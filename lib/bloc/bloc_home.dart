@@ -8,8 +8,10 @@ class HomeBloc implements Bloc {
 
   @override
   void init() {
-    // TODO: implement init
+    anggotaNotif.value = anggota;
   }
+
+  ValueNotifier<List<Map>> anggotaNotif = ValueNotifier([]);
 
   String nomorKK;
 
@@ -37,8 +39,9 @@ class HomeBloc implements Bloc {
         'alamat': tempAlamat,
         'jenisKel': tempJenisKel,
         'tempatLahir': tempTempatLahir,
-        'tempTglLahir': tempTglLahir.toString()
+        'tempTglLahir': tempTglLahir.toLocal().toString().split(' ')[0]
       });
+      anggotaNotif.value = anggota;
       tempNik = null;
       tempAlamat = null;
       tempJenisKel = null;

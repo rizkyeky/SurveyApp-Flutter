@@ -12,38 +12,51 @@ class HomePage extends Page<HomeBloc> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    String jenisKel;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Survey'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFieldWithTitle(
-              title: 'Nomor KK',
-              keyboardType: TextInputType.number,
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Survey'),
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFieldWithTitle(
+            title: 'Nomor KK',
+            keyboardType: TextInputType.number,
+            onChanged: (val) => _bloc.nomorKK = val,
+          ),
+          RaisedButton.icon(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AnggotaFormDialog(bloc: _bloc),
             ),
-            // TextFieldWithTitle(
-            //   title: 'Nama Keluarga',
-            // ),
-            RaisedButton.icon(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => AnggotaFormDialog(bloc: _bloc),
+            icon: const Icon(Icons.add),
+            label: const Text('Tambah Anggota Keluarga'),
+          ),
+          const SizedBox(height: 12,),
+          ValueListenableBuilder<List<Map>>(
+            valueListenable: _bloc.anggotaNotif, 
+            builder: (context, value, child) => SizedBox(
+              height: 500,
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
+                itemCount: value.length,
+                itemBuilder: (context, index) => ListTile(
+                  onTap: () {},
+                  dense: true,
+                  title: Text(value[index]['nik'] as String,),
+                  trailing: Text(value[index]['tempTglLahir'] as String),
+                )
               ),
-              icon: const Icon(Icons.add),
-              label: const Text('Tambah Anggota Keluarga'),
             )
-          ],
-        ),
+          ),
+          
+        ],
+
       ),
-    );
-  }
+    ),
+  );
 }
 
 class TextFieldWithTitle extends StatelessWidget {
