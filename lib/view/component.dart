@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flash/flash.dart';
 
 void showNetworkFlash(BuildContext context, {
-    Duration duration,
     String text,
     Color color,
     FlashPosition flashPosition = FlashPosition.bottom,
 }) {
   showFlash(
     context: context,
-    duration: duration,
+    duration: const Duration(seconds: 2),
     builder: (context, controller) {
       return Flash(
         controller: controller,

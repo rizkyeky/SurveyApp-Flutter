@@ -7,7 +7,9 @@ GetIt locator = GetIt.instance;
 
 Future<void> setLocator() async {
   locator.registerLazySingleton(() => ConnectionService());
+  
   locator.registerFactory(() => HomeBloc());
+  locator.registerFactory(() => QuestionBloc());
 
   await locator.get<ConnectionService>().init();
 }

@@ -9,6 +9,7 @@ import '../service/service.dart';
 import 'component.dart';
 
 part 'page_home.dart';
+part 'page_question.dart';
 
 abstract class Page extends StatefulWidget {
 
@@ -35,17 +36,13 @@ class _PageState extends State<Page> {
   @override
   void initState() {
     super.initState();
-    if (widget.init != null) {
-      widget.init();
-    }
+    widget.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    if (widget.dispose != null) {
-      widget.dispose();
-    }
+    widget.dispose();
   }
 
   @override
@@ -54,7 +51,7 @@ class _PageState extends State<Page> {
       valueListenable: locator.get<ConnectionService>().networkStatusNotifier,
       builder: (context, value, child) {
         if (value == ConnectionStatus.offline) {
-          Future.delayed(const Duration(seconds: 1))
+          Future.delayed(const Duration(milliseconds: 500))
               .then((value) => showNetworkFlash(
                     context,
                     text: 'OFFLINE',
@@ -62,11 +59,10 @@ class _PageState extends State<Page> {
                   ));
           hasOffline = true;
         } else if (hasOffline) {
-          Future.delayed(const Duration(seconds: 1))
+          Future.delayed(const Duration(milliseconds: 500))
               .then((value) => showNetworkFlash(
                     context,
                     text: 'ONLINE',
-                    duration: const Duration(seconds: 2),
                     color: Colors.green,
                   ));
         }
