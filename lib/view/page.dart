@@ -4,22 +4,20 @@ import 'package:flutter/material.dart';
 
 import '../bloc/bloc.dart';
 // import '../model/model.dart';
-import '../service/service.dart';
 import '../locator.dart';
+import '../service/service.dart';
 import 'component.dart';
 
 part 'page_home.dart';
 
-abstract class Page<T extends Bloc> extends StatefulWidget {
-  final T _bloc = locator<T>();
-  T get blc => _bloc;
+abstract class Page extends StatefulWidget {
 
-  Page({
+  const Page({
     Key key,
   }) : super(key: key);
 
   @override
-  _PageState<T> createState() => _PageState<T>();
+  _PageState createState() => _PageState();
 
   @protected
   Widget build(BuildContext context);
@@ -31,7 +29,7 @@ abstract class Page<T extends Bloc> extends StatefulWidget {
   void dispose();
 }
 
-class _PageState<T extends Bloc> extends State<Page<T>> {
+class _PageState extends State<Page> {
   bool hasOffline = false;
 
   @override
@@ -39,7 +37,6 @@ class _PageState<T extends Bloc> extends State<Page<T>> {
     super.initState();
     if (widget.init != null) {
       widget.init();
-      widget.blc.init();
     }
   }
 
@@ -48,7 +45,6 @@ class _PageState<T extends Bloc> extends State<Page<T>> {
     super.dispose();
     if (widget.dispose != null) {
       widget.dispose();
-      widget.blc.dispose();
     }
   }
 

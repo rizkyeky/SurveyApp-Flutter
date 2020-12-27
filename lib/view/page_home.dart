@@ -1,6 +1,7 @@
 part of 'page.dart';
 
-class HomePage extends Page<HomeBloc> {
+class HomePage extends Page {
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -11,6 +12,8 @@ class HomePage extends Page<HomeBloc> {
     // TODO: implement init
   }
 
+  final HomeBloc _bloc = locator.get<HomeBloc>();
+  
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -35,26 +38,65 @@ class HomePage extends Page<HomeBloc> {
             label: const Text('Tambah Anggota Keluarga'),
           ),
           const SizedBox(height: 12,),
-          ValueListenableBuilder<List<Map>>(
-            valueListenable: _bloc.anggotaNotif, 
-            builder: (context, value, child) => SizedBox(
-              height: 500,
-              child: ListView.separated(
+          SizedBox(
+            height: 300,
+            child: ValueListenableBuilder<List<Map<String, String>>>(
+              valueListenable: _bloc.anggotaNotif, 
+              builder: (context, value, child) => ListView.separated(
                 separatorBuilder: (context, index) => const Divider(),
                 itemCount: value.length,
                 itemBuilder: (context, index) => ListTile(
-                  onTap: () {},
-                  dense: true,
-                  title: Text(value[index]['nik'] as String,),
-                  trailing: Text(value[index]['tempTglLahir'] as String),
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(value[index]['nama']),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('NIK: ${value[index]['nik']}'),
+                            Text('Alamat: ${value[index]['alamat']}'),
+                            Text('Jenis Kelamin: ${value[index]['jenisKel']}'),
+                            Text('Tempat Lahir: ${value[index]['tempatLahir']}'),
+                            Text('Tanggal Lahir: ${value[index]['tglLahir']}'),
+                            Text('Agama: ${value[index]['agama']}'),
+                            Text('Lulusan: ${value[index]['lulusan']}'),
+                          ],
+                        ),
+                      )
+                    )
+                  ),
+                  onLongPress: () => showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Delete Anggota'),
+                      actions: [
+                        FlatButton(
+                          onPressed: () {
+                            _bloc.deleteAnggota(index);
+                            Navigator.pop(context);
+                          }, 
+                          child: const Text('OKE')
+                        ),
+                        FlatButton(
+                          color: Colors.teal,
+                          onPressed: () => Navigator.pop(context), 
+                          child: const Text('CANCEL')
+                        ),
+                      ],
+                    )
+                  ),
+                  title: Text(value[index]['nama'],),
                 )
-              ),
-            )
+              )
+            ),
           ),
-          
         ],
-
       ),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {},
+      child: const Icon(Icons.arrow_forward),
     ),
   );
 }
@@ -111,6 +153,12 @@ class AnggotaFormDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFieldWithTitle(
+                keyboardType: TextInputType.number,
+                title: 'Nama',
+                onChanged: (val) => bloc.tempNik = val,
+              ),
+              TextFieldWithTitle(
+                keyboardType: TextInputType.number,
                 title: 'NIK',
                 onChanged: (val) => bloc.tempNik = val,
               ),
@@ -133,7 +181,7 @@ class AnggotaFormDialog extends StatelessWidget {
                       title: const Text('Perempuan'),
                       value: 'Perempuan',
                       onChanged: (value) =>
-                          setState(() => bloc.tempJenisKel = value),
+                        setState(() => bloc.tempJenisKel = value),
                     ),
                   ],
                 )),
@@ -166,6 +214,15 @@ class AnggotaFormDialog extends StatelessWidget {
                       : 'Pilih Tanggal Lahir',
                     style: const TextStyle(color: Colors.white)),
                 ),
+              ),
+              TextFieldWithTitle(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                title: 'Agama',
+                onChanged: (val) => bloc.tempAgama = val,
+              ),
+              TextFieldWithTitle(
+                title: 'Lulusan',
+                onChanged: (val) => bloc.tempLulusan = val,
               ),
             ],
           ),

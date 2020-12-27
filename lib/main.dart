@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:provider/provider.dart';
 
-import 'view/page.dart';
-import 'service/service.dart';
-import 'bloc/bloc.dart';
 import 'locator.dart';
+import 'view/page.dart';
+// import 'service/service.dart';
+// import 'bloc/bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

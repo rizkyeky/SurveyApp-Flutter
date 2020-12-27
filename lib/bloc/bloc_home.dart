@@ -3,50 +3,59 @@ part of 'bloc.dart';
 class HomeBloc implements Bloc {
   @override
   void dispose() {
-    // TODO: implement dispose
+    anggotaNotif.dispose();
   }
 
   @override
   void init() {
-    anggotaNotif.value = anggota;
+    anggotaNotif.value = List.from(anggota);
   }
 
-  ValueNotifier<List<Map>> anggotaNotif = ValueNotifier([]);
+  ValueNotifier<List<Map<String, String>>> anggotaNotif = ValueNotifier([]);
 
   String nomorKK;
 
+  String tempNama;
   String tempNik;
   String tempAlamat;
   String tempJenisKel;
   String tempTempatLahir;
   DateTime tempTglLahir;
+  String tempAgama;
+  String tempLulusan;
 
-  List<Map<String, String>> anggota = [
-    {
-      'nik': '111',
-      'alamat': 'Bandung',
-      'jenisKel': 'Laki-laki',
-      'tempatLahir': 'Bandung',
-      'tempTglLahir': '2000-20-20'
-    }
-  ];
+  List<Map<String, String>> anggota = [];
 
   void addAnggota() {
-    if (tempNik != null && tempAlamat != null && tempJenisKel != null && 
-    tempTempatLahir != null && tempTglLahir != null) {
+    if (tempNama != null && tempNik != null && tempAlamat != null && 
+    tempJenisKel != null && tempTempatLahir != null && tempTglLahir != null && 
+    tempAgama != null && tempLulusan != null
+    ) {
       anggota.add({
+        'nama': tempNama,
         'nik': tempNik,
         'alamat': tempAlamat,
         'jenisKel': tempJenisKel,
         'tempatLahir': tempTempatLahir,
-        'tempTglLahir': tempTglLahir.toLocal().toString().split(' ')[0]
+        'tglLahir': tempTglLahir.toLocal().toString().split(' ')[0],
+        'agama': tempAgama,
+        'lulusan': tempLulusan
       });
-      anggotaNotif.value = anggota;
+      anggotaNotif.value = List.from(anggota);
+      
+      tempNama = null;
       tempNik = null;
       tempAlamat = null;
       tempJenisKel = null;
       tempTempatLahir = null;
       tempTglLahir = null;
+      tempAgama = null;
+      tempLulusan = null;
     }
+  }
+
+  void deleteAnggota(int index) {
+    anggota.removeAt(index);
+    anggotaNotif.value = List.from(anggota);
   }
 }
