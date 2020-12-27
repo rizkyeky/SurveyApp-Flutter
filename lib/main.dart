@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 import 'view/page.dart';
+import 'service/service.dart';
+import 'bloc/bloc.dart';
+import 'locator.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setLocator();
+
   runApp(MyApp());
 }
 
@@ -18,18 +24,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return MultiProvider(
-      providers: [
-
-      ],
-      child: MaterialApp(
-        title: 'Survey App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: HomePage(),
+    return MaterialApp(      
+      debugShowCheckedModeBanner: false,
+      title: 'Survey App',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      home: HomePage(),
     );
   }
 }

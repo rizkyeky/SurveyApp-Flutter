@@ -11,4 +11,11 @@ class HomeBloc implements Bloc {
     // TODO: implement init
   }
 
+  String nomorKK;
+
+  String nik;
+  String alamat;
+  String jenisKel;
+  String tempatLahir;
+  DateTime tglLahir;
 }
