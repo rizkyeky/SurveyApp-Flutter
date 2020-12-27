@@ -7,6 +7,7 @@ GetIt locator = GetIt.instance;
 
 Future<void> setLocator() async {
   locator.registerLazySingleton(() => ConnectionService());
+  locator.registerLazySingleton(() => FirebaseService());
   
   locator.registerFactory(() => HomeBloc());
   locator.registerFactory(() => QuestionBloc());

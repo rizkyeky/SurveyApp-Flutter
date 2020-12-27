@@ -95,7 +95,8 @@ class HomePage extends Page {
       ),
     ),
     floatingActionButton: FloatingActionButton(
-      onPressed: () {},
+      onPressed: () => Navigator.push(context, MaterialPageRoute(
+        builder: (context) => QuestionPage())),
       child: const Icon(Icons.arrow_forward),
     ),
   );
