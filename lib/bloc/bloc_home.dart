@@ -13,9 +13,37 @@ class HomeBloc implements Bloc {
 
   String nomorKK;
 
-  String nik;
-  String alamat;
-  String jenisKel;
-  String tempatLahir;
-  DateTime tglLahir;
+  String tempNik;
+  String tempAlamat;
+  String tempJenisKel;
+  String tempTempatLahir;
+  DateTime tempTglLahir;
+
+  List<Map<String, String>> anggota = [
+    {
+      'nik': '111',
+      'alamat': 'Bandung',
+      'jenisKel': 'Laki-laki',
+      'tempatLahir': 'Bandung',
+      'tempTglLahir': '2000-20-20'
+    }
+  ];
+
+  void addAnggota() {
+    if (tempNik != null && tempAlamat != null && tempJenisKel != null && 
+    tempTempatLahir != null && tempTglLahir != null) {
+      anggota.add({
+        'nik': tempNik,
+        'alamat': tempAlamat,
+        'jenisKel': tempJenisKel,
+        'tempatLahir': tempTempatLahir,
+        'tempTglLahir': tempTglLahir.toString()
+      });
+      tempNik = null;
+      tempAlamat = null;
+      tempJenisKel = null;
+      tempTempatLahir = null;
+      tempTglLahir = null;
+    }
+  }
 }

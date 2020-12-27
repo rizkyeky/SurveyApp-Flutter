@@ -99,35 +99,35 @@ class AnggotaFormDialog extends StatelessWidget {
             children: [
               TextFieldWithTitle(
                 title: 'NIK',
-                onChanged: (val) => bloc.nik = val,
+                onChanged: (val) => bloc.tempNik = val,
               ),
               TextFieldWithTitle(
                 title: 'Alamat (RT & RW)',
-                onChanged: (val) => bloc.alamat = val,
+                onChanged: (val) => bloc.tempAlamat = val,
               ),
               StatefulBuilder(
                 builder: (context, setState) => Column(
                   children: [
                     RadioListTile<String>(
-                      groupValue: bloc.jenisKel,
+                      groupValue: bloc.tempJenisKel,
                       title: const Text('Laki-laki'),
                       value: 'Laki-laki',
                       onChanged: (value) =>
-                          setState(() => bloc.jenisKel = value),
+                          setState(() => bloc.tempJenisKel = value),
                     ),
                     RadioListTile<String>(
-                      groupValue: bloc.jenisKel,
+                      groupValue: bloc.tempJenisKel,
                       title: const Text('Perempuan'),
                       value: 'Perempuan',
                       onChanged: (value) =>
-                          setState(() => bloc.jenisKel = value),
+                          setState(() => bloc.tempJenisKel = value),
                     ),
                   ],
                 )),
               TextFieldWithTitle(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 title: 'Tempat Lahir',
-                onChanged: (val) => bloc.tempatLahir = val,
+                onChanged: (val) => bloc.tempTempatLahir = val,
               ),
               StatefulBuilder(
                 builder: (context, setState) => FlatButton(
@@ -140,13 +140,13 @@ class AnggotaFormDialog extends StatelessWidget {
                       lastDate: DateTime(2021),
                     );
                     if (pickedDate != null &&
-                        pickedDate != bloc.tglLahir) {
-                      setState(() => bloc.tglLahir = pickedDate);
+                        pickedDate != bloc.tempTglLahir) {
+                      setState(() => bloc.tempTglLahir = pickedDate);
                     }
                   },
                   child: Text(
                     pickedDate != null
-                      ? bloc.tglLahir
+                      ? bloc.tempTglLahir
                         .toLocal()
                         .toString()
                         .split(' ')[0]
@@ -167,6 +167,7 @@ class AnggotaFormDialog extends StatelessWidget {
           FlatButton(
             color: Colors.teal,
             onPressed: () {
+              bloc.addAnggota();
               Navigator.of(context).pop();
             },
             child: const Text('OKE'),
