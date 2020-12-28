@@ -39,11 +39,11 @@ class QuestionPage extends Page {
                     children: List.generate(
                       _bloc.pertanyaanOpsi[indexCard]['opsi'].length as int, 
                       (indexRadio) => RadioListTile<String>(
-                        groupValue: _bloc.jawaban[indexCard],
+                        groupValue: _bloc.jawabanOpsi[indexCard],
                         title: Text(_bloc.pertanyaanOpsi[indexCard]['opsi'][indexRadio]  as String),
                         value: _bloc.pertanyaanOpsi[indexCard]['opsi'][indexRadio]  as String,
                         onChanged: (value) =>
-                            setState(() => _bloc.jawaban[indexCard] = value),
+                            setState(() => _bloc.jawabanOpsi[indexCard] = value),
                       ),
                     )
                   )
@@ -56,8 +56,8 @@ class QuestionPage extends Page {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: TextFieldWithTitle(
-                title: _bloc.pertanyaanInput[indexCard]['soal'] as String,
-                onChanged: (val) {},
+                title: _bloc.pertanyaanInput[indexCard],
+                onChanged: (value) => _bloc.jawabanInput[indexCard] = value,
               ),
             )
           ))

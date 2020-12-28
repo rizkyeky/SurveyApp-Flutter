@@ -11,8 +11,6 @@ class QuestionBloc implements Bloc {
     // TODO: implement init
   }
 
-  String answ;
-
   List<Map<String, dynamic>> pertanyaanOpsi = [
     {
       'soal': 'Siapa penemu listrik statis?',
@@ -24,12 +22,12 @@ class QuestionBloc implements Bloc {
     }
   ];
 
-  List<Map<String, dynamic>> pertanyaanInput = [
-    {
-      'soal': 'Siapa penemu listrik statis?',
-    }
+  List<String> pertanyaanInput = [
+    'Siapa penemu listrik statis?',
+    'Siapa penemu listrik dinamis?',
   ];
 
-  List<String> jawaban = List.generate(1, (index) => '');
+  List<String> jawabanOpsi = List.generate(1, (index) => '');
+  List<String> jawabanInput = List.generate(2, (index) => '');
 
 }
