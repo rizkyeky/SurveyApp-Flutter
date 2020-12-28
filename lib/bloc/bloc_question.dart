@@ -13,7 +13,7 @@ class QuestionBloc implements Bloc {
 
   String answ;
 
-  List<Map<String, dynamic>> pertanyaan = [
+  List<Map<String, dynamic>> pertanyaanOpsi = [
     {
       'soal': 'Siapa penemu listrik statis?',
       'opsi': [
@@ -21,6 +21,12 @@ class QuestionBloc implements Bloc {
         'Jonshon',
         'Jones'
       ]
+    }
+  ];
+
+  List<Map<String, dynamic>> pertanyaanInput = [
+    {
+      'soal': 'Siapa penemu listrik statis?',
     }
   ];
 

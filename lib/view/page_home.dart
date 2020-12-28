@@ -108,14 +108,22 @@ class HomePage extends Page {
 
 class TextFieldWithTitle extends StatelessWidget {
   final String title;
+  final double titleSize;
   final String hit;
   final TextInputType keyboardType;
   final void Function(String) onChanged;
   final EdgeInsetsGeometry padding;
   final int maxLines;
 
-  const TextFieldWithTitle(
-      {this.title, this.keyboardType, this.onChanged, this.padding, this.hit, this.maxLines});
+  const TextFieldWithTitle({
+    this.title, 
+    this.keyboardType, 
+    this.onChanged, 
+    this.padding, 
+    this.hit, 
+    this.maxLines, 
+    this.titleSize
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +132,7 @@ class TextFieldWithTitle extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title),
+          Text(title, style: TextStyle(fontSize: titleSize ?? 16.0),),
           const SizedBox(
             height: 12,
           ),
