@@ -13,6 +13,16 @@ class HomePage extends Page {
   }
 
   final HomeBloc _bloc = locator.get<HomeBloc>();
+
+  final List<String> _nameDetail = [
+    'NIK:',
+    'Alamat:',
+    'Jenis Kelamin:',
+    'Tempat Lahir:',
+    'Tanggal Lahir:',
+    'Agama:',
+    'Lulusan:',
+  ];
   
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -53,15 +63,9 @@ class HomePage extends Page {
                       content: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('NIK: ${value[index]['nik']}'),
-                            Text('Alamat: ${value[index]['alamat']}'),
-                            Text('Jenis Kelamin: ${value[index]['jenisKel']}'),
-                            Text('Tempat Lahir: ${value[index]['tempatLahir']}'),
-                            Text('Tanggal Lahir: ${value[index]['tglLahir']}'),
-                            Text('Agama: ${value[index]['agama']}'),
-                            Text('Lulusan: ${value[index]['lulusan']}'),
-                          ],
+                          children: List.generate(value.length, (index) => Text(
+                            '${_nameDetail[index]} ${value[index]['nik']}'
+                          ))
                         ),
                       )
                     )
@@ -108,9 +112,10 @@ class TextFieldWithTitle extends StatelessWidget {
   final TextInputType keyboardType;
   final void Function(String) onChanged;
   final EdgeInsetsGeometry padding;
+  final int maxLines;
 
   const TextFieldWithTitle(
-      {this.title, this.keyboardType, this.onChanged, this.padding, this.hit});
+      {this.title, this.keyboardType, this.onChanged, this.padding, this.hit, this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +131,9 @@ class TextFieldWithTitle extends StatelessWidget {
           TextField(
             onChanged: onChanged ?? (value) {},
             keyboardType: keyboardType ?? TextInputType.name,
+            maxLines: maxLines ?? 1,
             decoration: const InputDecoration(
               filled: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: 12),
               floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
           ),
@@ -165,6 +170,7 @@ class AnggotaFormDialog extends StatelessWidget {
               ),
               TextFieldWithTitle(
                 title: 'Alamat (RT & RW)',
+                maxLines: 3,
                 onChanged: (val) => bloc.tempAlamat = val,
               ),
               StatefulBuilder(

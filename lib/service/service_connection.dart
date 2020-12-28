@@ -9,6 +9,7 @@ class ConnectionService implements Service {
   ConnectionService() {
     _connectivity.onConnectivityChanged.listen((value) {
       final ConnectionStatus status = _getNetworkStatus(value);
+      print(status);
       if (networkStatusNotifier.value != status) {
         networkStatusNotifier.value = status;
       }
@@ -19,6 +20,7 @@ class ConnectionService implements Service {
   Future<void> init() async {
     await _connectivity.checkConnectivity().then((value) {
       final ConnectionStatus status = _getNetworkStatus(value);
+      print(status);
       if (networkStatusNotifier.value != status) {
         networkStatusNotifier.value = status;
       }
