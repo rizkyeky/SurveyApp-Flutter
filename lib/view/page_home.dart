@@ -4,25 +4,15 @@ class HomePage extends Page {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _bloc.dispose();
   }
 
   @override
   void init() {
-    // TODO: implement init
+    _bloc.init();
   }
 
   final HomeBloc _bloc = locator.get<HomeBloc>();
-
-  final List<String> _nameDetail = [
-    'NIK:',
-    'Alamat:',
-    'Jenis Kelamin:',
-    'Tempat Lahir:',
-    'Tanggal Lahir:',
-    'Agama:',
-    'Lulusan:',
-  ];
   
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -39,19 +29,6 @@ class HomePage extends Page {
             keyboardType: TextInputType.number,
             onChanged: (val) => _bloc.nomorKK = val,
           ),
-          Card(
-            child: Column(
-              children: [
-                ListTile(title: Text('Anggota 1'),),
-                TextFieldWithTitle(
-                  title: 'Nama',
-                  padding: const EdgeInsets.all(12),
-                  keyboardType: TextInputType.number,
-                  onChanged: (val) => _bloc.nomorKK = val,
-                ),
-              ],
-            ),
-          ),
           RaisedButton.icon(
             onPressed: () => showDialog(
               context: context,
@@ -61,52 +38,56 @@ class HomePage extends Page {
             label: const Text('Tambah Anggota Keluarga'),
           ),
           const SizedBox(height: 12,),
-          SizedBox(
-            height: 300,
-            child: ValueListenableBuilder<List<Map<String, String>>>(
-              valueListenable: _bloc.anggotaNotif, 
-              builder: (context, value, child) => ListView.separated(
-                separatorBuilder: (context, index) => const Divider(),
-                itemCount: value.length,
-                itemBuilder: (context, index) => ListTile(
-                  onTap: () => showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(value[index]['nama']),
-                      content: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(value.length, (index) => Text(
-                            '${_nameDetail[index]} ${value[index]['nik']}'
-                          ))
-                        ),
-                      )
-                    )
-                  ),
+          ValueListenableBuilder<List<Map<String, String>>>(
+            valueListenable: _bloc.anggotaNotif, 
+            builder: (context, value, child) => Column(
+              children: List.generate(value.length, (index) => Card(
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
                   onLongPress: () => showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Delete Anggota'),
+                      title: const Text('Delete Anggota Keluarga'),
                       actions: [
+                        FlatButton(
+                          color: Colors.teal,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('CANCEL'),
+                        ),
                         FlatButton(
                           onPressed: () {
                             _bloc.deleteAnggota(index);
                             Navigator.pop(context);
-                          }, 
-                          child: const Text('OKE')
+                          },
+                          child: const Text('DELETE'),
                         ),
-                        FlatButton(
-                          color: Colors.teal,
-                          onPressed: () => Navigator.pop(context), 
-                          child: const Text('CANCEL')
-                        ),
-                      ],
-                    )
+                      ]
+                    ),
                   ),
-                  title: Text(value[index]['nama'],),
+                  child: Column(
+                    children: [
+                      ...List.generate(_bloc.anggota[index].keys.length, 
+                        (indexLs) {
+                          final String key = _bloc.anggota[index].keys
+                            .toList()[indexLs];
+                          return ListTile(
+                          title: Text(_bloc.anggota[index][key], style: TextStyle(
+                            fontSize: (indexLs == 0) ? 20 : 16,
+                            fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
+                          ),),
+                          subtitle: (indexLs != 0) ? Text(key) : null,
+                          dense: indexLs != 0,
+                          
+                        );
+                        }
+                      )
+                    ]
+                  ),
                 )
-              )
-            ),
+              ),)
+            )
           ),
         ],
       ),
@@ -174,103 +155,101 @@ class AnggotaFormDialog extends StatelessWidget {
     DateTime pickedDate;
 
     return AlertDialog(
-        title: const Text('Tambah Anggota Keluarga'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFieldWithTitle(
-                keyboardType: TextInputType.number,
-                title: 'Nama',
-                onChanged: (val) => bloc.tempNik = val,
+      title: const Text('Tambah Anggota Keluarga'),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFieldWithTitle(
+              title: 'Nama',
+              onChanged: (val) {
+                bloc.tempNama = val;
+                bloc.checkValidFormAnggota();
+              },
+            ),
+            TextFieldWithTitle(
+              keyboardType: TextInputType.number,
+              title: 'NIK',
+              onChanged: (val) {
+                bloc.checkValidFormAnggota();
+                bloc.tempNik = val;
+              },
+            ),
+            StatefulBuilder(
+              builder: (context, setState) => Column(
+                children: [
+                  RadioListTile<String>(
+                    groupValue: bloc.tempJenisKel,
+                    title: const Text('Laki-laki'),
+                    value: 'Laki-laki',
+                    onChanged: (value) {
+                      setState(() => bloc.tempJenisKel = value);
+                      bloc.checkValidFormAnggota();
+                    },
+                  ),
+                  RadioListTile<String>(
+                    groupValue: bloc.tempJenisKel,
+                    title: const Text('Perempuan'),
+                    value: 'Perempuan',
+                    onChanged: (value) {
+                      setState(() => bloc.tempJenisKel = value);
+                      bloc.checkValidFormAnggota();
+                    },
+                  ),
+                ],
+              )),
+            TextFieldWithTitle(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              title: 'Tempat Lahir',
+              onChanged: (val) {
+                bloc.tempTempatLahir = val;
+                bloc.checkValidFormAnggota();
+              },
+            ),
+            StatefulBuilder(
+              builder: (context, setState) => FlatButton(
+                color: Colors.teal,
+                onPressed: () async {
+                  pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2021),
+                  );
+                  if (pickedDate != null && pickedDate != bloc.tempTglLahir) {
+                    setState(() => bloc.tempTglLahir = pickedDate);
+                    bloc.checkValidFormAnggota();
+                  }
+                },
+                child: Text(
+                  pickedDate != null
+                    ? formatDate(bloc.tempTglLahir)
+                    : 'Pilih Tanggal Lahir',
+                  style: const TextStyle(color: Colors.white)),
               ),
-              TextFieldWithTitle(
-                keyboardType: TextInputType.number,
-                title: 'NIK',
-                onChanged: (val) => bloc.tempNik = val,
-              ),
-              TextFieldWithTitle(
-                title: 'Alamat (RT & RW)',
-                maxLines: 3,
-                onChanged: (val) => bloc.tempAlamat = val,
-              ),
-              StatefulBuilder(
-                builder: (context, setState) => Column(
-                  children: [
-                    RadioListTile<String>(
-                      groupValue: bloc.tempJenisKel,
-                      title: const Text('Laki-laki'),
-                      value: 'Laki-laki',
-                      onChanged: (value) =>
-                          setState(() => bloc.tempJenisKel = value),
-                    ),
-                    RadioListTile<String>(
-                      groupValue: bloc.tempJenisKel,
-                      title: const Text('Perempuan'),
-                      value: 'Perempuan',
-                      onChanged: (value) =>
-                        setState(() => bloc.tempJenisKel = value),
-                    ),
-                  ],
-                )),
-              TextFieldWithTitle(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                title: 'Tempat Lahir',
-                onChanged: (val) => bloc.tempTempatLahir = val,
-              ),
-              StatefulBuilder(
-                builder: (context, setState) => FlatButton(
-                  color: Colors.teal,
-                  onPressed: () async {
-                    pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2021),
-                    );
-                    if (pickedDate != null &&
-                        pickedDate != bloc.tempTglLahir) {
-                      setState(() => bloc.tempTglLahir = pickedDate);
-                    }
-                  },
-                  child: Text(
-                    pickedDate != null
-                      ? bloc.tempTglLahir
-                        .toLocal()
-                        .toString()
-                        .split(' ')[0]
-                      : 'Pilih Tanggal Lahir',
-                    style: const TextStyle(color: Colors.white)),
-                ),
-              ),
-              TextFieldWithTitle(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                title: 'Agama',
-                onChanged: (val) => bloc.tempAgama = val,
-              ),
-              TextFieldWithTitle(
-                title: 'Lulusan',
-                onChanged: (val) => bloc.tempLulusan = val,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-        actions: [
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('CANCEL'),
-          ),
-          FlatButton(
+      ),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('CANCEL'),
+        ),
+        ValueListenableBuilder<bool>(
+          valueListenable: bloc.validFormNotif,
+          builder: (context, value, _) => FlatButton(
             color: Colors.teal,
-            onPressed: () {
+            onPressed: value ? () {
               bloc.addAnggota();
               Navigator.of(context).pop();
-            },
+            } : null,
             child: const Text('OKE'),
           ),
-        ]
-      );
+        ),
+      ]
+    );
   }
 }
