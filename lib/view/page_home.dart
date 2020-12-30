@@ -43,47 +43,63 @@ class HomePage extends Page {
             builder: (context, value, child) => Column(
               children: List.generate(value.length, (index) => Card(
                 clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onLongPress: () => showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Delete Anggota Keluarga'),
-                      actions: [
-                        FlatButton(
-                          color: Colors.teal,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('CANCEL'),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        ...List.generate(2, 
+                          (indexLs) {
+                            final String key = _bloc.anggota[index].keys
+                              .toList()[indexLs];
+                            final List<String> menu = ['Edit', 'Delete'];
+
+                            return ListTile(
+                              contentPadding: const EdgeInsets.all(0),
+                              title: Text(_bloc.anggota[index][key], style: TextStyle(
+                                fontSize: (indexLs == 0) ? 20 : 16,
+                                fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
+                              ),),
+                              subtitle: (indexLs != 0) ? Text(key) : null,
+                              dense: indexLs != 0,
+                              trailing: (indexLs == 0) ? PopupMenuButton<String>(
+                                icon: const Icon(Icons.more_vert),
+                                onSelected: (value) {}, 
+                                itemBuilder: (context) => List.generate(menu.length,
+                                  (index) => PopupMenuItem<String>(child: Text(menu[index]))),
+                              ) : null
+                            );
+                          }
                         ),
-                        FlatButton(
-                          onPressed: () {
-                            _bloc.deleteAnggota(index);
-                            Navigator.pop(context);
-                          },
-                          child: const Text('DELETE'),
+                        TextFieldWithTitle(
+                          title: 'Alamat',
+                          maxLines: 2,
+                          onChanged: (value) {},
                         ),
+                        const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        DropdownSearch<String>(
+                          hint: "Pilih Pekerjaan",
+                          items: _bloc.pekerjaan,
+                          showSearchBox: true,
+                          onChanged: (String data) => print(data),
+                          searchBoxDecoration: const InputDecoration(
+                            filled: true,
+                            hintText: 'Cari Pekerjaan',
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                          ),
+                          dropdownSearchDecoration: const InputDecoration(
+                            filled: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                          ),
+                        )
                       ]
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      ...List.generate(_bloc.anggota[index].keys.length, 
-                        (indexLs) {
-                          final String key = _bloc.anggota[index].keys
-                            .toList()[indexLs];
-                          return ListTile(
-                          title: Text(_bloc.anggota[index][key], style: TextStyle(
-                            fontSize: (indexLs == 0) ? 20 : 16,
-                            fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
-                          ),),
-                          subtitle: (indexLs != 0) ? Text(key) : null,
-                          dense: indexLs != 0,
-                          
-                        );
-                        }
-                      )
-                    ]
                   ),
                 )
               ),)
