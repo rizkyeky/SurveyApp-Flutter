@@ -27,7 +27,7 @@ class HomePage extends Page {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: const Text('Survey'),
+      title: const Text('Data Anggota Keluarga'),
     ),
     body: SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -38,6 +38,19 @@ class HomePage extends Page {
             title: 'Nomor KK',
             keyboardType: TextInputType.number,
             onChanged: (val) => _bloc.nomorKK = val,
+          ),
+          Card(
+            child: Column(
+              children: [
+                ListTile(title: Text('Anggota 1'),),
+                TextFieldWithTitle(
+                  title: 'Nama',
+                  padding: const EdgeInsets.all(12),
+                  keyboardType: TextInputType.number,
+                  onChanged: (val) => _bloc.nomorKK = val,
+                ),
+              ],
+            ),
           ),
           RaisedButton.icon(
             onPressed: () => showDialog(
