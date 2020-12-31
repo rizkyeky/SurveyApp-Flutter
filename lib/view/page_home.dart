@@ -16,6 +16,7 @@ class HomePage extends Page {
   
   @override
   Widget build(BuildContext context) => Scaffold(
+    resizeToAvoidBottomInset: true,
     appBar: AppBar(
       title: const Text('Data Anggota Keluarga'),
     ),
@@ -29,6 +30,45 @@ class HomePage extends Page {
             keyboardType: TextInputType.number,
             onChanged: (val) => _bloc.nomorKK = val,
           ),
+          StatefulBuilder(builder: (context, setState) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CheckboxListTile(
+                title: const Text('Satu Alamat'),
+                value: _bloc.satuAlamat,
+                onChanged: (value) {
+                  if (_bloc.satuAlamat != value) {
+                    setState(() {
+                      _bloc.satuAlamat = value;
+                    });
+                  }
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+              CheckboxListTile(
+                title: const Text('Satu Agama'),
+                value: _bloc.satuAgama,
+                onChanged: (value) {
+                  if (_bloc.satuAgama != value) {
+                    setState(() {
+                      _bloc.satuAgama = value;
+                    });
+                  }
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+              if (_bloc.satuAlamat) TextFieldWithTitle(
+                title: 'Alamat',
+                maxLines: 2,
+                onChanged: (value) {},
+              ),
+              if (_bloc.satuAgama) TextFieldWithTitle(
+                title: 'Agama',
+                onChanged: (value) {},
+              ),
+            ],
+          )),
+          const SizedBox(height: 12,),
           RaisedButton.icon(
             onPressed: () => showDialog(
               context: context,
@@ -45,61 +85,89 @@ class HomePage extends Page {
                 clipBehavior: Clip.antiAlias,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        ...List.generate(2, 
-                          (indexLs) {
-                            final String key = _bloc.anggota[index].keys
-                              .toList()[indexLs];
-                            final List<String> menu = ['Edit', 'Delete'];
-
-                            return ListTile(
-                              contentPadding: const EdgeInsets.all(0),
-                              title: Text(_bloc.anggota[index][key], style: TextStyle(
-                                fontSize: (indexLs == 0) ? 20 : 16,
-                                fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
-                              ),),
-                              subtitle: (indexLs != 0) ? Text(key) : null,
-                              dense: indexLs != 0,
-                              trailing: (indexLs == 0) ? PopupMenuButton<String>(
-                                icon: const Icon(Icons.more_vert),
-                                onSelected: (value) {}, 
-                                itemBuilder: (context) => List.generate(menu.length,
-                                  (index) => PopupMenuItem<String>(child: Text(menu[index]))),
-                              ) : null
-                            );
-                          }
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      ...List.generate(2, 
+                        (indexLs) {
+                          final String key = _bloc.anggota[index].keys
+                            .toList()[indexLs];
+                          final List<String> menu = ['Edit', 'Delete'];
+                          return ListTile(
+                            contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
+                            title: Text(_bloc.anggota[index][key], style: TextStyle(
+                              fontSize: (indexLs == 0) ? 20 : 16,
+                              fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
+                            ),),
+                            subtitle: (indexLs != 0) ? Text(key) : null,
+                            dense: indexLs != 0,
+                            trailing: (indexLs == 0) ? PopupMenuButton<String>(
+                              icon: const Icon(Icons.more_vert),
+                              onSelected: (value) {}, 
+                              itemBuilder: (context) => List.generate(menu.length,
+                                (index) => PopupMenuItem<String>(child: Text(menu[index]))),
+                            ) : null,
+                            onTap: (indexLs == 0) ? () {} : null,
+                          );
+                        }
+                      ),
+                      TextFieldWithTitle(
+                        title: 'Alamat',
+                        maxLines: 2,
+                        onChanged: (value) => _bloc.tempAlamat,
+                      ),
+                      const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      DropdownSearch<String>(
+                        hint: "Pilih Pekerjaan",
+                        items: _bloc.pekerjaan,
+                        showSearchBox: true,
+                        onChanged: (value) => _bloc.tempPekerjaan,
+                        searchBoxDecoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Cari Pekerjaan',
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
                         ),
-                        TextFieldWithTitle(
-                          title: 'Alamat',
-                          maxLines: 2,
-                          onChanged: (value) {},
+                        dropdownSearchDecoration: const InputDecoration(
+                          filled: true,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
                         ),
-                        const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
-                        const SizedBox(
-                          height: 12,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      const Text("Pendidikan", style: TextStyle(fontSize:16.0),),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      DropdownSearch<String>(
+                        hint: "Pilih Pendidikan",
+                        items: _bloc.pendidikan,
+                        mode: Mode.MENU,
+                        onChanged: (value) => _bloc.tempPekerjaan,
+                        searchBoxDecoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Cari Pendidikan',
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
                         ),
-                        DropdownSearch<String>(
-                          hint: "Pilih Pekerjaan",
-                          items: _bloc.pekerjaan,
-                          showSearchBox: true,
-                          onChanged: (String data) => print(data),
-                          searchBoxDecoration: const InputDecoration(
-                            filled: true,
-                            hintText: 'Cari Pekerjaan',
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                          ),
-                          dropdownSearchDecoration: const InputDecoration(
-                            filled: true,
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                          ),
-                        )
-                      ]
-                    ),
+                        dropdownSearchDecoration: const InputDecoration(
+                          filled: true,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      TextFieldWithTitle(
+                        padding: const EdgeInsets.all(0),
+                        title: 'Nomor HP',
+                        hit: 'Opsional',
+                        onChanged: (value) => _bloc.tempNomorTelp,
+                      ),
+                    ]
                   ),
                 )
               ),)
@@ -124,6 +192,7 @@ class TextFieldWithTitle extends StatelessWidget {
   final void Function(String) onChanged;
   final EdgeInsetsGeometry padding;
   final int maxLines;
+  final TextCapitalization textCapitalization;
 
   const TextFieldWithTitle({
     this.title, 
@@ -132,7 +201,8 @@ class TextFieldWithTitle extends StatelessWidget {
     this.padding, 
     this.hit, 
     this.maxLines, 
-    this.titleSize
+    this.titleSize,
+    this.textCapitalization
   });
 
   @override
@@ -147,11 +217,13 @@ class TextFieldWithTitle extends StatelessWidget {
             height: 12,
           ),
           TextField(
+            textCapitalization: textCapitalization ?? TextCapitalization.sentences,
             onChanged: onChanged ?? (value) {},
             keyboardType: keyboardType ?? TextInputType.name,
             maxLines: maxLines ?? 1,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               filled: true,
+              hintText: hit ,
               floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
           ),

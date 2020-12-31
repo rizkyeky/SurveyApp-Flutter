@@ -16,6 +16,8 @@ class HomeBloc implements Bloc {
   ValueNotifier<bool> validFormNotif = ValueNotifier(false);
 
   String nomorKK;
+  bool satuAlamat = false;
+  bool satuAgama = false;
 
   String tempNama;
   String tempNik;
@@ -25,6 +27,8 @@ class HomeBloc implements Bloc {
   DateTime tempTglLahir;
   String tempAgama;
   String tempLulusan;
+  String tempNomorTelp;
+  String tempPekerjaan;
 
   List<Map<String, String>> anggota = [
     {
@@ -53,6 +57,7 @@ class HomeBloc implements Bloc {
         'Tanggal Lahir': formatDate(tempTglLahir),
       });
       anggotaNotif.value = List.from(anggota);
+      validFormNotif.value = false;
       
       tempNama = null;
       tempNik = null;
@@ -69,6 +74,15 @@ class HomeBloc implements Bloc {
     anggota.removeAt(index);
     anggotaNotif.value = List.from(anggota);
   }
+
+  List<String> pendidikan = [
+    'SD',
+    'SMP',
+    'SMA',
+    'D3',
+    'S1',
+    'S2',
+  ];
 
   List<String> pekerjaan = [
     'Belum/ Tidak Bekerja',

@@ -22,7 +22,7 @@ class QuestionPage extends Page {
       ),
       body: ListView(
         children: [
-          ...List.generate(_bloc.pertanyaanOpsi.length, (indexCard) => Card(
+          Card(
             margin: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -30,27 +30,27 @@ class QuestionPage extends Page {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(18),
-                  child: Text(_bloc.pertanyaanOpsi[indexCard]['soal'] as String,
+                  child: Text(_bloc.pertanyaanOpsi[0]['soal'] as String,
                     style: const TextStyle(fontSize: 16)
                   ),
                 ),
                 StatefulBuilder(
                   builder: (context, setState) => Column(
                     children: List.generate(
-                      _bloc.pertanyaanOpsi[indexCard]['opsi'].length as int, 
+                      _bloc.pertanyaanOpsi[0]['opsi'].length as int, 
                       (indexRadio) => RadioListTile<String>(
-                        groupValue: _bloc.jawabanOpsi[indexCard],
-                        title: Text(_bloc.pertanyaanOpsi[indexCard]['opsi'][indexRadio]  as String),
-                        value: _bloc.pertanyaanOpsi[indexCard]['opsi'][indexRadio]  as String,
+                        groupValue: _bloc.jawabanOpsi[0],
+                        title: Text(_bloc.pertanyaanOpsi[0]['opsi'][indexRadio]  as String),
+                        value: _bloc.pertanyaanOpsi[0]['opsi'][indexRadio]  as String,
                         onChanged: (value) =>
-                            setState(() => _bloc.jawabanOpsi[indexCard] = value),
+                            setState(() => _bloc.jawabanOpsi[0] = value),
                       ),
                     )
                   )
                 ),
               ],
             ),
-          ),),
+          ),
           ...List.generate(_bloc.pertanyaanInput.length, (indexCard) => Card(
             margin: const EdgeInsets.all(12),
             child: Padding(

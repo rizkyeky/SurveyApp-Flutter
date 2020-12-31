@@ -13,11 +13,26 @@ class QuestionBloc implements Bloc {
 
   List<Map<String, dynamic>> pertanyaanOpsi = [
     {
-      'soal': 'Siapa penemu listrik statis?',
+      'soal': 'Apakah sudah memiliki BPJS?',
       'opsi': [
         'Jono',
         'Jonshon',
         'Jones'
+      ]
+    },
+    {
+      'soal': 'Sumber air minum apa?',
+      'opsi': [
+        'AirMn_kemasan',
+        'AirMn_PAM',
+        'AirMn_ledeng_tanpa_meteran',
+        'AirMn_sumurbor',
+        'AirMn_sumur',
+        'AirMn_mataair',
+        'AirMn_sungai',
+        'AirMn_hujan',
+        'AirMn_lainnya',
+        'AirMn_lainnya_sebutkan'
       ]
     }
   ];
@@ -27,7 +42,7 @@ class QuestionBloc implements Bloc {
     'Siapa penemu listrik dinamis?',
   ];
 
-  List<String> jawabanOpsi = List.generate(1, (index) => '');
+  List<String> jawabanOpsi = List.generate(2, (index) => '');
   List<String> jawabanInput = List.generate(2, (index) => '');
 
 }
