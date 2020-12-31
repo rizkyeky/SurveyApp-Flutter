@@ -14,6 +14,7 @@ class HomeBloc implements Bloc {
 
   ValueNotifier<List<Map<String, String>>> anggotaNotif = ValueNotifier([]);
   ValueNotifier<bool> validFormNotif = ValueNotifier(false);
+  ValueNotifier<bool> validAnggotaNotif = ValueNotifier(false);
   ValueNotifier<bool> satuAlamatNotif = ValueNotifier(false);
   ValueNotifier<bool> satuAgamaNotif = ValueNotifier(false);
 
@@ -30,9 +31,9 @@ class HomeBloc implements Bloc {
   String tempTempatLahir;
   DateTime tempTglLahir;
   
-  String tempLulusan;
-  String tempPekerjaan;
-  String tempNomorTelp;
+  List<String> tempPekerjaan = [];
+  List<String> tempLulusan = [];
+  List<String> tempNomorTelp = [];
 
   List<Map<String, String>> anggota = [
     // {
@@ -46,9 +47,31 @@ class HomeBloc implements Bloc {
     // }
   ];
 
+  Map<String, dynamic> dataKeluarga = {
+  };
+
+  void saveDataKeluarga() {
+    dataKeluarga['Nomor KK'] = nomorKK;
+    // dataKeluarga['Alamat'] = satuAlamat ? tempAlamat : null;
+    // dataKeluarga['Agama'] = satuAgama ? tempAgama : null;
+    // ignore: avoid_function_literals_in_foreach_calls
+    anggota.forEach((element) {element.addAll({
+      'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
+      'Lulusan': tempLulusan[anggota.indexOf(element)],
+      'Nomor HP': tempNomorTelp[anggota.indexOf(element)],
+    });});
+
+    dataKeluarga['Anggota'] = anggota;
+    print(dataKeluarga);
+  }
+
   void checkValidFormAnggota() {
     validFormNotif.value = tempNama != null && tempNik != null && 
     tempJenisKel != null && tempTempatLahir != null && tempTglLahir != null;
+  }
+
+  void checkValidAnggota() {
+
   }
 
   void addAnggota() {
@@ -62,11 +85,17 @@ class HomeBloc implements Bloc {
         'Tempat Lahir': tempTempatLahir,
         'Tanggal Lahir': formatDate(tempTglLahir),
         'Agama': tempAgama,
-        'Alamat': tempAlamat
+        'Alamat': tempAlamat,
       });
       anggotaNotif.value = List.from(anggota);
       validFormNotif.value = false;
-      
+
+      validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null;
+
+      tempPekerjaan.add('Belum/ Tidak Bekerja');
+      tempLulusan.add('SD');
+      tempNomorTelp.add(null);
+
       tempNama = null;
       tempNik = null;
       tempJenisKel = null;
@@ -78,6 +107,10 @@ class HomeBloc implements Bloc {
   void deleteAnggota(int index) {
     anggota.removeAt(index);
     anggotaNotif.value = List.from(anggota);
+    tempPekerjaan.removeAt(index);
+    tempLulusan.removeAt(index);
+    tempNomorTelp.removeAt(index);
+    validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null;
   }
 
   List<String> pendidikan = [

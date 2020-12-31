@@ -33,6 +33,7 @@ abstract class Page extends StatefulWidget {
 
 class _PageState extends State<Page> {
   bool hasOffline = false;
+  bool hasOnline = false;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _PageState extends State<Page> {
     return ValueListenableBuilder<ConnectionStatus>(
       valueListenable: locator.get<ConnectionService>().networkStatusNotifier,
       builder: (context, value, child) {
-        if (value == ConnectionStatus.offline) {
+        if (value == ConnectionStatus.offline && !hasOnline) {
           Future.delayed(const Duration(milliseconds: 500))
               .then((value) => showNetworkFlash(
                     context,
@@ -66,6 +67,7 @@ class _PageState extends State<Page> {
                     text: 'ONLINE',
                     color: Colors.green,
                   ));
+          hasOnline = true;
         }
         return child;
       },

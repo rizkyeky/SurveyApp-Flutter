@@ -28,7 +28,10 @@ class HomePage extends Page {
           TextFieldWithTitle(
             title: 'Nomor KK',
             keyboardType: TextInputType.number,
-            onChanged: (val) => _bloc.nomorKK = val,
+            onChanged: (val) {
+              _bloc.nomorKK = val;
+              _bloc.validAnggotaNotif.value = _bloc.anggota.isNotEmpty && _bloc.nomorKK != null;
+            },
           ),
           StatefulBuilder(builder: (context, setState) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +89,7 @@ class HomePage extends Page {
           ValueListenableBuilder<List<Map<String, String>>>(
             valueListenable: _bloc.anggotaNotif, 
             builder: (context, value, child) => Column(
-              children: List.generate(value.length, (index) => Card(
+              children: List.generate(value.length, (indexAnggota) => Card(
                 clipBehavior: Clip.antiAlias,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -96,12 +99,12 @@ class HomePage extends Page {
                     children: [
                       ...List.generate(2, 
                         (indexLs) {
-                          final String key = _bloc.anggota[index].keys
+                          final String key = _bloc.anggota[indexAnggota].keys
                             .toList()[indexLs];
                           final List<String> menu = ['Edit', 'Delete'];
                           return ListTile(
                             contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
-                            title: Text(_bloc.anggota[index][key], style: TextStyle(
+                            title: Text(_bloc.anggota[indexAnggota][key], style: TextStyle(
                               fontSize: (indexLs == 0) ? 18 : 16,
                               fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
                             ),),
@@ -122,7 +125,10 @@ class HomePage extends Page {
                                       title: const Text('Delete Anggota'),
                                       actions: [
                                         FlatButton(
-                                          onPressed: () => _bloc.deleteAnggota(index),
+                                          onPressed: () {
+                                            _bloc.deleteAnggota(indexAnggota);
+                                            Navigator.pop(context);
+                                          },
                                           child: const Text('DELETE')
                                         ),
                                         FlatButton(
@@ -170,7 +176,8 @@ class HomePage extends Page {
                         hint: "Pilih Pekerjaan",
                         items: _bloc.pekerjaan,
                         showSearchBox: true,
-                        onChanged: (value) => _bloc.tempPekerjaan,
+                        selectedItem: 'Belum/ Tidak Bekerja',
+                        onChanged: (value) => _bloc.tempPekerjaan[indexAnggota] = value,
                         searchBoxDecoration: const InputDecoration(
                           filled: true,
                           hintText: 'Cari Pekerjaan',
@@ -192,7 +199,8 @@ class HomePage extends Page {
                         hint: "Pilih Pendidikan",
                         items: _bloc.pendidikan,
                         mode: Mode.MENU,
-                        onChanged: (value) => _bloc.tempPekerjaan,
+                        selectedItem: 'SD',
+                        onChanged: (value) => _bloc.tempLulusan[indexAnggota] = value,
                         searchBoxDecoration: const InputDecoration(
                           filled: true,
                           hintText: 'Cari Pendidikan',
@@ -211,7 +219,10 @@ class HomePage extends Page {
                         keyboardType: TextInputType.phone,
                         title: 'Nomor HP',
                         hit: 'Jika ada',
-                        onChanged: (value) => _bloc.tempNomorTelp,
+                        onChanged: (value) {
+                          _bloc.tempNomorTelp[indexAnggota] = value;
+                          // print(_bloc.tempNomorTelp);
+                        },
                       ),
                     ]
                   ),
@@ -222,10 +233,18 @@ class HomePage extends Page {
         ],
       ),
     ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () => Navigator.push(context, MaterialPageRoute(
-        builder: (context) => QuestionPage())),
-      child: const Icon(Icons.arrow_forward),
+    floatingActionButton: ValueListenableBuilder<bool>(
+      valueListenable: _bloc.validAnggotaNotif,
+      builder: (context, value, _) => FloatingActionButton(
+        backgroundColor: value ? Colors.teal : Colors.grey,
+        onPressed: value ? () {
+          // Navigator.push(context, MaterialPageRoute(
+          // builder: (context) => QuestionPage()));
+          // print(_bloc.anggota);
+          _bloc.saveDataKeluarga();
+        } : null,
+        child: const Icon(Icons.arrow_forward),
+      ),
     ),
   );
 }
