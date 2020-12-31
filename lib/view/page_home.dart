@@ -30,7 +30,7 @@ class HomePage extends Page {
             keyboardType: TextInputType.number,
             onChanged: (val) {
               _bloc.nomorKK = val;
-              _bloc.validAnggotaNotif.value = _bloc.anggota.isNotEmpty && _bloc.nomorKK != null;
+              _bloc.validAnggotaNotif.value = _bloc.anggota.isNotEmpty && _bloc.nomorKK != null || _bloc.nomorKK != '';
             },
           ),
           StatefulBuilder(builder: (context, setState) => Column(
@@ -114,9 +114,10 @@ class HomePage extends Page {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) {
                                 if (value == 'Edit') {
+                                  _bloc.editAnggota(indexAnggota);
                                   showDialog(
                                     context: context,
-                                    builder: (context) => AnggotaFormDialog(bloc: _bloc),
+                                    builder: (context) => AnggotaFormDialog(bloc: _bloc, editIndex: indexAnggota,),
                                   );
                                 } else if (value == 'Delete') {
                                   showDialog(
@@ -303,8 +304,9 @@ class TextFieldWithTitle extends StatelessWidget {
 
 class AnggotaFormDialog extends StatelessWidget {
   final HomeBloc bloc;
+  final int editIndex;
 
-  const AnggotaFormDialog({this.bloc});
+  const AnggotaFormDialog({this.bloc, this.editIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -404,7 +406,7 @@ class AnggotaFormDialog extends StatelessWidget {
           builder: (context, value, _) => FlatButton(
             color: Colors.teal,
             onPressed: value ? () {
-              bloc.addAnggota();
+              (editIndex != null) ? bloc.modifAnggota(editIndex) : bloc.addAnggota();
               Navigator.of(context).pop();
             } : null,
             child: const Text('OKE'),

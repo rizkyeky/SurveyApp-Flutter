@@ -36,15 +36,24 @@ class HomeBloc implements Bloc {
   List<String> tempNomorTelp = [];
 
   List<Map<String, String>> anggota = [
-    // {
-    //   'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
-    //   'NIK': '321111000222333444',
-    //   'Jenis Kelamin': 'Laki-laki',
-    //   'Tempat Lahir': 'Badung dan Surabaya',
-    //   'Tanggal Lahir': '31 Desember 2020',
-    //   'Agama': 'Islam',
-    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
-    // }
+    {
+      'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
+      'NIK': '321111000222333444',
+      'Jenis Kelamin': 'Perempuan',
+      'Tempat Lahir': 'Bandung dan Bandung',
+      'Tanggal Lahir': '1 January 1999',
+      'Agama': 'Islam',
+      'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
+    },
+    {
+      'Nama': 'Dewi Rostika dan Dadang',
+      'NIK': '321111000222333444',
+      'Jenis Kelamin': 'Laki-laki',
+      'Tempat Lahir': 'Bandung dan Surabaya',
+      'Tanggal Lahir': '31 Desember 2020',
+      'Agama': 'Islam',
+      'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
+    }
   ];
 
   Map<String, dynamic> dataKeluarga = {
@@ -52,8 +61,7 @@ class HomeBloc implements Bloc {
 
   void saveDataKeluarga() {
     dataKeluarga['Nomor KK'] = nomorKK;
-    // dataKeluarga['Alamat'] = satuAlamat ? tempAlamat : null;
-    // dataKeluarga['Agama'] = satuAgama ? tempAgama : null;
+
     // ignore: avoid_function_literals_in_foreach_calls
     anggota.forEach((element) {element.addAll({
       'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
@@ -90,7 +98,7 @@ class HomeBloc implements Bloc {
       anggotaNotif.value = List.from(anggota);
       validFormNotif.value = false;
 
-      validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null;
+      validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null || nomorKK != '';
 
       tempPekerjaan.add('Belum/ Tidak Bekerja');
       tempLulusan.add('SD');
@@ -104,13 +112,34 @@ class HomeBloc implements Bloc {
     }
   }
 
+  void editAnggota(int index) {
+    tempNama = anggota[index]['Nama'];
+    tempNik = anggota[index]['NIK'];
+    tempJenisKel = anggota[index]['Jenis Kelamin'];
+    tempTempatLahir = anggota[index]['Tempat Lahir'];
+    tempTglLahir = convertDate(anggota[index]['Tanggal Lahir']);
+  }
+
+  void modifAnggota(int index) {
+    anggota[index] = {
+      'Nama': tempNama,
+      'NIK': tempNik,
+      'Jenis Kelamin': tempJenisKel,
+      'Tempat Lahir': tempTempatLahir,
+      'Tanggal Lahir': formatDate(tempTglLahir),
+      'Agama': tempAgama,
+      'Alamat': tempAlamat,
+    };
+    anggotaNotif.value = List.from(anggota);
+  }
+
   void deleteAnggota(int index) {
     anggota.removeAt(index);
     anggotaNotif.value = List.from(anggota);
     tempPekerjaan.removeAt(index);
     tempLulusan.removeAt(index);
     tempNomorTelp.removeAt(index);
-    validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null;
+    validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null || nomorKK != '';
   }
 
   List<String> pendidikan = [
