@@ -14,30 +14,36 @@ class HomeBloc implements Bloc {
 
   ValueNotifier<List<Map<String, String>>> anggotaNotif = ValueNotifier([]);
   ValueNotifier<bool> validFormNotif = ValueNotifier(false);
+  ValueNotifier<bool> satuAlamatNotif = ValueNotifier(false);
+  ValueNotifier<bool> satuAgamaNotif = ValueNotifier(false);
 
   String nomorKK;
   bool satuAlamat = false;
   bool satuAgama = false;
 
+  String tempAlamat;
+  String tempAgama;
+
   String tempNama;
   String tempNik;
-  String tempAlamat;
   String tempJenisKel;
   String tempTempatLahir;
   DateTime tempTglLahir;
-  String tempAgama;
+  
   String tempLulusan;
-  String tempNomorTelp;
   String tempPekerjaan;
+  String tempNomorTelp;
 
   List<Map<String, String>> anggota = [
-    {
-      'Nama': 'Mochamad Rizky Darmawan',
-      'NIK': '321111000222333444',
-      'Jenis Kelamin': 'Laki-laki',
-      'Tempat Lahir': 'Badung dan Surabaya',
-      'Tanggal Lahir': '31 Desember 2020',
-    }
+    // {
+    //   'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
+    //   'NIK': '321111000222333444',
+    //   'Jenis Kelamin': 'Laki-laki',
+    //   'Tempat Lahir': 'Badung dan Surabaya',
+    //   'Tanggal Lahir': '31 Desember 2020',
+    //   'Agama': 'Islam',
+    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
+    // }
   ];
 
   void checkValidFormAnggota() {
@@ -55,18 +61,17 @@ class HomeBloc implements Bloc {
         'Jenis Kelamin': tempJenisKel,
         'Tempat Lahir': tempTempatLahir,
         'Tanggal Lahir': formatDate(tempTglLahir),
+        'Agama': tempAgama,
+        'Alamat': tempAlamat
       });
       anggotaNotif.value = List.from(anggota);
       validFormNotif.value = false;
       
       tempNama = null;
       tempNik = null;
-      tempAlamat = null;
       tempJenisKel = null;
       tempTempatLahir = null;
       tempTglLahir = null;
-      tempAgama = null;
-      tempLulusan = null;
     }
   }
 

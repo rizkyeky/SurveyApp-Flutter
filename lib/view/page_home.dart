@@ -39,6 +39,7 @@ class HomePage extends Page {
                 onChanged: (value) {
                   if (_bloc.satuAlamat != value) {
                     setState(() {
+                      _bloc.satuAlamatNotif.value = value;
                       _bloc.satuAlamat = value;
                     });
                   }
@@ -51,6 +52,7 @@ class HomePage extends Page {
                 onChanged: (value) {
                   if (_bloc.satuAgama != value) {
                     setState(() {
+                      _bloc.satuAgamaNotif.value = value;
                       _bloc.satuAgama = value;
                     });
                   }
@@ -60,11 +62,14 @@ class HomePage extends Page {
               if (_bloc.satuAlamat) TextFieldWithTitle(
                 title: 'Alamat',
                 maxLines: 2,
-                onChanged: (value) {},
+                controller: TextEditingController(text: _bloc.tempAlamat),
+                textCapitalization: TextCapitalization.words,
+                onChanged: (value) => _bloc.tempAlamat = value,
               ),
               if (_bloc.satuAgama) TextFieldWithTitle(
                 title: 'Agama',
-                onChanged: (value) {},
+                controller: TextEditingController(text: _bloc.tempAgama),
+                onChanged: (value) => _bloc.tempAgama = value,
               ),
             ],
           )),
@@ -75,7 +80,7 @@ class HomePage extends Page {
               builder: (context) => AnggotaFormDialog(bloc: _bloc),
             ),
             icon: const Icon(Icons.add),
-            label: const Text('Tambah Anggota Keluarga'),
+            label: const Text('Tambah Anggota'),
           ),
           const SizedBox(height: 12,),
           ValueListenableBuilder<List<Map<String, String>>>(
@@ -97,25 +102,65 @@ class HomePage extends Page {
                           return ListTile(
                             contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
                             title: Text(_bloc.anggota[index][key], style: TextStyle(
-                              fontSize: (indexLs == 0) ? 20 : 16,
+                              fontSize: (indexLs == 0) ? 18 : 16,
                               fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
                             ),),
                             subtitle: (indexLs != 0) ? Text(key) : null,
                             dense: indexLs != 0,
                             trailing: (indexLs == 0) ? PopupMenuButton<String>(
                               icon: const Icon(Icons.more_vert),
-                              onSelected: (value) {}, 
+                              onSelected: (value) {
+                                if (value == 'Edit') {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AnggotaFormDialog(bloc: _bloc),
+                                  );
+                                } else if (value == 'Delete') {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Delete Anggota'),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () => _bloc.deleteAnggota(index),
+                                          child: const Text('DELETE')
+                                        ),
+                                        FlatButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text('CANCEL')
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }
+                              }, 
                               itemBuilder: (context) => List.generate(menu.length,
-                                (index) => PopupMenuItem<String>(child: Text(menu[index]))),
+                                (index) => PopupMenuItem<String>(
+                                  value: menu[index], 
+                                  child: Text(menu[index]), 
+                                )
+                              ),
                             ) : null,
                             onTap: (indexLs == 0) ? () {} : null,
                           );
                         }
                       ),
-                      TextFieldWithTitle(
-                        title: 'Alamat',
-                        maxLines: 2,
-                        onChanged: (value) => _bloc.tempAlamat,
+                      ValueListenableBuilder<bool>(
+                        valueListenable: _bloc.satuAlamatNotif, 
+                        builder: (context, value, _) => !value ? TextFieldWithTitle(
+                          title: 'Alamat',
+                          maxLines: 2,
+                          textCapitalization: TextCapitalization.words,
+                          onChanged: (value) => _bloc.tempAlamat,
+                        ) : const SizedBox()
+                      ),
+                      ValueListenableBuilder<bool>(
+                        valueListenable: _bloc.satuAgamaNotif, 
+                        builder: (context, value, _) => !value ? TextFieldWithTitle(
+                          title: 'Agama',
+                          textCapitalization: TextCapitalization.sentences,
+                          onChanged: (value) => _bloc.tempAgama,
+                        ) : const SizedBox()
                       ),
                       const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
                       const SizedBox(
@@ -163,8 +208,9 @@ class HomePage extends Page {
                       ),
                       TextFieldWithTitle(
                         padding: const EdgeInsets.all(0),
+                        keyboardType: TextInputType.phone,
                         title: 'Nomor HP',
-                        hit: 'Opsional',
+                        hit: 'Jika ada',
                         onChanged: (value) => _bloc.tempNomorTelp,
                       ),
                     ]
@@ -193,6 +239,7 @@ class TextFieldWithTitle extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final int maxLines;
   final TextCapitalization textCapitalization;
+  final TextEditingController controller;
 
   const TextFieldWithTitle({
     this.title, 
@@ -202,7 +249,8 @@ class TextFieldWithTitle extends StatelessWidget {
     this.hit, 
     this.maxLines, 
     this.titleSize,
-    this.textCapitalization
+    this.textCapitalization,
+    this.controller,
   });
 
   @override
@@ -217,6 +265,7 @@ class TextFieldWithTitle extends StatelessWidget {
             height: 12,
           ),
           TextField(
+            controller: controller,
             textCapitalization: textCapitalization ?? TextCapitalization.sentences,
             onChanged: onChanged ?? (value) {},
             keyboardType: keyboardType ?? TextInputType.name,
@@ -240,7 +289,7 @@ class AnggotaFormDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime pickedDate;
+    DateTime pickedDate = bloc.tempTglLahir;
 
     return AlertDialog(
       title: const Text('Tambah Anggota Keluarga'),
@@ -250,6 +299,8 @@ class AnggotaFormDialog extends StatelessWidget {
           children: [
             TextFieldWithTitle(
               title: 'Nama',
+              controller: TextEditingController(text: bloc.tempNama),
+              textCapitalization: TextCapitalization.words,
               onChanged: (val) {
                 bloc.tempNama = val;
                 bloc.checkValidFormAnggota();
@@ -257,6 +308,7 @@ class AnggotaFormDialog extends StatelessWidget {
             ),
             TextFieldWithTitle(
               keyboardType: TextInputType.number,
+              controller: TextEditingController(text: bloc.tempNik),
               title: 'NIK',
               onChanged: (val) {
                 bloc.checkValidFormAnggota();
@@ -289,6 +341,8 @@ class AnggotaFormDialog extends StatelessWidget {
             TextFieldWithTitle(
               padding: const EdgeInsets.symmetric(vertical: 12),
               title: 'Tempat Lahir',
+              controller: TextEditingController(text: bloc.tempTempatLahir),
+              textCapitalization: TextCapitalization.words,
               onChanged: (val) {
                 bloc.tempTempatLahir = val;
                 bloc.checkValidFormAnggota();
@@ -311,7 +365,7 @@ class AnggotaFormDialog extends StatelessWidget {
                 },
                 child: Text(
                   pickedDate != null
-                    ? formatDate(bloc.tempTglLahir)
+                    ? formatDate(pickedDate)
                     : 'Pilih Tanggal Lahir',
                   style: const TextStyle(color: Colors.white)),
               ),
