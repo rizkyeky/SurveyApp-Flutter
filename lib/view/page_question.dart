@@ -13,6 +13,10 @@ class QuestionPage extends Page {
   void init() {
     _bloc.dataKeluarga = dataKeluarga;
     _bloc.anggotaBPJS = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
+    _bloc.anggotaRekening = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
+    _bloc.anggotaKIP = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
+    _bloc.anggotaKIS = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
+    _bloc.anggotaPrakerja = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
   }
 
   final Map<String, dynamic> dataKeluarga;
@@ -258,25 +262,186 @@ class QuestionPage extends Page {
           ),
           Card(
             child: StatefulBuilder(
-              builder: (context, setState) => Column(
+              builder: (context, setState) => Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Text('Siapa yang memiliki rekening bank?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                    ),
+                    ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                          value: _bloc.anggotaRekening[index],
+                          onChanged: (value) => setState(() => _bloc.anggotaRekening[index] = value),
+                        ),
+                        if (_bloc.anggotaRekening[index]) TextFieldWithTitle(
+                          title: 'Apa nama bank yang dimiliki?',
+                          onChanged: (value) {},
+                        )
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            child: StatefulBuilder(
+              builder: (context, setState) => Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Text('Siapa yang memiliki KIP (Kartu Indonesia Pintar)?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                    ),
+                    ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                          value: _bloc.anggotaKIP[index],
+                          onChanged: (value) => setState(() => _bloc.anggotaKIP[index] = value),
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            child: StatefulBuilder(
+              builder: (context, setState) => Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Text('Siapa yang memiliki KIS (Kartu Indonesia Sehat)?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                    ),
+                    ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                          value: _bloc.anggotaKIS[index],
+                          onChanged: (value) => setState(() => _bloc.anggotaKIS[index] = value),
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            child: StatefulBuilder(
+              builder: (context, setState) => Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Text('Siapa yang memiliki Kartu Prakerja?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                    ),
+                    ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
+                      children: [
+                        CheckboxListTile(
+                          title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                          value: _bloc.anggotaPrakerja[index],
+                          onChanged: (value) => setState(() => _bloc.anggotaPrakerja[index] = value),
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Text('Siapa yang memiliki rekening bank?',
+                    padding: EdgeInsets.all(6),
+                    child: Text('Apakah terdapat surat aset?',
                       style:  TextStyle(fontSize: 16)
                     ),
                   ),
-                  ...List.generate(dataKeluarga['Anggota'].length as int, (index) => CheckboxListTile(
-                    title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
-                    value: _bloc.anggotaBPJS[index],
-                    onChanged: (value) => setState(() => _bloc.anggotaBPJS[index] = value),
-                  ))
+                  const SizedBox(height: 6,),
+                  DropdownSearch<String>(
+                    hint: "Pilih surat aset",
+                    items: _bloc.opsiAset,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempAset = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),  
                 ],
               ),
             ),
-          )
+          ),
+          Card(
+            margin: const EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text('Apakah pernah mendapat bantuan?',
+                      style:  TextStyle(fontSize: 16)
+                    ),
+                  ),
+                  const SizedBox(height: 6,),
+                  DropdownSearch<String>(
+                    hint: "Pilih bantuan",
+                    items: _bloc.opsiBantuan,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempBantuan = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),  
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 300,),
         ], 
       ),

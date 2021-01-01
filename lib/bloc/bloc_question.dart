@@ -66,9 +66,29 @@ class QuestionBloc implements Bloc {
     'Luar Negri',
   ];
 
+  String tempAset;
+  List<String> opsiAset = [
+    'Sertifikat', 'Akte', 'Hibah', 'Waris', 'Petok D', 'Tidak Ada'
+  ];
+
+  String tempBantuan;
+  List<String> opsiBantuan = [
+    'Belum Pernah',
+    'Bantuan Sosial Tunai',
+    'Program Keluarga Harapan',
+    'Bansos lainnya',
+  ];
+
   bool tempYN2 = false;
   List<bool> aksesInternet;
   String tempInternet;
+
+  List<bool> anggotaRekening;
+  List<bool> anggotaKIP;
+  List<bool> anggotaKIS;
+  List<bool> anggotaPrakerja;
+
+  List<String> bankAnggota = [];
   // Map<String, String> dataBPJS = {
   // };
 }
