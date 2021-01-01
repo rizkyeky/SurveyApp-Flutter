@@ -12,6 +12,7 @@ class QuestionBloc implements Bloc {
   }
 
   ValueNotifier<bool> anggotaBPJSNotif = ValueNotifier(false);
+  ValueNotifier<bool> aksesInternetNotif = ValueNotifier(false);
 
   Map<String, dynamic> dataKeluarga;
 
@@ -64,4 +65,10 @@ class QuestionBloc implements Bloc {
     'Swasta',
     'Luar Negri',
   ];
+
+  bool tempYN2 = false;
+  List<bool> aksesInternet;
+  String tempInternet;
+  // Map<String, String> dataBPJS = {
+  // };
 }

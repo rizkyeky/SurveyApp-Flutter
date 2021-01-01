@@ -176,11 +176,12 @@ class QuestionPage extends Page {
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
                   ),
+                  const SizedBox(height: 12,),
                   DropdownSearch<String>(
                     hint: "Pilih Status Sinyal",
-                    items: _bloc.opsiProvider,
+                    items: _bloc.opsiStatusSinyal,
                     mode: Mode.MENU,
-                    onChanged: (value) => _bloc.tempProvider = value,
+                    onChanged: (value) => _bloc.tempStatusSinyal = value,
                     searchBoxDecoration: const InputDecoration(
                       filled: true,
                       floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -190,6 +191,7 @@ class QuestionPage extends Page {
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
                   ),
+                  const SizedBox(height: 12,),
                   DropdownSearch<String>(
                     hint: "Pilih Siaran TV",
                     items: _bloc.opsiTV,
@@ -204,10 +206,78 @@ class QuestionPage extends Page {
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Text('Apakah terdapat akses internet?',
+                      style: TextStyle(fontSize: 16)
+                    ),
+                  ),
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      final List<String> opsi = ['Iya', 'Tidak'];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          ...List.generate(
+                            2, (indexRadio) => RadioListTile<bool>(
+                              groupValue: _bloc.tempYN2,
+                              title: Text(opsi[indexRadio]),
+                              value: indexRadio == 0,
+                              onChanged: (value) => setState(() {
+                                  _bloc.tempYN2 = value;
+                                  _bloc.aksesInternetNotif.value = _bloc.tempYN2;
+                                }
+                              ),
+                            ),
+                          ),
+                          ValueListenableBuilder<bool>(
+                            valueListenable: _bloc.aksesInternetNotif, 
+                            builder: (context, value, _) => value ? DropdownSearch<String>(
+                              hint: "Pilih Penyedia Internet",
+                              items: _bloc.opsiProvider,
+                              mode: Mode.MENU,
+                              onChanged: (value) => _bloc.tempInternet = value,
+                              searchBoxDecoration: const InputDecoration(
+                                filled: true,
+                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                              ),
+                              dropdownSearchDecoration: const InputDecoration(
+                                filled: true,
+                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                              ),
+                            ) : const SizedBox()
+                          ),
+                        ]
+                      );
+                    }
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Card(
+            child: StatefulBuilder(
+              builder: (context, setState) => Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(18),
+                    child: Text('Siapa yang memiliki rekening bank?',
+                      style:  TextStyle(fontSize: 16)
+                    ),
+                  ),
+                  ...List.generate(dataKeluarga['Anggota'].length as int, (index) => CheckboxListTile(
+                    title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                    value: _bloc.anggotaBPJS[index],
+                    onChanged: (value) => setState(() => _bloc.anggotaBPJS[index] = value),
+                  ))
                 ],
               ),
             ),
           )
+          const SizedBox(height: 300,),
         ], 
       ),
     );
