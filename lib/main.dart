@@ -24,6 +24,36 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
+    final Map<String, dynamic> keluarga = {
+      'Nomor KK': '12345678',
+      'Anggota': [
+        {
+          'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
+          'NIK': '321111000222333444',
+          'Jenis Kelamin': 'Perempuan',
+          'Tempat Lahir': 'Bandung dan Bandung',
+          'Tanggal Lahir': '1 January 1999',
+          'Agama': 'Islam',
+          'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+          'Pekerjaan': 'Presiden',
+          'Lulusan': 'D3',
+          'Nomor HP': null
+        },
+        {
+          'Nama': 'Dewi Rostika dan Dadang',
+          'NIK': '321111000222333444',
+          'Jenis Kelamin': 'Laki-laki',
+          'Tempat Lahir': 'Bandung dan Surabaya',
+          'Tanggal Lahir': '31 Desember 2020',
+          'Agama': 'Islam',
+          'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+          'Pekerjaan': 'Wakil Presiden',
+          'Lulusan': 'SD',
+          'Nomor HP': 0812121212
+        }
+      ]
+    };
+
     return MaterialApp(      
       debugShowCheckedModeBanner: false,
       title: 'Survey App',
@@ -31,7 +61,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: QuestionPage(keluarga),
     );
   }
 }

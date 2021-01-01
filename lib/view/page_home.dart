@@ -30,7 +30,7 @@ class HomePage extends Page {
             keyboardType: TextInputType.number,
             onChanged: (val) {
               _bloc.nomorKK = val;
-              _bloc.validAnggotaNotif.value = _bloc.anggota.isNotEmpty && _bloc.nomorKK != null || _bloc.nomorKK != '';
+              _bloc.validAnggotaNotif.value = _bloc.checkValidKeluarga();
             },
           ),
           StatefulBuilder(builder: (context, setState) => Column(
@@ -239,10 +239,10 @@ class HomePage extends Page {
       builder: (context, value, _) => FloatingActionButton(
         backgroundColor: value ? Colors.teal : Colors.grey,
         onPressed: value ? () {
-          // Navigator.push(context, MaterialPageRoute(
-          // builder: (context) => QuestionPage()));
-          // print(_bloc.anggota);
           _bloc.saveDataKeluarga();
+          Navigator.push(context, MaterialPageRoute(
+          builder: (context) => QuestionPage(_bloc.dataKeluarga)));
+          // print(_bloc.anggota);
         } : null,
         child: const Icon(Icons.arrow_forward),
       ),

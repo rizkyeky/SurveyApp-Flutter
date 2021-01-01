@@ -62,6 +62,8 @@ class HomeBloc implements Bloc {
   void saveDataKeluarga() {
     dataKeluarga['Nomor KK'] = nomorKK;
 
+    // print(anggota);
+
     // ignore: avoid_function_literals_in_foreach_calls
     anggota.forEach((element) {element.addAll({
       'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
@@ -70,7 +72,7 @@ class HomeBloc implements Bloc {
     });});
 
     dataKeluarga['Anggota'] = anggota;
-    print(dataKeluarga);
+    // print(dataKeluarga);
   }
 
   void checkValidFormAnggota() {
@@ -78,8 +80,10 @@ class HomeBloc implements Bloc {
     tempJenisKel != null && tempTempatLahir != null && tempTglLahir != null;
   }
 
-  void checkValidAnggota() {
-
+  bool checkValidKeluarga() {
+    final bool validAlamat = satuAlamat ? (tempAlamat != null || tempAlamat != '') : !satuAlamat;
+    final bool validAgama = satuAlamat ? (tempAgama != null || tempAgama != '') : !satuAgama;
+    return anggota.isNotEmpty && (nomorKK != null || nomorKK != '') && validAlamat && validAgama;
   }
 
   void addAnggota() {
@@ -98,7 +102,7 @@ class HomeBloc implements Bloc {
       anggotaNotif.value = List.from(anggota);
       validFormNotif.value = false;
 
-      validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null || nomorKK != '';
+      validAnggotaNotif.value = checkValidKeluarga();
 
       tempPekerjaan.add('Belum/ Tidak Bekerja');
       tempLulusan.add('SD');
@@ -131,6 +135,12 @@ class HomeBloc implements Bloc {
       'Alamat': tempAlamat,
     };
     anggotaNotif.value = List.from(anggota);
+
+    tempNama = null;
+    tempNik = null;
+    tempJenisKel = null;
+    tempTempatLahir = null;
+    tempTglLahir = null;
   }
 
   void deleteAnggota(int index) {
@@ -139,7 +149,7 @@ class HomeBloc implements Bloc {
     tempPekerjaan.removeAt(index);
     tempLulusan.removeAt(index);
     tempNomorTelp.removeAt(index);
-    validAnggotaNotif.value = anggota.isNotEmpty && nomorKK != null || nomorKK != '';
+    validAnggotaNotif.value = checkValidKeluarga();
   }
 
   List<String> pendidikan = [

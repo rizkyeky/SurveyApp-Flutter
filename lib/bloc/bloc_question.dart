@@ -11,30 +11,27 @@ class QuestionBloc implements Bloc {
     // TODO: implement init
   }
 
-  List<Map<String, dynamic>> pertanyaanOpsi = [
-    {
-      'soal': 'Apakah sudah memiliki BPJS?',
-      'opsi': [
-        'Jono',
-        'Jonshon',
-        'Jones'
-      ]
-    },
-    {
-      'soal': 'Sumber air minum apa?',
-      'opsi': [
-        'AirMn_kemasan',
-        'AirMn_PAM',
-        'AirMn_ledeng_tanpa_meteran',
-        'AirMn_sumurbor',
-        'AirMn_sumur',
-        'AirMn_mataair',
-        'AirMn_sungai',
-        'AirMn_hujan',
-        'AirMn_lainnya',
-        'AirMn_lainnya_sebutkan'
-      ]
-    }
+  ValueNotifier<bool> anggotaBPJSNotif = ValueNotifier(false);
+
+  Map<String, dynamic> dataKeluarga;
+
+  bool tempYN1 = false;
+  List<bool> anggotaBPJS;
+  Map<String, String> dataBPJS = {
+  };
+
+
+  String tempAirMinum;
+  List<String> opsiAirMinum = [
+    'Air Minum Kemasan',
+    'Air Minum PAM',
+    'Air Minum Ledeng tanpa Meteran',
+    'Air Minum Sumur Bor',
+    'Air Minum Sumur',
+    'Air Minum Mata Air',
+    'Air Minum Sungai',
+    'Air Minum Hujan',
+    'Air Minum Lainnya',
   ];
 
   List<String> pertanyaanInput = [
