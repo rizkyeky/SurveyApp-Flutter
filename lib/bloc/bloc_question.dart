@@ -20,12 +20,11 @@ class QuestionBloc implements Bloc {
   Map<String, String> dataBPJS = {
   };
 
-
   String tempAirMinum;
   List<String> opsiAirMinum = [
     'Air Minum Kemasan',
     'Air Minum PAM',
-    'Air Minum Ledeng tanpa Meteran',
+    'Air Minum Ledeng Tanpa Meteran',
     'Air Minum Sumur Bor',
     'Air Minum Sumur',
     'Air Minum Mata Air',
@@ -33,13 +32,36 @@ class QuestionBloc implements Bloc {
     'Air Minum Hujan',
     'Air Minum Lainnya',
   ];
-
-  List<String> pertanyaanInput = [
-    'Siapa penemu listrik statis?',
-    'Siapa penemu listrik dinamis?',
+  
+  String tempSenitasi;
+  List<String> opsiSenitasi = [
+    'Jamban Sendiri',
+    'Jamban Bersama',
+    'Jamban Umum',
+    'Bukan Jamban',
+    'Yang Lain'
   ];
 
-  List<String> jawabanOpsi = List.generate(2, (index) => '');
-  List<String> jawabanInput = List.generate(2, (index) => '');
+  String tempProvider;
+  List<String> opsiProvider = [
+    'Tidak Menggunakan',
+    'Telkomsel',
+    'Indosat',
+    'XL',
+    'Yang Lain'
+  ];
 
+  String tempStatusSinyal;
+  List<String> opsiStatusSinyal = [
+    'Kuat',
+    'Sedang',
+    'Lemah',
+  ];
+
+  String tempTV;
+  List<String> opsiTV = [
+    'TVRI',
+    'Swasta',
+    'Luar Negri',
+  ];
 }

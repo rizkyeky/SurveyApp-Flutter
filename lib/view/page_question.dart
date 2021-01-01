@@ -82,32 +82,130 @@ class QuestionPage extends Page {
           ),
           Card(
             margin: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(18),
-                  child: Text('Darimana sumber air minum?',
-                    style:  TextStyle(fontSize: 16)
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text('Darimana sumber air minum?',
+                      style:  TextStyle(fontSize: 16)
+                    ),
                   ),
-                ),
-                DropdownSearch<String>(
-                  hint: "Pilih Sumber Air Minum",
-                  items: _bloc.opsiAirMinum,
-                  showSearchBox: true,
-                  onChanged: (value) => _bloc.tempAirMinum = value,
-                  searchBoxDecoration: const InputDecoration(
-                    filled: true,
-                    hintText: 'Cari Pekerjaan',
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                  const SizedBox(height: 6,),
+                  DropdownSearch<String>(
+                    hint: "Pilih Sumber Air Minum",
+                    items: _bloc.opsiAirMinum,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempAirMinum = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      hintText: 'Cari Sumber Air Minum',
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),  
+                ],
+              ),
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text('Dimana tempat senitasi?',
+                      style:  TextStyle(fontSize: 16)
+                    ),
                   ),
-                  dropdownSearchDecoration: const InputDecoration(
-                    filled: true,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                  const SizedBox(height: 6,),
+                  DropdownSearch<String>(
+                    hint: "Pilih Senitasi",
+                    items: _bloc.opsiSenitasi,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempSenitasi = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),  
+                ],
+              ),
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.all(12),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(6),
+                    child: Text('Darimana tempat akses informasi?',
+                      style:  TextStyle(fontSize: 16)
+                    ),
                   ),
-                ),  
-              ],
+                  const SizedBox(height: 6,),
+                  DropdownSearch<String>(
+                    hint: "Pilih Provider",
+                    items: _bloc.opsiProvider,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempProvider = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),
+                  DropdownSearch<String>(
+                    hint: "Pilih Status Sinyal",
+                    items: _bloc.opsiProvider,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempProvider = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),
+                  DropdownSearch<String>(
+                    hint: "Pilih Siaran TV",
+                    items: _bloc.opsiTV,
+                    mode: Mode.MENU,
+                    onChanged: (value) => _bloc.tempTV = value,
+                    searchBoxDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                    dropdownSearchDecoration: const InputDecoration(
+                      filled: true,
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                    ),
+                  ),
+                ],
+              ),
             ),
           )
         ], 
