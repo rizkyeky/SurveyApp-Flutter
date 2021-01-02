@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       'Nomor KK': '12345678',
       'Anggota': [
         {
-          'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
+          'Nama': 'Mochamad Rizky Darmawan',
           'NIK': '321111000222333444',
           'Jenis Kelamin': 'Perempuan',
           'Tempat Lahir': 'Bandung dan Bandung',
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           'Nomor HP': null
         },
         {
-          'Nama': 'Dewi Rostika dan Dadang',
+          'Nama': 'Dewi Rostika',
           'NIK': '321111000222333444',
           'Jenis Kelamin': 'Laki-laki',
           'Tempat Lahir': 'Bandung dan Surabaya',

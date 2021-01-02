@@ -32,191 +32,142 @@ class QuestionPage extends Page {
         child: Column(
           children: [
             Card(
-              margin: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(18),
-                    child: Text('Apakah sudah memiliki BPJS?',
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Text('Apakah keluarga sudah memiliki BPJS?',
                       style:  TextStyle(fontSize: 16)
                     ),
-                  ),
-                  StatefulBuilder(
-                    builder: (context, setState) {
-                      final List<String> opsi = ['Iya', 'Tidak'];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          ...List.generate(
-                            2, (indexRadio) => RadioListTile<bool>(
-                              groupValue: _bloc.tempYN1,
-                              title: Text(opsi[indexRadio]),
-                              value: indexRadio == 0,
-                              onChanged: (value) => setState(() {
-                                  _bloc.tempYN1 = value;
-                                  _bloc.anggotaBPJSNotif.value = _bloc.tempYN1;
-                                }
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        final List<String> opsi = ['Iya', 'Tidak'];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            ...List.generate(
+                              2, (indexRadio) => RadioListTile<bool>(
+                                dense: true,
+                                groupValue: _bloc.tempYN1,
+                                title: Text(opsi[indexRadio]),
+                                value: indexRadio == 0,
+                                onChanged: (value) => setState(() {
+                                    _bloc.tempYN1 = value;
+                                    _bloc.anggotaBPJSNotif.value = _bloc.tempYN1;
+                                  }
+                                ),
                               ),
                             ),
-                          ),
-                          if (_bloc.tempYN1) const Padding(
-                          padding: EdgeInsets.all(18),
-                            child: Text('Siapa saja?',
+                            if (_bloc.tempYN1) const Text('Siapa saja?',
                               style: TextStyle(fontSize: 16)
                             ),
-                          ),
-                          ValueListenableBuilder<bool>(
-                            valueListenable: _bloc.anggotaBPJSNotif, 
-                            builder: (context, value, _) => value ? Column(
-                              children: List.generate(dataKeluarga['Anggota'].length as int, (index) => CheckboxListTile(
-                                title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
-                                value: _bloc.anggotaBPJS[index],
-                                onChanged: (value) => setState(() => _bloc.anggotaBPJS[index] = value),
-                              ))
-                            ) : const SizedBox()
-                          ),
-                        ]
-                      );
-                    }
-                  ),
-                ],
+                            if (_bloc.tempYN1) const SizedBox(height: 12,),
+                            ValueListenableBuilder<bool>(
+                              valueListenable: _bloc.anggotaBPJSNotif, 
+                              builder: (context, value, _) => value ? Column(
+                                children: List.generate(dataKeluarga['Anggota'].length as int, (index) => CheckboxListTile(
+                                  dense: true,
+                                  title: Text(dataKeluarga['Anggota'][index]['Nama'] as String,
+                                    style: const TextStyle(fontSize: 15)
+                                  ),
+                                  value: _bloc.anggotaBPJS[index],
+                                  onChanged: (value) => setState(() => _bloc.anggotaBPJS[index] = value),
+                                ))
+                              ) : const SizedBox()
+                            ),
+                          ]
+                        );
+                      }
+                    ),
+                  ],
+                ),
               ),
             ),
             Card(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Text('Darimana sumber air minum?',
-                        style:  TextStyle(fontSize: 16)
-                      ),
+                    const Text('Darimana sumber air minum?',
+                      style:  TextStyle(fontSize: 16)
                     ),
-                    const SizedBox(height: 6,),
-                    DropdownSearch<String>(
-                      hint: "Pilih Sumber Air Minum",
+                    const SizedBox(height: 12,),
+                    DropDownOption(
+                      title: 'Pilih Sumber Air Minum',
                       items: _bloc.opsiAirMinum,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempAirMinum = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        hintText: 'Cari Sumber Air Minum',
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
+                      value: _bloc.tempAirMinum,
+                      onChanged: (val) => _bloc.tempAirMinum = val,
                     ),  
                   ],
                 ),
               ),
             ),
             Card(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Text('Dimana tempat senitasi?',
-                        style:  TextStyle(fontSize: 16)
-                      ),
+                    const Text('Dimana tempat senitasi?',
+                      style: TextStyle(fontSize: 16)
                     ),
-                    const SizedBox(height: 6,),
-                    DropdownSearch<String>(
-                      hint: "Pilih Senitasi",
+                    const SizedBox(height: 12,),
+                    DropDownOption(
+                      title: 'Pilih Senitasi',
                       items: _bloc.opsiSenitasi,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempSenitasi = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
+                      value: _bloc.tempSenitasi,
+                      onChanged: (val) => _bloc.tempSenitasi = val,
                     ),  
                   ],
                 ),
               ),
             ),
             Card(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Text('Darimana tempat akses informasi?',
-                        style:  TextStyle(fontSize: 16)
-                      ),
+                    const Text('Darimana tempat akses informasi?',
+                      style: TextStyle(fontSize: 16)
                     ),
-                    const SizedBox(height: 6,),
-                    DropdownSearch<String>(
-                      hint: "Pilih Provider",
+                    const SizedBox(height: 12,),
+                    DropDownOption(
+                      title: 'Pilih Penyedia Telepon',
                       items: _bloc.opsiProvider,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempProvider = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
+                      value: _bloc.tempProvider,
+                      onChanged: (val) => _bloc.tempProvider = val,
                     ),
                     const SizedBox(height: 12,),
-                    DropdownSearch<String>(
-                      hint: "Pilih Status Sinyal",
+                    DropDownOption(
+                      title: 'Pilih Status Sinyal',
                       items: _bloc.opsiStatusSinyal,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempStatusSinyal = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
+                      value: _bloc.tempStatusSinyal,
+                      onChanged: (val) => _bloc.tempStatusSinyal = val,
                     ),
                     const SizedBox(height: 12,),
-                    DropdownSearch<String>(
-                      hint: "Pilih Siaran TV",
+                    DropDownOption(
+                      title: 'Pilih Siaran TV',
                       items: _bloc.opsiTV,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempTV = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
+                      value: _bloc.tempTV,
+                      onChanged: (val) => _bloc.tempTV = val,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(18),
-                      child: Text('Apakah terdapat akses internet?',
-                        style: TextStyle(fontSize: 16)
-                      ),
+                    const SizedBox(height: 12,),
+                    const Text('Apakah keluarga miliki akses internet?',
+                      style: TextStyle(fontSize: 16)
                     ),
+                    const SizedBox(height: 12,),
                     StatefulBuilder(
                       builder: (context, setState) {
                         final List<String> opsi = ['Iya', 'Tidak'];
@@ -225,7 +176,8 @@ class QuestionPage extends Page {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             ...List.generate(
-                              2, (indexRadio) => RadioListTile<bool>(
+                              opsi.length, (indexRadio) => RadioListTile<bool>(
+                                dense: true,
                                 groupValue: _bloc.tempYN2,
                                 title: Text(opsi[indexRadio]),
                                 value: indexRadio == 0,
@@ -238,19 +190,11 @@ class QuestionPage extends Page {
                             ),
                             ValueListenableBuilder<bool>(
                               valueListenable: _bloc.aksesInternetNotif, 
-                              builder: (context, value, _) => value ? DropdownSearch<String>(
-                                hint: "Pilih Penyedia Internet",
+                              builder: (context, value, _) => value ? DropDownOption(
+                                title: 'Pilih Penyedia Internet',
                                 items: _bloc.opsiProvider,
-                                mode: Mode.MENU,
-                                onChanged: (value) => _bloc.tempInternet = value,
-                                searchBoxDecoration: const InputDecoration(
-                                  filled: true,
-                                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                                ),
-                                dropdownSearchDecoration: const InputDecoration(
-                                  filled: true,
-                                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                                ),
+                                value: _bloc.tempInternet,
+                                onChanged: (val) => _bloc.tempInternet = val,
                               ) : const SizedBox()
                             ),
                           ]
@@ -262,19 +206,18 @@ class QuestionPage extends Page {
               ),
             ),
             Card(
-              child: StatefulBuilder(
-                builder: (context, setState) => Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: StatefulBuilder(
+                  builder: (context, setState) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Text('Siapa yang memiliki rekening bank?',
-                          style:  TextStyle(fontSize: 16)
-                        ),
+                      const Text('Siapa yang memiliki rekening bank?',
+                        style: TextStyle(fontSize: 16)
                       ),
+                      const SizedBox(height: 12,),
                       ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
                         children: [
                           CheckboxListTile(
@@ -294,23 +237,25 @@ class QuestionPage extends Page {
               ),
             ),
             Card(
-              child: StatefulBuilder(
-                builder: (context, setState) => Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: StatefulBuilder(
+                  builder: (context, setState) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Text('Siapa yang memiliki KIP (Kartu Indonesia Pintar)?',
-                          style:  TextStyle(fontSize: 16)
-                        ),
+                      const Text('Siapa yang sudah memiliki Kartu Indonesia Pintar?',
+                        style: TextStyle(fontSize: 16)
                       ),
+                      const SizedBox(height: 12,),
                       ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
                         children: [
                           CheckboxListTile(
-                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                            dense: true,
+                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String,
+                              style: const TextStyle(fontSize: 15)
+                            ),
                             value: _bloc.anggotaKIP[index],
                             onChanged: (value) => setState(() => _bloc.anggotaKIP[index] = value),
                           ),
@@ -322,23 +267,25 @@ class QuestionPage extends Page {
               ),
             ),
             Card(
-              child: StatefulBuilder(
-                builder: (context, setState) => Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: StatefulBuilder(
+                  builder: (context, setState) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Text('Siapa yang memiliki KIS (Kartu Indonesia Sehat)?',
-                          style:  TextStyle(fontSize: 16)
-                        ),
+                      const Text('Siapa yang sudah memiliki Kartu Indonesia Sehat?',
+                        style: TextStyle(fontSize: 16)
                       ),
+                      const SizedBox(height: 12,),
                       ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
                         children: [
                           CheckboxListTile(
-                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                            dense: true,
+                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String,
+                              style: const TextStyle(fontSize: 15)
+                            ),
                             value: _bloc.anggotaKIS[index],
                             onChanged: (value) => setState(() => _bloc.anggotaKIS[index] = value),
                           ),
@@ -350,23 +297,25 @@ class QuestionPage extends Page {
               ),
             ),
             Card(
-              child: StatefulBuilder(
-                builder: (context, setState) => Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: StatefulBuilder(
+                  builder: (context, setState) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(6),
-                        child: Text('Siapa yang memiliki Kartu Prakerja?',
-                          style:  TextStyle(fontSize: 16)
-                        ),
+                      const Text('Siapa yang sudah memiliki Kartu Prakerja?',
+                        style: TextStyle(fontSize: 16)
                       ),
+                      const SizedBox(height: 12,),
                       ...List.generate(dataKeluarga['Anggota'].length as int, (index) => Column(
                         children: [
                           CheckboxListTile(
-                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
+                            dense: true,
+                            title: Text(dataKeluarga['Anggota'][index]['Nama'] as String,
+                              style: const TextStyle(fontSize: 15)
+                            ),
                             value: _bloc.anggotaPrakerja[index],
                             onChanged: (value) => setState(() => _bloc.anggotaPrakerja[index] = value),
                           ),
@@ -378,50 +327,39 @@ class QuestionPage extends Page {
               ),
             ),
             Card(
-              margin: const EdgeInsets.all(12),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(6),
-                      child: Text('Apakah terdapat surat aset?',
-                        style:  TextStyle(fontSize: 16)
-                      ),
-                    ),
-                    const SizedBox(height: 6,),
-                    DropdownSearch<String>(
-                      hint: "Pilih surat aset",
-                      items: _bloc.opsiAset,
-                      mode: Mode.MENU,
-                      onChanged: (value) => _bloc.tempAset = value,
-                      searchBoxDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        filled: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                      ),
-                    ),  
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              margin: const EdgeInsets.all(12),
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    const Text('Apakah pernah mendapatkan bantuan?',
+                    const Text('Apakah keluarga memiliki surat aset?',
                       style: TextStyle(fontSize: 16)
                     ),
-                    const SizedBox(height: 6,),
+                    const SizedBox(height: 12,),
+                    DropDownOption(
+                      title: 'Pilih Surat Aset',
+                      items: _bloc.opsiAset,
+                      value: _bloc.tempAset,
+                      onChanged: (value) => _bloc.tempAset = value,
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Text('Apakah keluarga pernah mendapatkan bantuan?',
+                      style: TextStyle(fontSize: 16)
+                    ),
+                    const SizedBox(height: 12,),
                     DropDownOption(
                       title: 'Pilih Bantuan',
                       items: _bloc.opsiBantuan,
@@ -439,10 +377,11 @@ class QuestionPage extends Page {
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _bloc.validQuesNotif,
         builder: (context, value, _) => FloatingActionButton(
-            onPressed: value ? () {} : null,
-            backgroundColor: value ? Colors.teal : Colors.grey,
-            child: const Icon(Icons.save),
-          )
+          onPressed: value ? () {} : null,
+          backgroundColor: value ? Colors.teal : Colors.grey,
+          elevation: value ? 1 : 0,
+          child: const Icon(Icons.check),
+        )
       ),
     );
   }
