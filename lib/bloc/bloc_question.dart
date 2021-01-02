@@ -19,49 +19,60 @@ class QuestionBloc implements Bloc {
 
   bool tempYN1 = false;
   List<bool> anggotaBPJS;
-  Map<String, String> dataBPJS = {
-  };
 
   void checkValidQues() {
-    final bool check = tempAirMinum != null && tempSenitasi != null && 
-      tempProvider != null && tempStatusSinyal != null && tempTV != null && 
-      tempAset != null && tempBantuan != null && tempInternet != null;
+
+    final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
+    final bool validAirMinum = tempAirMinum != null;
+    final bool validSenitasi = tempSenitasi != null;
+    final bool validProvider = tempProvider != null;
+    final bool validStatusSinyal = tempStatusSinyal != null;
+    final bool validTV = tempTV != null;
+    final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
+    final bool validAset = tempAset != null;
+    final bool validBantuan = tempBantuan != null;
+
+    final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
+    validStatusSinyal && validTV && validInternet && validAset && validBantuan;
     validQuesNotif.value = check;
   }
 
   String tempAirMinum;
   List<String> opsiAirMinum = [
-    'Air Minum Kemasan',
-    'Air Minum PAM',
-    'Air Minum Ledeng Tanpa Meteran',
-    'Air Minum Sumur Bor',
-    'Air Minum Sumur',
-    'Air Minum Mata Air',
-    'Air Minum Sungai',
-    'Air Minum Hujan',
-    'Air Minum Lainnya',
+    'Tidak Ada',
+    'Kemasan',
+    'PAM',
+    'Ledeng Tanpa Meteran',
+    'Sumur Bor',
+    'Sumur',
+    'Mata Air',
+    'Sungai',
+    'Hujan',
+    'Lainnya',
   ];
   
   String tempSenitasi;
   List<String> opsiSenitasi = [
+    'Tidak Ada',
     'Jamban Sendiri',
     'Jamban Bersama',
     'Jamban Umum',
     'Bukan Jamban',
-    'Yang Lain'
+    'Lainnya'
   ];
 
   String tempProvider;
   List<String> opsiProvider = [
-    'Tidak Menggunakan',
+    'Tidak Ada',
     'Telkomsel',
     'Indosat',
     'XL',
-    'Yang Lain'
+    'Lainnya'
   ];
 
   String tempStatusSinyal;
   List<String> opsiStatusSinyal = [
+    'Tidak Ada',
     'Kuat',
     'Sedang',
     'Lemah',
@@ -69,6 +80,7 @@ class QuestionBloc implements Bloc {
 
   String tempTV;
   List<String> opsiTV = [
+    'Tidak Ada',
     'TVRI',
     'Swasta',
     'Luar Negri',
@@ -76,27 +88,87 @@ class QuestionBloc implements Bloc {
 
   String tempAset;
   List<String> opsiAset = [
-    'Sertifikat', 'Akte', 'Hibah', 'Waris', 'Petok D', 'Tidak Ada'
+    'Tidak Ada', 'Sertifikat', 'Akte', 'Hibah', 'Waris', 'Petok D', 'Lainnya'
   ];
 
   String tempBantuan;
   List<String> opsiBantuan = [
-    'Belum Pernah',
+    'Tidak Ada',
     'Bantuan Sosial Tunai',
     'Program Keluarga Harapan',
-    'Bansos lainnya',
+    'Lainnya',
   ];
 
-  bool tempYN2 = false;
-  List<bool> aksesInternet;
+  bool tempAksesInternet = false;
   String tempInternet;
 
   List<bool> anggotaRekening;
+  List<String> namaRekeningAnggota = [];
+
   List<bool> anggotaKIP;
   List<bool> anggotaKIS;
   List<bool> anggotaPrakerja;
 
-  List<String> bankAnggota = [];
-  // Map<String, String> dataBPJS = {
-  // };
+  void saveJawabanKeluarga() {
+    final List<String> tempAnggotaBPJS = [];
+    // ignore: avoid_function_literals_in_foreach_calls
+    anggotaBPJS.forEach((element) {
+      int i = 0;
+      if (element) {
+        tempAnggotaBPJS.add(dataKeluarga['Anggota'][i] as String);
+      }
+      i++;
+    });
+
+    final List<String> tempAnggotaRekening = [];
+    // ignore: avoid_function_literals_in_foreach_calls
+    anggotaRekening.forEach((element) {
+      int i = 0;
+      if (element) {
+        tempAnggotaRekening.add(dataKeluarga['Anggota'][i] as String);
+      }
+      i++;
+    });
+
+    final List<String> tempAnggotaKIP = [];
+    // ignore: avoid_function_literals_in_foreach_calls
+    anggotaKIP.forEach((element) {
+      int i = 0;
+      if (element) {
+        tempAnggotaKIP.add(dataKeluarga['Anggota'][i] as String);
+      }
+      i++;
+    });
+
+    final List<String> tempAnggotaKIS = [];
+    // ignore: avoid_function_literals_in_foreach_calls
+    anggotaKIS.forEach((element) {
+      int i = 0;
+      if (element) {
+        tempAnggotaKIS.add(dataKeluarga['Anggota'][i] as String);
+      }
+      i++;
+    });
+
+    dataKeluarga.addAll({
+      'Jawaban': {
+        'BPjS': tempYN1,
+        'Anggota BPJS': tempAnggotaBPJS,
+        'Air Minum': tempAirMinum,
+        'Senitasi': tempSenitasi,
+        'Provider Telp': tempProvider,
+        'Status Sinyal': tempStatusSinyal,
+        'TV': tempTV,
+        'Akses Internet': tempAksesInternet,
+        'Internet': tempInternet,
+        'Anggota Rekening': tempAnggotaRekening,
+        'Anggota KIP': tempAnggotaKIP,
+        'Anggota KIS': tempAnggotaKIS,
+        'Surat Aset': tempAset,
+        'Bantuan': tempBantuan
+      }
+    });
+
+    print(dataKeluarga);
+  }
 }

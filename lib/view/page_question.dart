@@ -42,6 +42,7 @@ class QuestionPage extends Page {
                     const Text('Apakah keluarga sudah memiliki BPJS?',
                       style:  TextStyle(fontSize: 16)
                     ),
+                    const SizedBox(height: 12,),
                     StatefulBuilder(
                       builder: (context, setState) {
                         final List<String> opsi = ['Iya', 'Tidak'];
@@ -51,17 +52,18 @@ class QuestionPage extends Page {
                           children: [
                             ...List.generate(
                               2, (indexRadio) => RadioListTile<bool>(
-                                dense: true,
                                 groupValue: _bloc.tempYN1,
                                 title: Text(opsi[indexRadio]),
                                 value: indexRadio == 0,
                                 onChanged: (value) => setState(() {
                                     _bloc.tempYN1 = value;
                                     _bloc.anggotaBPJSNotif.value = _bloc.tempYN1;
+                                    _bloc.checkValidQues();
                                   }
                                 ),
                               ),
                             ),
+                            if (_bloc.tempYN1) const SizedBox(height: 12,),
                             if (_bloc.tempYN1) const Text('Siapa saja?',
                               style: TextStyle(fontSize: 16)
                             ),
@@ -75,7 +77,10 @@ class QuestionPage extends Page {
                                     style: const TextStyle(fontSize: 15)
                                   ),
                                   value: _bloc.anggotaBPJS[index],
-                                  onChanged: (value) => setState(() => _bloc.anggotaBPJS[index] = value),
+                                  onChanged: (value) {
+                                    setState(() => _bloc.anggotaBPJS[index] = value);
+                                    _bloc.checkValidQues();
+                                  },
                                 ))
                               ) : const SizedBox()
                             ),
@@ -103,7 +108,10 @@ class QuestionPage extends Page {
                       title: 'Pilih Sumber Air Minum',
                       items: _bloc.opsiAirMinum,
                       value: _bloc.tempAirMinum,
-                      onChanged: (val) => _bloc.tempAirMinum = val,
+                      onChanged: (val) {
+                        _bloc.tempAirMinum = val;
+                        _bloc.checkValidQues();
+                      },
                     ),  
                   ],
                 ),
@@ -125,7 +133,10 @@ class QuestionPage extends Page {
                       title: 'Pilih Senitasi',
                       items: _bloc.opsiSenitasi,
                       value: _bloc.tempSenitasi,
-                      onChanged: (val) => _bloc.tempSenitasi = val,
+                      onChanged: (val) {
+                        _bloc.tempSenitasi = val;
+                        _bloc.checkValidQues();
+                      },
                     ),  
                   ],
                 ),
@@ -147,21 +158,30 @@ class QuestionPage extends Page {
                       title: 'Pilih Penyedia Telepon',
                       items: _bloc.opsiProvider,
                       value: _bloc.tempProvider,
-                      onChanged: (val) => _bloc.tempProvider = val,
+                      onChanged: (val) {
+                        _bloc.tempProvider = val;
+                        _bloc.checkValidQues();
+                      },
                     ),
                     const SizedBox(height: 12,),
                     DropDownOption(
                       title: 'Pilih Status Sinyal',
                       items: _bloc.opsiStatusSinyal,
                       value: _bloc.tempStatusSinyal,
-                      onChanged: (val) => _bloc.tempStatusSinyal = val,
+                      onChanged: (val) {
+                        _bloc.tempStatusSinyal = val;
+                        _bloc.checkValidQues();
+                      },
                     ),
                     const SizedBox(height: 12,),
                     DropDownOption(
                       title: 'Pilih Siaran TV',
                       items: _bloc.opsiTV,
                       value: _bloc.tempTV,
-                      onChanged: (val) => _bloc.tempTV = val,
+                      onChanged: (val) {
+                        _bloc.tempTV = val;
+                        _bloc.checkValidQues();
+                      },
                     ),
                     const SizedBox(height: 12,),
                     const Text('Apakah keluarga miliki akses internet?',
@@ -177,13 +197,13 @@ class QuestionPage extends Page {
                           children: [
                             ...List.generate(
                               opsi.length, (indexRadio) => RadioListTile<bool>(
-                                dense: true,
-                                groupValue: _bloc.tempYN2,
+                                groupValue: _bloc.tempAksesInternet,
                                 title: Text(opsi[indexRadio]),
                                 value: indexRadio == 0,
                                 onChanged: (value) => setState(() {
-                                    _bloc.tempYN2 = value;
-                                    _bloc.aksesInternetNotif.value = _bloc.tempYN2;
+                                    _bloc.tempAksesInternet = value;
+                                    _bloc.aksesInternetNotif.value = _bloc.tempAksesInternet;
+                                    _bloc.checkValidQues();
                                   }
                                 ),
                               ),
@@ -194,7 +214,10 @@ class QuestionPage extends Page {
                                 title: 'Pilih Penyedia Internet',
                                 items: _bloc.opsiProvider,
                                 value: _bloc.tempInternet,
-                                onChanged: (val) => _bloc.tempInternet = val,
+                                onChanged: (val) {
+                                  _bloc.tempInternet = val;
+                                  _bloc.checkValidQues();
+                                },
                               ) : const SizedBox()
                             ),
                           ]
@@ -214,7 +237,7 @@ class QuestionPage extends Page {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      const Text('Siapa yang memiliki rekening bank?',
+                      const Text('Siapa yang sudah memiliki rekening bank?',
                         style: TextStyle(fontSize: 16)
                       ),
                       const SizedBox(height: 12,),
@@ -223,11 +246,17 @@ class QuestionPage extends Page {
                           CheckboxListTile(
                             title: Text(dataKeluarga['Anggota'][index]['Nama'] as String),
                             value: _bloc.anggotaRekening[index],
-                            onChanged: (value) => setState(() => _bloc.anggotaRekening[index] = value),
+                            onChanged: (value) {
+                              setState(() => _bloc.anggotaRekening[index] = value);
+                              _bloc.checkValidQues();
+                            },
                           ),
                           if (_bloc.anggotaRekening[index]) TextFieldWithTitle(
                             title: 'Apa nama bank yang dimiliki?',
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              _bloc.namaRekeningAnggota[index] = value;
+                              _bloc.checkValidQues();
+                            },
                           )
                         ],
                       ))
@@ -257,7 +286,10 @@ class QuestionPage extends Page {
                               style: const TextStyle(fontSize: 15)
                             ),
                             value: _bloc.anggotaKIP[index],
-                            onChanged: (value) => setState(() => _bloc.anggotaKIP[index] = value),
+                            onChanged: (value) {
+                              setState(() => _bloc.anggotaKIP[index] = value);
+                              _bloc.checkValidQues();
+                            },
                           ),
                         ],
                       ))
@@ -287,7 +319,10 @@ class QuestionPage extends Page {
                               style: const TextStyle(fontSize: 15)
                             ),
                             value: _bloc.anggotaKIS[index],
-                            onChanged: (value) => setState(() => _bloc.anggotaKIS[index] = value),
+                            onChanged: (value) {
+                              setState(() => _bloc.anggotaKIS[index] = value);
+                              _bloc.checkValidQues();
+                            },
                           ),
                         ],
                       ))
@@ -317,7 +352,10 @@ class QuestionPage extends Page {
                               style: const TextStyle(fontSize: 15)
                             ),
                             value: _bloc.anggotaPrakerja[index],
-                            onChanged: (value) => setState(() => _bloc.anggotaPrakerja[index] = value),
+                            onChanged: (value) {
+                              setState(() => _bloc.anggotaPrakerja[index] = value);
+                              _bloc.checkValidQues();
+                            },
                           ),
                         ],
                       ))
@@ -342,7 +380,10 @@ class QuestionPage extends Page {
                       title: 'Pilih Surat Aset',
                       items: _bloc.opsiAset,
                       value: _bloc.tempAset,
-                      onChanged: (value) => _bloc.tempAset = value,
+                      onChanged: (value) {
+                        _bloc.tempAset = value;
+                        _bloc.checkValidQues();
+                      },
                     )
                   ],
                 ),
@@ -364,7 +405,10 @@ class QuestionPage extends Page {
                       title: 'Pilih Bantuan',
                       items: _bloc.opsiBantuan,
                       value: _bloc.tempBantuan,
-                      onChanged: (value) => _bloc.tempBantuan = value,
+                      onChanged: (value) {
+                        _bloc.tempBantuan = value;
+                        _bloc.checkValidQues();
+                      },
                     )
                   ],
                 ),
@@ -377,9 +421,9 @@ class QuestionPage extends Page {
       floatingActionButton: ValueListenableBuilder<bool>(
         valueListenable: _bloc.validQuesNotif,
         builder: (context, value, _) => FloatingActionButton(
-          onPressed: value ? () {} : null,
           backgroundColor: value ? Colors.teal : Colors.grey,
           elevation: value ? 1 : 0,
+          onPressed: value ? () => _bloc.saveJawabanKeluarga() : null,
           child: const Icon(Icons.check),
         )
       ),
@@ -412,6 +456,10 @@ class DropDownOption extends StatelessWidget {
             temp = val;
             onChanged(val);
           }),
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            filled: true,
+          ),
         ),
       ),
     );
