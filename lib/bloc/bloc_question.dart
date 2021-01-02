@@ -13,6 +13,7 @@ class QuestionBloc implements Bloc {
 
   ValueNotifier<bool> anggotaBPJSNotif = ValueNotifier(false);
   ValueNotifier<bool> aksesInternetNotif = ValueNotifier(false);
+  ValueNotifier<bool> validQuesNotif = ValueNotifier(false);
 
   Map<String, dynamic> dataKeluarga;
 
@@ -20,6 +21,13 @@ class QuestionBloc implements Bloc {
   List<bool> anggotaBPJS;
   Map<String, String> dataBPJS = {
   };
+
+  void checkValidQues() {
+    final bool check = tempAirMinum != null && tempSenitasi != null && 
+      tempProvider != null && tempStatusSinyal != null && tempTV != null && 
+      tempAset != null && tempBantuan != null && tempInternet != null;
+    validQuesNotif.value = check;
+  }
 
   String tempAirMinum;
   List<String> opsiAirMinum = [
