@@ -19,26 +19,30 @@ class QuestionBloc implements Bloc {
 
   void checkValidQues() {
 
-    // final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
-    // final bool validAirMinum = tempAirMinum != null;
-    // final bool validSenitasi = tempSenitasi != null;
-    // final bool validProvider = tempProvider != null;
-    // final bool validStatusSinyal = tempStatusSinyal != null;
-    // final bool validTV = tempTV != null;
-    // final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
-    // final bool validAset = tempAset != null;
-    // final bool validBantuan = tempBantuan != null;
+    final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
+    final bool validAirMinum = tempAirMinum != null || tempAirMinum != '' || tempAirMinum != 'Lainnya';
+    final bool validSenitasi = tempSenitasi != null || tempSenitasi != '' || tempSenitasi != 'Lainnya';
+    final bool validProvider = tempProvider != null || tempProvider != '' || tempProvider != 'Lainnya';
+    final bool validStatusSinyal = tempStatusSinyal != null;
+    final bool validTV = tempOpsiTV.contains(true);
+    final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
+    final bool validAset = !tempOpsiAset.contains(null);
+    final bool validAsetLain = tempOpsiAset.last ? tempAsetLainnya != '' : !tempOpsiAset.last;
+    final bool validBantuan = !tempOpsiBantuan.contains(null);
+    final bool validBantuanLain = tempOpsiBantuan.last ? tempBantuanLainnya != '' : !tempOpsiBantuan.last;
+    final bool validNamaBank = !namaRekeningAnggota.contains('');
 
-    // final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
-    // validStatusSinyal && validTV && validInternet && validAset && validBantuan;
-    // validQuesNotif.value = check;
+    final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
+    validStatusSinyal && validTV && validInternet && validAset && validAsetLain && validBantuan
+    && validBantuanLain && validNamaBank;
+    validQuesNotif.value = check;
   }
 
   bool tempYN1 = false;
   List<bool> anggotaBPJS;
 
-  List<String> tempKelasBPSJ = List.generate(3, (index) => null);
-  List<String> opsiKelasBPSJ =[
+  List<String> tempKelasBPSJ;
+  List<String> opsiKelasBPSJ = [
     'Kelas 1', 'Kelas 2', 'Kelas 3'
   ];
 
@@ -109,7 +113,7 @@ class QuestionBloc implements Bloc {
   String tempInternet;
 
   List<bool> anggotaRekening;
-  List<String> namaRekeningAnggota = [];
+  List<String> namaRekeningAnggota;
 
   List<bool> anggotaKIP;
   List<bool> anggotaKIS;
@@ -126,6 +130,18 @@ class QuestionBloc implements Bloc {
       }
       i++;
     });
+
+    final List<String> tempTV = [];
+    i = 0;
+    // ignore: avoid_function_literals_in_foreach_calls
+    tempOpsiTV.forEach((element) {
+      if (element && i != tempOpsiTV.length-1) {
+        tempTV.add(opsiTV[i]);
+      }
+      i++;
+    });
+    if (tempTVLainnya != null || tempTVLainnya != '') tempTV.add(tempTVLainnya);
+    
 
     final List<String> tempAnggotaRekening = [];
     i = 0;
@@ -157,25 +173,50 @@ class QuestionBloc implements Bloc {
       i++;
     });
 
+    final List<String> tempAset = [];
+    i = 0;
+    // ignore: avoid_function_literals_in_foreach_calls
+    tempOpsiAset.forEach((element) {
+      if (element && i != tempOpsiAset.length-1) {
+        tempAset.add(opsiAset[i]);
+      }
+      i++;
+    });
+    if (tempAsetLainnya != null || tempAsetLainnya != '') tempAset.add(tempAsetLainnya);
+
+    final List<String> tempBantuan = [];
+    i = 0;
+    // ignore: avoid_function_literals_in_foreach_calls
+    tempOpsiBantuan.forEach((element) {
+      if (element && i != tempOpsiBantuan.length-1) {
+        tempBantuan.add(opsiBantuan[i]);
+      }
+      i++;
+    });
+    if (tempBantuanLainnya != null || tempBantuanLainnya != '') tempBantuan.add(tempBantuanLainnya);
+
+
     dataKeluarga.addAll({
       'Jawaban': {
-        'BPjS': tempYN1,
+        'BPJS': tempYN1,
         'Anggota BPJS': tempAnggotaBPJS,
+        'Kelas BPJS': tempKelasBPSJ,
         'Air Minum': tempAirMinum,
         'Senitasi': tempSenitasi,
         'Provider Telp': tempProvider,
         'Status Sinyal': tempStatusSinyal,
-        // 'TV': tempTV,
+        'TV': tempTV,
         'Akses Internet': tempAksesInternet,
         'Internet': tempInternet,
         'Anggota Rekening': tempAnggotaRekening,
+        'Nama Bank': namaRekeningAnggota,
         'Anggota KIP': tempAnggotaKIP,
         'Anggota KIS': tempAnggotaKIS,
-        // 'Surat Aset': tempAset,
-        // 'Bantuan': tempBantuan
+        'Surat Aset': tempAset,
+        'Bantuan': tempBantuan
       }
     });
 
-    print(dataKeluarga);
+    print(dataKeluarga['Jawaban']);
   }
 }

@@ -17,6 +17,9 @@ class QuestionPage extends Page {
     _bloc.anggotaKIP = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
     _bloc.anggotaKIS = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
     _bloc.anggotaPrakerja = List.generate(dataKeluarga['Anggota'].length as int, (index) => false);
+
+    _bloc.namaRekeningAnggota = List.generate(dataKeluarga['Anggota'].length as int, (index) => null);
+    _bloc.tempKelasBPSJ = List.generate(dataKeluarga['Anggota'].length as int, (index) => null);
   }
 
   final Map<String, dynamic> dataKeluarga;
@@ -169,8 +172,8 @@ class QuestionPage extends Page {
                           _bloc.checkValidQues();
                         },
                       ),
-                      if (_bloc.tempAirMinum == 'Lainnya') const SizedBox(height: 12,),
-                      if (_bloc.tempAirMinum == 'Lainnya') TextFieldWithTitle(
+                      if (_bloc.tempSenitasi == 'Lainnya') const SizedBox(height: 12,),
+                      if (_bloc.tempSenitasi == 'Lainnya') TextFieldWithTitle(
                         title: 'Lainnya',
                         onChanged: (val) => _bloc.tempSenitasi = val,
                       )  
@@ -183,133 +186,141 @@ class QuestionPage extends Page {
               margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        const Text('Darimana tempat akses informasi?',
-                          style: TextStyle(fontSize: 16)
-                        ),
-                        const SizedBox(height: 12,),
-                        DropDownOption(
-                          title: 'Pilih Penyedia Telepon',
-                          items: _bloc.opsiProvider,
-                          value: _bloc.tempProvider,
-                          onSelected: (val) {
-                            setState(() {
-                              _bloc.tempProvider = val;
-                            });
-                            _bloc.checkValidQues();
-                          },
-                        ),
-                        if (_bloc.tempProvider == 'Lainnya') const SizedBox(height: 12,),
-                        if (_bloc.tempProvider == 'Lainnya') TextFieldWithTitle(
-                          title: 'Lainnya',
-                          onChanged: (val) => _bloc.tempProvider = val,
-                        ),
-                        const SizedBox(height: 12,),
-                        DropDownOption(
-                          title: 'Pilih Status Sinyal',
-                          items: _bloc.opsiStatusSinyal,
-                          value: _bloc.tempStatusSinyal,
-                          onSelected: (val) {
-                            setState(() {
-                              _bloc.tempStatusSinyal = val;
-                            });
-                            _bloc.checkValidQues();
-                          },
-                        ),
-                        if (_bloc.tempStatusSinyal == 'Lainnya') const SizedBox(height: 12,),
-                        if (_bloc.tempStatusSinyal == 'Lainnya') TextFieldWithTitle(
-                          title: 'Lainnya',
-                          onChanged: (val) => _bloc.tempStatusSinyal = val,
-                        ),
-                        const SizedBox(height: 12,),
-                        const Text('Apakah keluarga miliki akses TV?',
-                          style: TextStyle(fontSize: 16)
-                        ),
-                        const SizedBox(height: 12,),
-                        ...List.generate(_bloc.opsiTV.length, (index) => StatefulBuilder(
-                          builder: (context, setState) => Column(
-                            children: [
-                              CheckboxListTile(
-                                dense: true,
-                                title: Text(_bloc.opsiTV[index],
-                                  style: const TextStyle(fontSize: 15)
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    const Text('Darimana tempat akses informasi?',
+                      style: TextStyle(fontSize: 16)
+                    ),
+                    const SizedBox(height: 12,),
+                    StatefulBuilder(
+                      builder: (context, setState) => Column(
+                        children: [
+                          DropDownOption(
+                            title: 'Pilih Penyedia Telepon',
+                            items: _bloc.opsiProvider,
+                            value: _bloc.tempProvider,
+                            onSelected: (val) {
+                              setState(() {
+                                _bloc.tempProvider = val;
+                              });
+                              _bloc.checkValidQues();
+                            },
+                          ),
+                          if (_bloc.tempProvider == 'Lainnya') const SizedBox(height: 12,),
+                          if (_bloc.tempProvider == 'Lainnya') TextFieldWithTitle(
+                            title: 'Lainnya',
+                            onChanged: (val) => _bloc.tempProvider = val,
+                          ),
+                        ],
+                      )
+                    ),
+                    const SizedBox(height: 12,),
+                    StatefulBuilder(
+                      builder: (context, setState) => Column(
+                        children: [
+                          DropDownOption(
+                            title: 'Pilih Status Sinyal',
+                            items: _bloc.opsiStatusSinyal,
+                            value: _bloc.tempStatusSinyal,
+                            onSelected: (val) {
+                              setState(() {
+                                _bloc.tempStatusSinyal = val;
+                              });
+                              _bloc.checkValidQues();
+                            },
+                          ),
+                          if (_bloc.tempStatusSinyal == 'Lainnya') const SizedBox(height: 12,),
+                          if (_bloc.tempStatusSinyal == 'Lainnya') TextFieldWithTitle(
+                            title: 'Lainnya',
+                            onChanged: (val) => _bloc.tempStatusSinyal = val,
+                          ),
+                        ],
+                      )
+                    ),
+                    const SizedBox(height: 12,),
+                    const Text('Apakah keluarga miliki akses TV?',
+                      style: TextStyle(fontSize: 16)
+                    ),
+                    const SizedBox(height: 12,),
+                    StatefulBuilder(
+                      builder: (context, setState) => Column(
+                        children: [
+                          ...List.generate(_bloc.opsiTV.length, (indexRadio) => CheckboxListTile(
+                            dense: true,
+                            title: Text(_bloc.opsiTV[indexRadio],
+                              style: const TextStyle(fontSize: 15)
+                            ),
+                            value: _bloc.tempOpsiTV[indexRadio],
+                            onChanged: (value) {
+                              setState(() => _bloc.tempOpsiTV[indexRadio] = value);
+                              _bloc.checkValidQues();
+                            },
+                          ),),
+                          if (_bloc.tempOpsiTV[3]) const SizedBox(height: 12,),
+                          if (_bloc.tempOpsiTV[3]) TextFieldWithTitle(
+                            padding: const EdgeInsets.all(0),
+                            title: 'Lainnya',
+                            onChanged: (val) => _bloc.tempTVLainnya = val,
+                          ),
+                        ],
+                      )
+                    ),
+                    const SizedBox(height: 12,),
+                    const Text('Apakah keluarga miliki akses internet?',
+                      style: TextStyle(fontSize: 16)
+                    ),
+                    const SizedBox(height: 12,),
+                    StatefulBuilder(
+                      builder: (context, setState) {
+                        final List<String> opsi = ['Iya', 'Tidak'];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            ...List.generate(
+                              opsi.length, (indexRadio) => RadioListTile<bool>(
+                                groupValue: _bloc.tempAksesInternet,
+                                title: Text(opsi[indexRadio]),
+                                value: indexRadio == 0,
+                                onChanged: (value) => setState(() {
+                                    _bloc.tempAksesInternet = value;
+                                    _bloc.aksesInternetNotif.value = _bloc.tempAksesInternet;
+                                    _bloc.checkValidQues();
+                                  }
                                 ),
-                                value: _bloc.tempOpsiTV[index],
-                                onChanged: (value) {
-                                  setState(() => _bloc.tempOpsiTV[index] = value);
-                                  _bloc.checkValidQues();
-                                },
                               ),
-                              if (_bloc.tempOpsiTV[3]) const SizedBox(height: 12,),
-                              if (_bloc.tempOpsiTV[3]) TextFieldWithTitle(
-                                padding: const EdgeInsets.all(0),
-                                title: 'Lainnya',
-                                onChanged: (val) => _bloc.tempTVLainnya = val,
-                              ),
-                            ],
-                          )
-                        )),
-                        const SizedBox(height: 12,),
-                        const Text('Apakah keluarga miliki akses internet?',
-                          style: TextStyle(fontSize: 16)
-                        ),
-                        const SizedBox(height: 12,),
-                        StatefulBuilder(
-                          builder: (context, setState) {
-                            final List<String> opsi = ['Iya', 'Tidak'];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                ...List.generate(
-                                  opsi.length, (indexRadio) => RadioListTile<bool>(
-                                    groupValue: _bloc.tempAksesInternet,
-                                    title: Text(opsi[indexRadio]),
-                                    value: indexRadio == 0,
-                                    onChanged: (value) => setState(() {
-                                        _bloc.tempAksesInternet = value;
-                                        _bloc.aksesInternetNotif.value = _bloc.tempAksesInternet;
-                                        _bloc.checkValidQues();
-                                      }
-                                    ),
+                            ),
+                            ValueListenableBuilder<bool>(
+                              valueListenable: _bloc.aksesInternetNotif, 
+                              builder: (context, value, _) => value ? Column(
+                                children: [
+                                  DropDownOption(
+                                    title: 'Pilih Penyedia Internet',
+                                    items: _bloc.opsiProvider,
+                                    value: _bloc.tempInternet,
+                                    onSelected: (val) {
+                                      setState(() {
+                                        _bloc.tempInternet = val;
+                                      });
+                                      _bloc.checkValidQues();
+                                    },
                                   ),
-                                ),
-                                ValueListenableBuilder<bool>(
-                                  valueListenable: _bloc.aksesInternetNotif, 
-                                  builder: (context, value, _) => value ? Column(
-                                    children: [
-                                      DropDownOption(
-                                        title: 'Pilih Penyedia Internet',
-                                        items: _bloc.opsiProvider,
-                                        value: _bloc.tempInternet,
-                                        onSelected: (val) {
-                                          setState(() {
-                                            _bloc.tempInternet = val;
-                                          });
-                                          _bloc.checkValidQues();
-                                        },
-                                      ),
-                                      if (_bloc.tempInternet == 'Lainnya') const SizedBox(height: 12,),
-                                      if (_bloc.tempInternet == 'Lainnya') TextFieldWithTitle(
-                                        title: 'Lainnya',
-                                        onChanged: (val) => _bloc.tempInternet = val,
-                                      ),
-                                    ],
-                                  ) : const SizedBox()
-                                ),
-                              ]
-                            );
-                          }
-                        ),
-                      ],
-                    );
-                  }
-                ),
+                                  if (_bloc.tempInternet == 'Lainnya') const SizedBox(height: 12,),
+                                  if (_bloc.tempInternet == 'Lainnya') TextFieldWithTitle(
+                                    title: 'Lainnya',
+                                    onChanged: (val) => _bloc.tempInternet = val,
+                                  ),
+                                ],
+                              ) : const SizedBox()
+                            ),
+                          ]
+                        );
+                      }
+                    ),
+                  ],
+                )
               ),
             ),
             Card(
@@ -332,6 +343,7 @@ class QuestionPage extends Page {
                             value: _bloc.anggotaRekening[index],
                             onChanged: (value) {
                               setState(() => _bloc.anggotaRekening[index] = value);
+                              if (!value) _bloc.namaRekeningAnggota[index] = null;
                               _bloc.checkValidQues();
                             },
                           ),
@@ -460,29 +472,29 @@ class QuestionPage extends Page {
                       style: TextStyle(fontSize: 16)
                     ),
                     const SizedBox(height: 12,),
-                    ...List.generate(_bloc.opsiAset.length, (index) => StatefulBuilder(
+                    StatefulBuilder(
                       builder: (context, setState) => Column(
                         children: [
-                          CheckboxListTile(
+                          ...List.generate(_bloc.opsiAset.length, (indexRadio) => CheckboxListTile(
                             dense: true,
-                            title: Text(_bloc.opsiAset[index],
+                            title: Text(_bloc.opsiAset[indexRadio],
                               style: const TextStyle(fontSize: 15)
                             ),
-                            value: _bloc.tempOpsiAset[index],
+                            value: _bloc.tempOpsiAset[indexRadio],
                             onChanged: (value) {
-                              setState(() => _bloc.tempOpsiAset[index] = value);
+                              setState(() => _bloc.tempOpsiAset[indexRadio] = value);
                               _bloc.checkValidQues();
                             },
-                          ),
+                          ),),
                           if (_bloc.tempOpsiAset[5]) const SizedBox(height: 12,),
                           if (_bloc.tempOpsiAset[5]) TextFieldWithTitle(
                             padding: const EdgeInsets.all(0),
                             title: 'Lainnya',
-                            onChanged: (val) => _bloc.tempBantuanLainnya = val,
+                            onChanged: (val) => _bloc.tempAsetLainnya = val,
                           ),
                         ],
                       )
-                    ))
+                    ),
                   ],
                 ),
               ),
@@ -499,20 +511,20 @@ class QuestionPage extends Page {
                       style: TextStyle(fontSize: 16)
                     ),
                     const SizedBox(height: 12,),
-                    ...List.generate(_bloc.opsiBantuan.length, (index) => StatefulBuilder(
+                    StatefulBuilder(
                       builder: (context, setState) => Column(
                         children: [
-                          CheckboxListTile(
+                          ...List.generate(_bloc.opsiBantuan.length, (indexRadio) => CheckboxListTile(
                             dense: true,
-                            title: Text(_bloc.opsiBantuan[index],
+                            title: Text(_bloc.opsiBantuan[indexRadio],
                               style: const TextStyle(fontSize: 15)
                             ),
-                            value: _bloc.tempOpsiBantuan[index],
+                            value: _bloc.tempOpsiBantuan[indexRadio],
                             onChanged: (value) {
-                              setState(() => _bloc.tempOpsiBantuan[index] = value);
+                              setState(() => _bloc.tempOpsiBantuan[indexRadio] = value);
                               _bloc.checkValidQues();
                             },
-                          ),
+                          ),),
                           if (_bloc.tempOpsiBantuan[2]) const SizedBox(height: 12,),
                           if (_bloc.tempOpsiBantuan[2]) TextFieldWithTitle(
                             padding: const EdgeInsets.all(0),
@@ -521,7 +533,7 @@ class QuestionPage extends Page {
                           ),
                         ],
                       )
-                    ))
+                    ),
                   ],
                 ),
               ),
