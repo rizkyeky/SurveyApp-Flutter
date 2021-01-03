@@ -227,22 +227,33 @@ class QuestionPage extends Page {
                           onChanged: (val) => _bloc.tempStatusSinyal = val,
                         ),
                         const SizedBox(height: 12,),
-                        DropDownOption(
-                          title: 'Pilih Siaran TV',
-                          items: _bloc.opsiTV,
-                          value: _bloc.tempTV,
-                          onSelected: (val) {
-                            setState(() {
-                              _bloc.tempTV = val;
-                            });
-                            _bloc.checkValidQues();
-                          },
+                        const Text('Apakah keluarga miliki akses TV?',
+                          style: TextStyle(fontSize: 16)
                         ),
-                        if (_bloc.tempTV == 'Lainnya') const SizedBox(height: 12,),
-                        if (_bloc.tempTV == 'Lainnya') TextFieldWithTitle(
-                          title: 'Lainnya',
-                          onChanged: (val) => _bloc.tempTV = val,
-                        ),
+                        const SizedBox(height: 12,),
+                        ...List.generate(_bloc.opsiTV.length, (index) => StatefulBuilder(
+                          builder: (context, setState) => Column(
+                            children: [
+                              CheckboxListTile(
+                                dense: true,
+                                title: Text(_bloc.opsiTV[index],
+                                  style: const TextStyle(fontSize: 15)
+                                ),
+                                value: _bloc.tempOpsiTV[index],
+                                onChanged: (value) {
+                                  setState(() => _bloc.tempOpsiTV[index] = value);
+                                  _bloc.checkValidQues();
+                                },
+                              ),
+                              if (_bloc.tempOpsiTV[3]) const SizedBox(height: 12,),
+                              if (_bloc.tempOpsiTV[3]) TextFieldWithTitle(
+                                padding: const EdgeInsets.all(0),
+                                title: 'Lainnya',
+                                onChanged: (val) => _bloc.tempTVLainnya = val,
+                              ),
+                            ],
+                          )
+                        )),
                         const SizedBox(height: 12,),
                         const Text('Apakah keluarga miliki akses internet?',
                           style: TextStyle(fontSize: 16)
@@ -449,15 +460,29 @@ class QuestionPage extends Page {
                       style: TextStyle(fontSize: 16)
                     ),
                     const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Surat Aset',
-                      items: _bloc.opsiAset,
-                      value: _bloc.tempAset,
-                      onSelected: (value) {
-                        _bloc.tempAset = value;
-                        _bloc.checkValidQues();
-                      },
-                    )
+                    ...List.generate(_bloc.opsiAset.length, (index) => StatefulBuilder(
+                      builder: (context, setState) => Column(
+                        children: [
+                          CheckboxListTile(
+                            dense: true,
+                            title: Text(_bloc.opsiAset[index],
+                              style: const TextStyle(fontSize: 15)
+                            ),
+                            value: _bloc.tempOpsiAset[index],
+                            onChanged: (value) {
+                              setState(() => _bloc.tempOpsiAset[index] = value);
+                              _bloc.checkValidQues();
+                            },
+                          ),
+                          if (_bloc.tempOpsiAset[5]) const SizedBox(height: 12,),
+                          if (_bloc.tempOpsiAset[5]) TextFieldWithTitle(
+                            padding: const EdgeInsets.all(0),
+                            title: 'Lainnya',
+                            onChanged: (val) => _bloc.tempBantuanLainnya = val,
+                          ),
+                        ],
+                      )
+                    ))
                   ],
                 ),
               ),
@@ -474,15 +499,29 @@ class QuestionPage extends Page {
                       style: TextStyle(fontSize: 16)
                     ),
                     const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Bantuan',
-                      items: _bloc.opsiBantuan,
-                      value: _bloc.tempBantuan,
-                      onSelected: (value) {
-                        _bloc.tempBantuan = value;
-                        _bloc.checkValidQues();
-                      },
-                    )
+                    ...List.generate(_bloc.opsiBantuan.length, (index) => StatefulBuilder(
+                      builder: (context, setState) => Column(
+                        children: [
+                          CheckboxListTile(
+                            dense: true,
+                            title: Text(_bloc.opsiBantuan[index],
+                              style: const TextStyle(fontSize: 15)
+                            ),
+                            value: _bloc.tempOpsiBantuan[index],
+                            onChanged: (value) {
+                              setState(() => _bloc.tempOpsiBantuan[index] = value);
+                              _bloc.checkValidQues();
+                            },
+                          ),
+                          if (_bloc.tempOpsiBantuan[2]) const SizedBox(height: 12,),
+                          if (_bloc.tempOpsiBantuan[2]) TextFieldWithTitle(
+                            padding: const EdgeInsets.all(0),
+                            title: 'Lainnya',
+                            onChanged: (val) => _bloc.tempBantuanLainnya = val,
+                          ),
+                        ],
+                      )
+                    ))
                   ],
                 ),
               ),

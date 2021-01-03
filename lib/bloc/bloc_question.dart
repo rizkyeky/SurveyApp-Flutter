@@ -19,19 +19,19 @@ class QuestionBloc implements Bloc {
 
   void checkValidQues() {
 
-    final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
-    final bool validAirMinum = tempAirMinum != null;
-    final bool validSenitasi = tempSenitasi != null;
-    final bool validProvider = tempProvider != null;
-    final bool validStatusSinyal = tempStatusSinyal != null;
-    final bool validTV = tempTV != null;
-    final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
-    final bool validAset = tempAset != null;
-    final bool validBantuan = tempBantuan != null;
+    // final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
+    // final bool validAirMinum = tempAirMinum != null;
+    // final bool validSenitasi = tempSenitasi != null;
+    // final bool validProvider = tempProvider != null;
+    // final bool validStatusSinyal = tempStatusSinyal != null;
+    // final bool validTV = tempTV != null;
+    // final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
+    // final bool validAset = tempAset != null;
+    // final bool validBantuan = tempBantuan != null;
 
-    final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
-    validStatusSinyal && validTV && validInternet && validAset && validBantuan;
-    validQuesNotif.value = check;
+    // final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
+    // validStatusSinyal && validTV && validInternet && validAset && validBantuan;
+    // validQuesNotif.value = check;
   }
 
   bool tempYN1 = false;
@@ -68,7 +68,6 @@ class QuestionBloc implements Bloc {
 
   String tempProvider;
   List<String> opsiProvider = [
-    'Tidak Ada',
     'Telkomsel',
     'Indosat',
     'XL',
@@ -78,27 +77,29 @@ class QuestionBloc implements Bloc {
   String tempStatusSinyal;
   List<String> opsiStatusSinyal = [
     'Tidak Ada',
-    'Kuat',
-    'Sedang',
     'Lemah',
+    'Sedang',
+    'Kuat',
   ];
 
-  String tempTV;
+  String tempTVLainnya;
+  List<bool> tempOpsiTV = List.generate(4, (index) => false);
   List<String> opsiTV = [
-    'Tidak Ada',
     'TVRI',
     'Swasta',
     'Luar Negri',
+    'Lainnya',
   ];
 
-  String tempAset;
+  String tempAsetLainnya;
+  List<bool> tempOpsiAset = List.generate(6, (index) => false);
   List<String> opsiAset = [
-    'Tidak Ada', 'Sertifikat', 'Akte', 'Hibah', 'Waris', 'Petok D', 'Lainnya'
+    'Sertifikat', 'Akte', 'Hibah', 'Waris', 'Petok D', 'Lainnya'
   ];
 
-  String tempBantuan;
+  String tempBantuanLainnya;
+  List<bool> tempOpsiBantuan = List.generate(3, (index) => false);
   List<String> opsiBantuan = [
-    'Tidak Ada',
     'Bantuan Sosial Tunai',
     'Program Keluarga Harapan',
     'Lainnya',
@@ -164,14 +165,14 @@ class QuestionBloc implements Bloc {
         'Senitasi': tempSenitasi,
         'Provider Telp': tempProvider,
         'Status Sinyal': tempStatusSinyal,
-        'TV': tempTV,
+        // 'TV': tempTV,
         'Akses Internet': tempAksesInternet,
         'Internet': tempInternet,
         'Anggota Rekening': tempAnggotaRekening,
         'Anggota KIP': tempAnggotaKIP,
         'Anggota KIS': tempAnggotaKIS,
-        'Surat Aset': tempAset,
-        'Bantuan': tempBantuan
+        // 'Surat Aset': tempAset,
+        // 'Bantuan': tempBantuan
       }
     });
 
