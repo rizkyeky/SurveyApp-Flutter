@@ -12,13 +12,19 @@ class HomePage extends Page {
     _bloc.init();
   }
 
-  final HomeBloc _bloc = locator.get<HomeBloc>();
+  final HomeBloc _bloc = HomeBloc();
   
   @override
   Widget build(BuildContext context) => Scaffold(
     resizeToAvoidBottomInset: true,
     appBar: AppBar(
       title: const Text('Data Anggota Keluarga'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.article_outlined), 
+          onPressed: () {}
+        )
+      ],
     ),
     body: SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -180,37 +186,25 @@ class HomePage extends Page {
                         selectedItem: 'Belum/ Tidak Bekerja',
                         onChanged: (value) => _bloc.tempPekerjaan[indexAnggota] = value,
                         searchBoxDecoration: const InputDecoration(
+                          border: InputBorder.none,
                           filled: true,
                           hintText: 'Cari Pekerjaan',
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                         ),
                         dropdownSearchDecoration: const InputDecoration(
+                          border: InputBorder.none,
                           filled: true,
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                         ),
                       ),
-                      const SizedBox(
-                        height: 12,
-                      ),
+                      const SizedBox(height: 12,),
                       const Text("Pendidikan", style: TextStyle(fontSize:16.0),),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      DropdownSearch<String>(
-                        hint: "Pilih Pendidikan",
+                      const SizedBox(height: 12,),
+                      DropDownOption(
+                        title: 'Pilih Pendidikan',
                         items: _bloc.pendidikan,
-                        mode: Mode.MENU,
-                        selectedItem: 'SD',
-                        onChanged: (value) => _bloc.tempLulusan[indexAnggota] = value,
-                        searchBoxDecoration: const InputDecoration(
-                          filled: true,
-                          hintText: 'Cari Pendidikan',
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                        ),
-                        dropdownSearchDecoration: const InputDecoration(
-                          filled: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                        ),
+                        value: _bloc.tempLulusan[indexAnggota],
+                        onSelected: (value) => _bloc.tempLulusan[indexAnggota] = value,
                       ),
                       const SizedBox(
                         height: 12,
@@ -291,6 +285,7 @@ class TextFieldWithTitle extends StatelessWidget {
             keyboardType: keyboardType ?? TextInputType.name,
             maxLines: maxLines ?? 1,
             decoration: InputDecoration(
+              border: InputBorder.none,
               filled: true,
               hintText: hit ,
               floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -375,7 +370,7 @@ class AnggotaFormDialog extends StatelessWidget {
                 onPressed: () async {
                   pickedDate = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: DateTime(2000),
                     firstDate: DateTime(1900),
                     lastDate: DateTime(2021),
                   );

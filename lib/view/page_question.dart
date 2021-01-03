@@ -20,7 +20,7 @@ class QuestionPage extends Page {
   }
 
   final Map<String, dynamic> dataKeluarga;
-  final QuestionBloc _bloc = locator.get<QuestionBloc>();
+  final QuestionBloc _bloc = QuestionBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -71,16 +71,35 @@ class QuestionPage extends Page {
                             ValueListenableBuilder<bool>(
                               valueListenable: _bloc.anggotaBPJSNotif, 
                               builder: (context, value, _) => value ? Column(
-                                children: List.generate(dataKeluarga['Anggota'].length as int, (index) => CheckboxListTile(
-                                  dense: true,
-                                  title: Text(dataKeluarga['Anggota'][index]['Nama'] as String,
-                                    style: const TextStyle(fontSize: 15)
-                                  ),
-                                  value: _bloc.anggotaBPJS[index],
-                                  onChanged: (value) {
-                                    setState(() => _bloc.anggotaBPJS[index] = value);
-                                    _bloc.checkValidQues();
-                                  },
+                                children: List.generate(dataKeluarga['Anggota'].length as int, (indexAnggota) => Column(
+                                  children: [
+                                    CheckboxListTile(
+                                      dense: true,
+                                      title: Text(dataKeluarga['Anggota'][indexAnggota]['Nama'] as String,
+                                        style: const TextStyle(fontSize: 15)
+                                      ),
+                                      value: _bloc.anggotaBPJS[indexAnggota],
+                                      onChanged: (value) {
+                                        setState(() => _bloc.anggotaBPJS[indexAnggota] = value);
+                                        _bloc.checkValidQues();
+                                        if (!value) {
+                                          _bloc.tempKelasBPSJ[indexAnggota] = null;
+                                        }
+                                      },
+                                    ),
+                                    if (_bloc.anggotaBPJS[indexAnggota]) Column(
+                                      children: [
+                                        ...List.generate(_bloc.opsiKelasBPSJ.length, (indexRadio) => RadioListTile<String>(
+                                          title: Text(_bloc.opsiKelasBPSJ[indexRadio]), 
+                                          value: _bloc.opsiKelasBPSJ[indexRadio],
+                                          groupValue: _bloc.tempKelasBPSJ[indexAnggota], 
+                                          onChanged: (value) => setState(() {
+                                            _bloc.tempKelasBPSJ[indexAnggota] = value;
+                                          })
+                                        ))
+                                      ],
+                                    )
+                                  ],
                                 ))
                               ) : const SizedBox()
                             ),
@@ -96,24 +115,33 @@ class QuestionPage extends Page {
               margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    const Text('Darimana sumber air minum?',
-                      style:  TextStyle(fontSize: 16)
-                    ),
-                    const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Sumber Air Minum',
-                      items: _bloc.opsiAirMinum,
-                      value: _bloc.tempAirMinum,
-                      onChanged: (val) {
-                        _bloc.tempAirMinum = val;
-                        _bloc.checkValidQues();
-                      },
-                    ),  
-                  ],
+                child: StatefulBuilder(
+                  builder: (context, setState,) => Column( 
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      const Text('Darimana sumber air minum?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                      const SizedBox(height: 12,),
+                      DropDownOption(
+                        title: 'Pilih Sumber Air Minum',
+                        items: _bloc.opsiAirMinum,
+                        value: _bloc.tempAirMinum,
+                        onSelected: (val) {
+                          setState(() {
+                            _bloc.tempAirMinum = val;
+                          });
+                          _bloc.checkValidQues();
+                        },
+                      ),
+                      if (_bloc.tempAirMinum == 'Lainnya') const SizedBox(height: 12,),
+                      if (_bloc.tempAirMinum == 'Lainnya') TextFieldWithTitle(
+                        title: 'Lainnya',
+                        onChanged: (val) => _bloc.tempAirMinum = val,
+                      )  
+                    ],
+                  )
                 ),
               ),
             ),
@@ -121,24 +149,33 @@ class QuestionPage extends Page {
               margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    const Text('Dimana tempat senitasi?',
-                      style: TextStyle(fontSize: 16)
-                    ),
-                    const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Senitasi',
-                      items: _bloc.opsiSenitasi,
-                      value: _bloc.tempSenitasi,
-                      onChanged: (val) {
-                        _bloc.tempSenitasi = val;
-                        _bloc.checkValidQues();
-                      },
-                    ),  
-                  ],
+                child: StatefulBuilder(
+                  builder: (context, setState,) => Column( 
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      const Text('Dimana tempat senitasi?',
+                        style:  TextStyle(fontSize: 16)
+                      ),
+                      const SizedBox(height: 12,),
+                      DropDownOption(
+                        title: 'Pilih Tempat Senitasi',
+                        items: _bloc.opsiSenitasi,
+                        value: _bloc.tempSenitasi,
+                        onSelected: (val) {
+                          setState(() {
+                            _bloc.tempSenitasi = val;
+                          });
+                          _bloc.checkValidQues();
+                        },
+                      ),
+                      if (_bloc.tempAirMinum == 'Lainnya') const SizedBox(height: 12,),
+                      if (_bloc.tempAirMinum == 'Lainnya') TextFieldWithTitle(
+                        title: 'Lainnya',
+                        onChanged: (val) => _bloc.tempSenitasi = val,
+                      )  
+                    ],
+                  )
                 ),
               ),
             ),
@@ -146,85 +183,121 @@ class QuestionPage extends Page {
               margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Padding(
                 padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    const Text('Darimana tempat akses informasi?',
-                      style: TextStyle(fontSize: 16)
-                    ),
-                    const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Penyedia Telepon',
-                      items: _bloc.opsiProvider,
-                      value: _bloc.tempProvider,
-                      onChanged: (val) {
-                        _bloc.tempProvider = val;
-                        _bloc.checkValidQues();
-                      },
-                    ),
-                    const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Status Sinyal',
-                      items: _bloc.opsiStatusSinyal,
-                      value: _bloc.tempStatusSinyal,
-                      onChanged: (val) {
-                        _bloc.tempStatusSinyal = val;
-                        _bloc.checkValidQues();
-                      },
-                    ),
-                    const SizedBox(height: 12,),
-                    DropDownOption(
-                      title: 'Pilih Siaran TV',
-                      items: _bloc.opsiTV,
-                      value: _bloc.tempTV,
-                      onChanged: (val) {
-                        _bloc.tempTV = val;
-                        _bloc.checkValidQues();
-                      },
-                    ),
-                    const SizedBox(height: 12,),
-                    const Text('Apakah keluarga miliki akses internet?',
-                      style: TextStyle(fontSize: 16)
-                    ),
-                    const SizedBox(height: 12,),
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        final List<String> opsi = ['Iya', 'Tidak'];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            ...List.generate(
-                              opsi.length, (indexRadio) => RadioListTile<bool>(
-                                groupValue: _bloc.tempAksesInternet,
-                                title: Text(opsi[indexRadio]),
-                                value: indexRadio == 0,
-                                onChanged: (value) => setState(() {
-                                    _bloc.tempAksesInternet = value;
-                                    _bloc.aksesInternetNotif.value = _bloc.tempAksesInternet;
-                                    _bloc.checkValidQues();
-                                  }
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        const Text('Darimana tempat akses informasi?',
+                          style: TextStyle(fontSize: 16)
+                        ),
+                        const SizedBox(height: 12,),
+                        DropDownOption(
+                          title: 'Pilih Penyedia Telepon',
+                          items: _bloc.opsiProvider,
+                          value: _bloc.tempProvider,
+                          onSelected: (val) {
+                            setState(() {
+                              _bloc.tempProvider = val;
+                            });
+                            _bloc.checkValidQues();
+                          },
+                        ),
+                        if (_bloc.tempProvider == 'Lainnya') const SizedBox(height: 12,),
+                        if (_bloc.tempProvider == 'Lainnya') TextFieldWithTitle(
+                          title: 'Lainnya',
+                          onChanged: (val) => _bloc.tempProvider = val,
+                        ),
+                        const SizedBox(height: 12,),
+                        DropDownOption(
+                          title: 'Pilih Status Sinyal',
+                          items: _bloc.opsiStatusSinyal,
+                          value: _bloc.tempStatusSinyal,
+                          onSelected: (val) {
+                            setState(() {
+                              _bloc.tempStatusSinyal = val;
+                            });
+                            _bloc.checkValidQues();
+                          },
+                        ),
+                        if (_bloc.tempStatusSinyal == 'Lainnya') const SizedBox(height: 12,),
+                        if (_bloc.tempStatusSinyal == 'Lainnya') TextFieldWithTitle(
+                          title: 'Lainnya',
+                          onChanged: (val) => _bloc.tempStatusSinyal = val,
+                        ),
+                        const SizedBox(height: 12,),
+                        DropDownOption(
+                          title: 'Pilih Siaran TV',
+                          items: _bloc.opsiTV,
+                          value: _bloc.tempTV,
+                          onSelected: (val) {
+                            setState(() {
+                              _bloc.tempTV = val;
+                            });
+                            _bloc.checkValidQues();
+                          },
+                        ),
+                        if (_bloc.tempTV == 'Lainnya') const SizedBox(height: 12,),
+                        if (_bloc.tempTV == 'Lainnya') TextFieldWithTitle(
+                          title: 'Lainnya',
+                          onChanged: (val) => _bloc.tempTV = val,
+                        ),
+                        const SizedBox(height: 12,),
+                        const Text('Apakah keluarga miliki akses internet?',
+                          style: TextStyle(fontSize: 16)
+                        ),
+                        const SizedBox(height: 12,),
+                        StatefulBuilder(
+                          builder: (context, setState) {
+                            final List<String> opsi = ['Iya', 'Tidak'];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                ...List.generate(
+                                  opsi.length, (indexRadio) => RadioListTile<bool>(
+                                    groupValue: _bloc.tempAksesInternet,
+                                    title: Text(opsi[indexRadio]),
+                                    value: indexRadio == 0,
+                                    onChanged: (value) => setState(() {
+                                        _bloc.tempAksesInternet = value;
+                                        _bloc.aksesInternetNotif.value = _bloc.tempAksesInternet;
+                                        _bloc.checkValidQues();
+                                      }
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            ValueListenableBuilder<bool>(
-                              valueListenable: _bloc.aksesInternetNotif, 
-                              builder: (context, value, _) => value ? DropDownOption(
-                                title: 'Pilih Penyedia Internet',
-                                items: _bloc.opsiProvider,
-                                value: _bloc.tempInternet,
-                                onChanged: (val) {
-                                  _bloc.tempInternet = val;
-                                  _bloc.checkValidQues();
-                                },
-                              ) : const SizedBox()
-                            ),
-                          ]
-                        );
-                      }
-                    ),
-                  ],
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: _bloc.aksesInternetNotif, 
+                                  builder: (context, value, _) => value ? Column(
+                                    children: [
+                                      DropDownOption(
+                                        title: 'Pilih Penyedia Internet',
+                                        items: _bloc.opsiProvider,
+                                        value: _bloc.tempInternet,
+                                        onSelected: (val) {
+                                          setState(() {
+                                            _bloc.tempInternet = val;
+                                          });
+                                          _bloc.checkValidQues();
+                                        },
+                                      ),
+                                      if (_bloc.tempInternet == 'Lainnya') const SizedBox(height: 12,),
+                                      if (_bloc.tempInternet == 'Lainnya') TextFieldWithTitle(
+                                        title: 'Lainnya',
+                                        onChanged: (val) => _bloc.tempInternet = val,
+                                      ),
+                                    ],
+                                  ) : const SizedBox()
+                                ),
+                              ]
+                            );
+                          }
+                        ),
+                      ],
+                    );
+                  }
                 ),
               ),
             ),
@@ -380,7 +453,7 @@ class QuestionPage extends Page {
                       title: 'Pilih Surat Aset',
                       items: _bloc.opsiAset,
                       value: _bloc.tempAset,
-                      onChanged: (value) {
+                      onSelected: (value) {
                         _bloc.tempAset = value;
                         _bloc.checkValidQues();
                       },
@@ -405,7 +478,7 @@ class QuestionPage extends Page {
                       title: 'Pilih Bantuan',
                       items: _bloc.opsiBantuan,
                       value: _bloc.tempBantuan,
-                      onChanged: (value) {
+                      onSelected: (value) {
                         _bloc.tempBantuan = value;
                         _bloc.checkValidQues();
                       },
@@ -436,31 +509,35 @@ class DropDownOption extends StatelessWidget {
   final String title;
   final String value;
   final List<String> items;
-  final void Function(String) onChanged;
+  final void Function(String) onSelected;
 
-  const DropDownOption({this.title, this.value, this.items, this.onChanged});
+  const DropDownOption({this.title, this.value, this.items, this.onSelected});
   
   @override
   Widget build(BuildContext context) {
     String temp = value;
     return StatefulBuilder(
-      builder: (context, setState) => DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<String>(
-          hint: Text(title),
-          value: temp,
-          items: items.map((item) => DropdownMenuItem(
-            value: item,
-            child: Text(item),
-          )).toList(),
-          onChanged: (val) => setState(() {
-            temp = val;
-            onChanged(val);
-          }),
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-            filled: true,
+      builder: (context, setState) => Column(
+        children: [
+          DropdownButtonHideUnderline(
+            child: DropdownButtonFormField<String>(
+              hint: Text(title),
+              value: temp,
+              items: items.map((item) => DropdownMenuItem(
+                value: item,
+                child: Text(item),
+              )).toList(),
+              onChanged: (val) => setState(() {
+                temp = val;
+                onSelected(val);
+              }),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                filled: true,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

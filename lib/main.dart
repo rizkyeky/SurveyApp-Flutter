@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
           'Pekerjaan': 'Wakil Presiden',
           'Lulusan': 'SD',
-          'Nomor HP': 0812121212
+          'Nomor HP': '0812121212'
         }
       ]
     };

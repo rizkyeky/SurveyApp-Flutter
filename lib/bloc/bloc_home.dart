@@ -36,24 +36,24 @@ class HomeBloc implements Bloc {
   List<String> tempNomorTelp = [];
 
   List<Map<String, String>> anggota = [
-    {
-      'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
-      'NIK': '321111000222333444',
-      'Jenis Kelamin': 'Perempuan',
-      'Tempat Lahir': 'Bandung dan Bandung',
-      'Tanggal Lahir': '1 January 1999',
-      'Agama': 'Islam',
-      'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
-    },
-    {
-      'Nama': 'Dewi Rostika dan Dadang',
-      'NIK': '321111000222333444',
-      'Jenis Kelamin': 'Laki-laki',
-      'Tempat Lahir': 'Bandung dan Surabaya',
-      'Tanggal Lahir': '31 Desember 2020',
-      'Agama': 'Islam',
-      'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
-    }
+    // {
+    //   'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
+    //   'NIK': '321111000222333444',
+    //   'Jenis Kelamin': 'Perempuan',
+    //   'Tempat Lahir': 'Bandung dan Bandung',
+    //   'Tanggal Lahir': '1 January 1999',
+    //   'Agama': 'Islam',
+    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
+    // },
+    // {
+    //   'Nama': 'Dewi Rostika dan Dadang',
+    //   'NIK': '321111000222333444',
+    //   'Jenis Kelamin': 'Laki-laki',
+    //   'Tempat Lahir': 'Bandung dan Surabaya',
+    //   'Tanggal Lahir': '31 Desember 2020',
+    //   'Agama': 'Islam',
+    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
+    // }
   ];
 
   Map<String, dynamic> dataKeluarga = {

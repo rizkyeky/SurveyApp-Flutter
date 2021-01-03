@@ -17,9 +17,6 @@ class QuestionBloc implements Bloc {
 
   Map<String, dynamic> dataKeluarga;
 
-  bool tempYN1 = false;
-  List<bool> anggotaBPJS;
-
   void checkValidQues() {
 
     final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
@@ -36,6 +33,14 @@ class QuestionBloc implements Bloc {
     validStatusSinyal && validTV && validInternet && validAset && validBantuan;
     validQuesNotif.value = check;
   }
+
+  bool tempYN1 = false;
+  List<bool> anggotaBPJS;
+
+  List<String> tempKelasBPSJ = List.generate(3, (index) => null);
+  List<String> opsiKelasBPSJ =[
+    'Kelas 1', 'Kelas 2', 'Kelas 3'
+  ];
 
   String tempAirMinum;
   List<String> opsiAirMinum = [
@@ -110,42 +115,43 @@ class QuestionBloc implements Bloc {
   List<bool> anggotaPrakerja;
 
   void saveJawabanKeluarga() {
+    
     final List<String> tempAnggotaBPJS = [];
+    int i = 0;
     // ignore: avoid_function_literals_in_foreach_calls
     anggotaBPJS.forEach((element) {
-      int i = 0;
       if (element) {
-        tempAnggotaBPJS.add(dataKeluarga['Anggota'][i] as String);
+        tempAnggotaBPJS.add(dataKeluarga['Anggota'][i]['Nama'] as String);
       }
       i++;
     });
 
     final List<String> tempAnggotaRekening = [];
+    i = 0;
     // ignore: avoid_function_literals_in_foreach_calls
     anggotaRekening.forEach((element) {
-      int i = 0;
       if (element) {
-        tempAnggotaRekening.add(dataKeluarga['Anggota'][i] as String);
+        tempAnggotaRekening.add(dataKeluarga['Anggota'][i]['Nama'] as String);
       }
       i++;
     });
 
     final List<String> tempAnggotaKIP = [];
+    i = 0;
     // ignore: avoid_function_literals_in_foreach_calls
     anggotaKIP.forEach((element) {
-      int i = 0;
       if (element) {
-        tempAnggotaKIP.add(dataKeluarga['Anggota'][i] as String);
+        tempAnggotaKIP.add(dataKeluarga['Anggota'][i]['Nama'] as String);
       }
       i++;
     });
 
     final List<String> tempAnggotaKIS = [];
+    i = 0;
     // ignore: avoid_function_literals_in_foreach_calls
     anggotaKIS.forEach((element) {
-      int i = 0;
       if (element) {
-        tempAnggotaKIS.add(dataKeluarga['Anggota'][i] as String);
+        tempAnggotaKIS.add(dataKeluarga['Anggota'][i]['Nama'] as String);
       }
       i++;
     });
