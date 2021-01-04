@@ -5,26 +5,71 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:survey_app/service/service.dart';
 
-import 'package:survey_app/main.dart';
+Future<void> main() async {
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
+  final FirebaseService _service = FirebaseService();
+  await _service.init();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  final Map<String, dynamic> keluarga = {
+    'Nomor KK': '12345678',
+    'Anggota': [
+      {
+        'Nama': 'Mochamad Rizky Darmawan',
+        'NIK': '321111000222333444',
+        'Jenis Kelamin': 'Perempuan',
+        'Tempat Lahir': 'Bandung dan Bandung',
+        'Tanggal Lahir': '1 January 1999',
+        'Agama': 'Islam',
+        'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+        'Pekerjaan': 'Presiden',
+        'Lulusan': 'D3',
+        'Nomor HP': null
+      },
+      {
+        'Nama': 'Dewi Rostika',
+        'NIK': '321111000222333444',
+        'Jenis Kelamin': 'Laki-laki',
+        'Tempat Lahir': 'Bandung dan Surabaya',
+        'Tanggal Lahir': '31 Desember 2020',
+        'Agama': 'Islam',
+        'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+        'Pekerjaan': 'Wakil Presiden',
+        'Lulusan': 'SD',
+        'Nomor HP': '0812121212'
+      },
+      {
+        'Nama': 'Dadang Rendra',
+        'NIK': '321111000222333444',
+        'Jenis Kelamin': 'Laki-laki',
+        'Tempat Lahir': 'Bandung dan Surabaya',
+        'Tanggal Lahir': '31 Desember 2020',
+        'Agama': 'Islam',
+        'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+        'Pekerjaan': 'Wakil Presiden',
+        'Lulusan': 'SD',
+        'Nomor HP': '0812121212'
+      },
+      {
+        'Nama': 'Rajiv',
+        'NIK': '321111000222333444',
+        'Jenis Kelamin': 'Laki-laki',
+        'Tempat Lahir': 'Bandung dan Surabaya',
+        'Tanggal Lahir': '31 Desember 2020',
+        'Agama': 'Islam',
+        'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung',
+        'Pekerjaan': 'Wakil Presiden',
+        'Lulusan': 'SD',
+        'Nomor HP': '0812121212'
+      }
+    ]
+  };
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  await _service.addKeluarga(keluarga);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
 }

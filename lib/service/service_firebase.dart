@@ -7,11 +7,33 @@ class FirebaseService implements Service {
   @override
   Future<void> init() async {
     await Firebase.initializeApp();
-    _dataCollection = FirebaseFirestore.instance.collection('graph');
+    _dataCollection = FirebaseFirestore.instance.collection('keluarga');
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
   }
+
+  Future<ServiceResult> addKeluarga(Map<String, dynamic> keluarga) async {
+    try {
+      await _dataCollection.doc(keluarga['Nomor KK'] as String).set(keluarga);
+      return ServiceResult(isSucess: true, massage: 'complete');
+
+    } catch (e) {
+      return ServiceResult(isSucess: false, massage: '');
+    }
+  }
+
+  Future<ServiceResult<List<Map<String, dynamic>>>> readKoleksi() async {
+      try {
+        final QuerySnapshot query = await _dataCollection.get();
+        final List<Map<String, dynamic>> data = query.docs.map((e) => e.data()).toList();
+        return ServiceResult(value: data, isSucess: true, massage: 'Sucessed');
+    } catch (e) {
+      return ServiceResult(isSucess: false, massage: 'Failed');
+    }
+  }
+
+
 }

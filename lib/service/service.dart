@@ -17,6 +17,7 @@ abstract class Service {
 class ServiceResult<T> {
   String massage;
   T value;
+  bool isSucess;
 
-  ServiceResult({this.massage, this.value});
+  ServiceResult({this.massage, this.value, this.isSucess});
 }

@@ -11,6 +11,8 @@ class QuestionBloc implements Bloc {
     // TODO: implement init
   }
 
+  final FirebaseService _firebaseService = locator.get<FirebaseService>();
+
   ValueNotifier<bool> anggotaBPJSNotif = ValueNotifier(false);
   ValueNotifier<bool> aksesInternetNotif = ValueNotifier(false);
   ValueNotifier<bool> validQuesNotif = ValueNotifier(false);
@@ -20,9 +22,9 @@ class QuestionBloc implements Bloc {
   void checkValidQues() {
 
     final bool validBPJS = tempYN1 ? anggotaBPJS.contains(true) : !tempYN1;
-    final bool validAirMinum = tempAirMinum != null || tempAirMinum != '' || tempAirMinum != 'Lainnya';
-    final bool validSenitasi = tempSenitasi != null || tempSenitasi != '' || tempSenitasi != 'Lainnya';
-    final bool validProvider = tempProvider != null || tempProvider != '' || tempProvider != 'Lainnya';
+    final bool validAirMinum = tempAirMinum != null && tempAirMinum != '' && tempAirMinum != 'Lainnya';
+    final bool validSenitasi = tempSenitasi != null && tempSenitasi != '' && tempSenitasi != 'Lainnya';
+    final bool validProvider = tempProvider != null && tempProvider != '' && tempProvider != 'Lainnya';
     final bool validStatusSinyal = tempStatusSinyal != null;
     final bool validTV = tempOpsiTV.contains(true);
     final bool validInternet = tempAksesInternet ? tempInternet != null : !tempAksesInternet;
@@ -31,10 +33,11 @@ class QuestionBloc implements Bloc {
     final bool validBantuan = !tempOpsiBantuan.contains(null);
     final bool validBantuanLain = tempOpsiBantuan.last ? tempBantuanLainnya != '' : !tempOpsiBantuan.last;
     final bool validNamaBank = !namaRekeningAnggota.contains('');
+    final bool validFoto = images.isNotEmpty;
 
     final bool check = validBPJS && validAirMinum && validSenitasi && validProvider &&
     validStatusSinyal && validTV && validInternet && validAset && validAsetLain && validBantuan
-    && validBantuanLain && validNamaBank;
+    && validBantuanLain && validNamaBank && validFoto;
     validQuesNotif.value = check;
   }
 
@@ -119,7 +122,7 @@ class QuestionBloc implements Bloc {
   List<bool> anggotaKIS;
   List<bool> anggotaPrakerja;
 
-  void saveJawabanKeluarga() {
+  Future<void> saveJawabanKeluarga() async {
     
     final List<String> tempAnggotaBPJS = [];
     int i = 0;
@@ -140,7 +143,7 @@ class QuestionBloc implements Bloc {
       }
       i++;
     });
-    if (tempTVLainnya != null || tempTVLainnya != '') tempTV.add(tempTVLainnya);
+    if (tempTVLainnya != null && tempTVLainnya != '') tempTV.add(tempTVLainnya);
     
 
     final List<String> tempAnggotaRekening = [];
@@ -182,7 +185,7 @@ class QuestionBloc implements Bloc {
       }
       i++;
     });
-    if (tempAsetLainnya != null || tempAsetLainnya != '') tempAset.add(tempAsetLainnya);
+    if (tempAsetLainnya != null && tempAsetLainnya != '') tempAset.add(tempAsetLainnya);
 
     final List<String> tempBantuan = [];
     i = 0;
@@ -193,7 +196,7 @@ class QuestionBloc implements Bloc {
       }
       i++;
     });
-    if (tempBantuanLainnya != null || tempBantuanLainnya != '') tempBantuan.add(tempBantuanLainnya);
+    if (tempBantuanLainnya != null && tempBantuanLainnya != '') {tempBantuan.add(tempBantuanLainnya);}
 
 
     dataKeluarga.addAll({
@@ -218,5 +221,27 @@ class QuestionBloc implements Bloc {
     });
 
     print(dataKeluarga['Jawaban']);
+
+    await _firebaseService.addKeluarga(dataKeluarga);
+  }
+
+  List<File> images = [];
+  final picker = ImagePicker();
+
+  Future<File> getImage() async {
+    try {
+      final PickedFile pickedFile = await picker.getImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        return File(pickedFile.path);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  void deleteImg(int index) {
+    images.removeAt(index);
   }
 }

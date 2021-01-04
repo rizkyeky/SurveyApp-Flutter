@@ -33,6 +33,8 @@ class QuestionPage extends Page {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
           children: [
             Card(
               margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
@@ -538,6 +540,61 @@ class QuestionPage extends Page {
                 ),
               ),
             ),
+            StatefulBuilder(
+              builder: (context, setState) => Column(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: RaisedButton.icon(
+                      onPressed: () async {
+                        final File img = await _bloc.getImage();
+                        setState(() {
+                          if (img != null) {
+                            _bloc.images.add(img);
+                          }
+                        });
+                        _bloc.checkValidQues();
+                      }, 
+                      icon: const Icon(Icons.add),
+                      label: const Text('Foto Rumah'),
+                    ),
+                  ),
+                  if (_bloc.images.isNotEmpty) Column(
+                    children: List.generate(_bloc.images.length, (index) => Card(
+                      clipBehavior: Clip.antiAlias,
+                      margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                      child: InkWell(
+                        onLongPress: () => showDialog(context: context, builder: (context) => AlertDialog(
+                          title: const Text('Delete Gambar'),
+                          content: const Text('Apakah anda ingin menghapus gambar?'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () => Navigator.pop(context), 
+                              child: const Text('CANCEL')
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                setState(() => _bloc.deleteImg(index));
+                                _bloc.checkValidQues();
+                                Navigator.pop(context);
+                              },
+                              child: const Text('DELETE')
+                            )
+                          ],
+                        )),
+                        child: Ink.image(
+                          image: FileImage(_bloc.images[index]),
+                          fit: BoxFit.cover,
+                          height: 200,
+                        ),
+                      ),
+                    )),
+                  ),
+                ],
+              )
+            ),
             const SizedBox(height: 300,),
           ], 
         ),
@@ -547,7 +604,11 @@ class QuestionPage extends Page {
         builder: (context, value, _) => FloatingActionButton(
           backgroundColor: value ? Colors.teal : Colors.grey,
           elevation: value ? 1 : 0,
-          onPressed: value ? () => _bloc.saveJawabanKeluarga() : null,
+          onPressed: value ? () async {
+            await _bloc.saveJawabanKeluarga().then((_) => 
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) => HomePage())));
+          } : null,
           child: const Icon(Icons.check),
         )
       ),

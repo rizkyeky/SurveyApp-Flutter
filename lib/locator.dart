@@ -13,4 +13,6 @@ Future<void> setLocator() async {
   locator.registerFactory(() => QuestionBloc());
 
   await locator.get<ConnectionService>().init();
+  await locator.get<FirebaseService>().init();
+  
 }
