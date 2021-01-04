@@ -219,9 +219,6 @@ class QuestionBloc implements Bloc {
         'Bantuan': tempBantuan
       }
     });
-
-    print(dataKeluarga['Jawaban']);
-
     await _firebaseService.addKeluarga(dataKeluarga);
   }
 

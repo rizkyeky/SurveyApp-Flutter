@@ -26,10 +26,20 @@ class FirebaseService implements Service {
   }
 
   Future<ServiceResult<List<Map<String, dynamic>>>> readKoleksi() async {
-      try {
-        final QuerySnapshot query = await _dataCollection.get();
-        final List<Map<String, dynamic>> data = query.docs.map((e) => e.data()).toList();
-        return ServiceResult(value: data, isSucess: true, massage: 'Sucessed');
+    try {
+      final QuerySnapshot query = await _dataCollection.get();
+      final List<Map<String, dynamic>> data = query.docs.map((e) => e.data()).toList();
+      return ServiceResult(value: data, isSucess: true, massage: 'Sucessed');
+    } catch (e) {
+      return ServiceResult(isSucess: false, massage: 'Failed');
+    }
+  }
+
+  Future<ServiceResult<List<String>>> checkKoleksi() async {
+    try {
+      final QuerySnapshot query = await _dataCollection.get();
+      final List<String> data = query.docs.map((e) => e.id).toList();
+      return ServiceResult(value: data, isSucess: true, massage: 'Sucessed');
     } catch (e) {
       return ServiceResult(isSucess: false, massage: 'Failed');
     }

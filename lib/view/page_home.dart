@@ -232,11 +232,21 @@ class HomePage extends Page {
       valueListenable: _bloc.validAnggotaNotif,
       builder: (context, value, _) => FloatingActionButton(
         backgroundColor: value ? Colors.teal : Colors.grey,
-        onPressed: value ? () {
-          _bloc.saveDataKeluarga();
-          Navigator.push(context, MaterialPageRoute(
-          builder: (context) => QuestionPage(_bloc.dataKeluarga)));
-          // print(_bloc.anggota);
+        onPressed: value ? () async {
+          await _bloc.checkNoKK(_bloc.nomorKK).then((value) {
+            if (!value) {
+              _bloc.saveDataKeluarga();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => QuestionPage(_bloc.dataKeluarga)));
+            } else {
+              showNetworkFlash(
+                context,
+                text: 'Nomor KK sudah terdaftar',
+                color: Colors.white,
+                textColor: Colors.black
+              );
+            }
+          });
         } : null,
         child: const Icon(Icons.arrow_forward),
       ),

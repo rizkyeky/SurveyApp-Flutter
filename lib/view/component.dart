@@ -4,6 +4,7 @@ import 'package:flash/flash.dart';
 void showNetworkFlash(BuildContext context, {
     String text,
     Color color,
+    Color textColor,
     FlashPosition flashPosition = FlashPosition.bottom,
 }) {
   showFlash(
@@ -18,11 +19,11 @@ void showNetworkFlash(BuildContext context, {
         position: flashPosition,
         backgroundColor: color ?? Colors.white,
         child: FlashBar(
-          message: Text(text ?? '', style: const TextStyle(color: Colors.white),),
+          message: Text(text ?? '', style: TextStyle(color: textColor ?? Colors.white),),
           primaryAction: TextButton(
             onPressed: () => controller.dismiss(), 
-            child: const Text('DISMISS', style: TextStyle(
-              color: Colors.white
+            child: Text('DISMISS', style: TextStyle(
+              color: textColor ?? Colors.white
             ),)),
         ),
       );

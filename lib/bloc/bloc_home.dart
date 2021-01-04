@@ -5,12 +5,17 @@ class HomeBloc implements Bloc {
   void dispose() {
     anggotaNotif.dispose();
     validFormNotif.dispose();
+    validAnggotaNotif.dispose();
+    satuAlamatNotif.dispose();
+    satuAgamaNotif.dispose();
   }
 
   @override
   void init() {
     anggotaNotif.value = List.from(anggota);
   }
+
+  final FirebaseService _firebaseService = locator.get<FirebaseService>();
 
   ValueNotifier<List<Map<String, String>>> anggotaNotif = ValueNotifier([]);
   ValueNotifier<bool> validFormNotif = ValueNotifier(false);
@@ -58,6 +63,15 @@ class HomeBloc implements Bloc {
 
   Map<String, dynamic> dataKeluarga = {
   };
+
+  Future<bool> checkNoKK(String noKK) async {
+    final ServiceResult<List<String>> result = await _firebaseService.checkKoleksi();
+    if (result.value != null) {
+      return result.value.contains(noKK); 
+    } else {
+      return false;
+    }
+  }
 
   void saveDataKeluarga() {
     dataKeluarga['Nomor KK'] = nomorKK;

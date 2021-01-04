@@ -605,9 +605,13 @@ class QuestionPage extends Page {
           backgroundColor: value ? Colors.teal : Colors.grey,
           elevation: value ? 1 : 0,
           onPressed: value ? () async {
+            showDialog(context: context, builder: (context) => const AlertDialog(
+            title:  Text('Simpan Data ke Database'),
+            content: SizedBox(height: 100 ,child: Center(child: CircularProgressIndicator())),
+          ));
             await _bloc.saveJawabanKeluarga().then((_) => 
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) => HomePage())));
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (context) => HomePage()), (route) => false));
           } : null,
           child: const Icon(Icons.check),
         )
