@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "533259051897",
-    "project_id": "test-android-c6db5",
-    "storage_bucket": "test-android-c6db5.appspot.com"
+    "project_number": "1068406399171",
+    "project_id": "survei-digitalisasi",
+    "storage_bucket": "survei-digitalisasi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:533259051897:android:c5c36a351e0875d9dac5a8",
+        "mobilesdk_app_id": "1:1068406399171:android:d3202cd8ed462222674276",
         "android_client_info": {
           "package_name": "com.example.survey_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "533259051897-d7b6jk5jo1cqglpj9glpp429qo3d7gs0.apps.googleusercontent.com",
+          "client_id": "1068406399171-a75c60ionv2ojqii8nne9kice8gvgfcn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDj9NfRP5C1YAKKey6Td1QVzgOnjhPgmFU"
+          "current_key": "AIzaSyAUskU6khduPD_zIeV4ZaViSNwJez9CUCY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "533259051897-d7b6jk5jo1cqglpj9glpp429qo3d7gs0.apps.googleusercontent.com",
+              "client_id": "1068406399171-a75c60ionv2ojqii8nne9kice8gvgfcn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

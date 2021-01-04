@@ -38,10 +38,6 @@ class ListPage extends Page {
                     title: const Text('Anggota'),
                     subtitle: Text((keluarga['Anggota'] as List).map((e) => e['Nama']).toList().join(', ')),
                   ),
-                  // ...List.generate(3, (index) => ListTile(
-                  //   title: Text(keluarga.values.toList()[index] as String),
-                  //   subtitle: Text(keluarga.keys.toList()[index]),
-                  // ))
                 ]
               ),
             );
