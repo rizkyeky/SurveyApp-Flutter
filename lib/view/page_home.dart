@@ -22,7 +22,7 @@ class HomePage extends Page {
       actions: [
         IconButton(
           icon: const Icon(Icons.article_outlined), 
-          onPressed: () {}
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ListPage()))
         )
       ],
     ),

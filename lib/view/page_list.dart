@@ -22,8 +22,8 @@ class ListPage extends Page {
       ),
       body: FutureBuilder<void>(
         future: _bloc.getListKeluarga(),
-        builder: (context, snapshot) => (snapshot.connectionState == ConnectionState.done) ? ListView.builder(
-            itemCount: 3,
+        builder: (context, snapshot) => (snapshot.connectionState == ConnectionState.done) ? _bloc.listKeluarga.isNotEmpty ? ListView.builder(
+            itemCount: _bloc.listKeluarga.length,
             itemBuilder: (context, indexKeluarga) {
               final Map<String, dynamic> keluarga = _bloc.listKeluarga[indexKeluarga];
               return Card(
@@ -31,18 +31,22 @@ class ListPage extends Page {
                 children: 
                 [
                   ListTile(
-                    title: Text(keluarga.keys.toList()[0]),
+                    title: const Text('Nomor KK'),
                     subtitle: Text(keluarga.values.toList()[0] as String),
                   ),
-                  ...List.generate(3, (index) => ListTile(
-                    title: Text(keluarga.values.toList()[index] as String),
-                    subtitle: Text(keluarga.keys.toList()[index]),
-                  ))
+                  ListTile(
+                    title: const Text('Anggota'),
+                    subtitle: Text((keluarga['Anggota'] as List).map((e) => e['Nama']).toList().join(', ')),
+                  ),
+                  // ...List.generate(3, (index) => ListTile(
+                  //   title: Text(keluarga.values.toList()[index] as String),
+                  //   subtitle: Text(keluarga.keys.toList()[index]),
+                  // ))
                 ]
               ),
             );
             }
-          ) : const Center(child: CircularProgressIndicator())
+          ) : const Center(child: Text('Tidak Ada Data')) : const Center(child: CircularProgressIndicator())
       ),
     );
   }
