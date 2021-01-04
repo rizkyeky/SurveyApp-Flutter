@@ -227,7 +227,7 @@ class QuestionBloc implements Bloc {
 
   Future<File> getImage() async {
     try {
-      final PickedFile pickedFile = await picker.getImage(source: ImageSource.gallery);
+      final PickedFile pickedFile = await picker.getImage(source: ImageSource.camera);
       if (pickedFile != null) {
         return File(pickedFile.path);
       } else {
