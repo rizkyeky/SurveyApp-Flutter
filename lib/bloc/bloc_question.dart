@@ -238,6 +238,19 @@ class QuestionBloc implements Bloc {
     }
   }
 
+  Future<void> uploadImages() async {
+    try {
+      // ignore: avoid_function_literals_in_foreach_calls
+      images.forEach((element) async {
+        final String url = await _firebaseService.uploadFile(dataKeluarga['Nomor KK'] as String, element);
+        print(url);
+      });
+    // ignore: empty_catches
+    } catch (e) {
+      
+    }
+  }
+
   void deleteImg(int index) {
     images.removeAt(index);
   }

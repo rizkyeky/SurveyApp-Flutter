@@ -45,5 +45,12 @@ class FirebaseService implements Service {
     }
   }
 
-
+  Future<String> uploadFile(String noKK,File _image) async {
+    final Reference storageReference = FirebaseStorage.instance.ref().child(
+      '$noKK/${basename(_image.path)}'
+    );
+    final UploadTask uploadTask = storageReference.putFile(_image);
+    final TaskSnapshot snapshot = uploadTask.snapshot;
+    return snapshot.ref.getDownloadURL();
+  }
 }

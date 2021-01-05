@@ -609,6 +609,7 @@ class QuestionPage extends Page {
             title:  Text('Simpan Data ke Database'),
             content: SizedBox(height: 100 ,child: Center(child: CircularProgressIndicator())),
           ));
+            await _bloc.uploadImages();
             await _bloc.saveJawabanKeluarga().then((_) => 
               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
                 builder: (context) => HomePage()), (route) => false));
