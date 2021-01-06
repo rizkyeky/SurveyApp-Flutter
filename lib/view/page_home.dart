@@ -2,17 +2,25 @@ part of 'page.dart';
 
 class HomePage extends Page {
 
+  final Map<String, dynamic> dataAnggota;
+
+  HomePage({this.dataAnggota});
+
   @override
   void dispose() {
-    _bloc.dispose();
+    bloc.dispose();
   }
 
   @override
   void init() {
-    _bloc.init();
+    bloc.init();
+    
+    if (dataAnggota != null) {
+
+    }
   }
 
-  final HomeBloc _bloc = HomeBloc();
+  final HomeBloc bloc = HomeBloc();
   
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -35,65 +43,21 @@ class HomePage extends Page {
             title: 'Nomor KK',
             keyboardType: TextInputType.number,
             onChanged: (val) {
-              _bloc.nomorKK = val;
-              _bloc.validAnggotaNotif.value = _bloc.checkValidKeluarga();
+              bloc.nomorKK = val;
+              bloc.validAnggotaNotif.value = bloc.checkValidKeluarga();
             },
           ),
-          StatefulBuilder(builder: (context, setState) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CheckboxListTile(
-                title: const Text('Satu Alamat'),
-                value: _bloc.satuAlamat,
-                onChanged: (value) {
-                  if (_bloc.satuAlamat != value) {
-                    setState(() {
-                      _bloc.satuAlamatNotif.value = value;
-                      _bloc.satuAlamat = value;
-                    });
-                  }
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              CheckboxListTile(
-                title: const Text('Satu Agama'),
-                value: _bloc.satuAgama,
-                onChanged: (value) {
-                  if (_bloc.satuAgama != value) {
-                    setState(() {
-                      _bloc.satuAgamaNotif.value = value;
-                      _bloc.satuAgama = value;
-                    });
-                  }
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              if (_bloc.satuAlamat) TextFieldWithTitle(
-                title: 'Alamat',
-                maxLines: 2,
-                controller: TextEditingController(text: _bloc.tempAlamat),
-                textCapitalization: TextCapitalization.words,
-                onChanged: (value) => _bloc.tempAlamat = value,
-              ),
-              if (_bloc.satuAgama) TextFieldWithTitle(
-                title: 'Agama',
-                controller: TextEditingController(text: _bloc.tempAgama),
-                onChanged: (value) => _bloc.tempAgama = value,
-              ),
-            ],
-          )),
           const SizedBox(height: 12,),
           RaisedButton.icon(
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => AnggotaFormDialog(bloc: _bloc),
-            ),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => InputPage()));
+            },
             icon: const Icon(Icons.add),
             label: const Text('Tambah Anggota'),
           ),
           const SizedBox(height: 12,),
           ValueListenableBuilder<List<Map<String, String>>>(
-            valueListenable: _bloc.anggotaNotif, 
+            valueListenable: bloc.anggotaNotif, 
             builder: (context, value, child) => Column(
               children: List.generate(value.length, (indexAnggota) => Card(
                 clipBehavior: Clip.antiAlias,
@@ -105,12 +69,12 @@ class HomePage extends Page {
                     children: [
                       ...List.generate(2, 
                         (indexLs) {
-                          final String key = _bloc.anggota[indexAnggota].keys
+                          final String key = bloc.anggota[indexAnggota].keys
                             .toList()[indexLs];
                           final List<String> menu = ['Edit', 'Delete'];
                           return ListTile(
                             contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
-                            title: Text(_bloc.anggota[indexAnggota][key], style: TextStyle(
+                            title: Text(bloc.anggota[indexAnggota][key], style: TextStyle(
                               fontSize: (indexLs == 0) ? 18 : 16,
                               fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
                             ),),
@@ -120,10 +84,10 @@ class HomePage extends Page {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) {
                                 if (value == 'Edit') {
-                                  _bloc.editAnggota(indexAnggota);
+                                  bloc.editAnggota(indexAnggota);
                                   showDialog(
                                     context: context,
-                                    builder: (context) => AnggotaFormDialog(bloc: _bloc, editIndex: indexAnggota,),
+                                    builder: (context) => AnggotaFormDialog(bloc: bloc, editIndex: indexAnggota,),
                                   );
                                 } else if (value == 'Delete') {
                                   showDialog(
@@ -133,7 +97,7 @@ class HomePage extends Page {
                                       actions: [
                                         FlatButton(
                                           onPressed: () {
-                                            _bloc.deleteAnggota(indexAnggota);
+                                            bloc.deleteAnggota(indexAnggota);
                                             Navigator.pop(context);
                                           },
                                           child: const Text('DELETE')
@@ -159,20 +123,20 @@ class HomePage extends Page {
                         }
                       ),
                       ValueListenableBuilder<bool>(
-                        valueListenable: _bloc.satuAlamatNotif, 
+                        valueListenable: bloc.satuAlamatNotif, 
                         builder: (context, value, _) => !value ? TextFieldWithTitle(
                           title: 'Alamat',
                           maxLines: 2,
                           textCapitalization: TextCapitalization.words,
-                          onChanged: (value) => _bloc.tempAlamat,
+                          onChanged: (value) => bloc.tempAlamat,
                         ) : const SizedBox()
                       ),
                       ValueListenableBuilder<bool>(
-                        valueListenable: _bloc.satuAgamaNotif, 
+                        valueListenable: bloc.satuAgamaNotif, 
                         builder: (context, value, _) => !value ? TextFieldWithTitle(
                           title: 'Agama',
                           textCapitalization: TextCapitalization.sentences,
-                          onChanged: (value) => _bloc.tempAgama,
+                          onChanged: (value) => bloc.tempAgama,
                         ) : const SizedBox()
                       ),
                       const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
@@ -181,10 +145,10 @@ class HomePage extends Page {
                       ),
                       DropdownSearch<String>(
                         hint: "Pilih Pekerjaan",
-                        items: _bloc.pekerjaan,
+                        items: bloc.pekerjaan,
                         showSearchBox: true,
                         selectedItem: 'Belum/ Tidak Bekerja',
-                        onChanged: (value) => _bloc.tempPekerjaan[indexAnggota] = value,
+                        onChanged: (value) => bloc.tempPekerjaan[indexAnggota] = value,
                         searchBoxDecoration: const InputDecoration(
                           border: InputBorder.none,
                           filled: true,
@@ -202,9 +166,9 @@ class HomePage extends Page {
                       const SizedBox(height: 12,),
                       DropDownOption(
                         title: 'Pilih Pendidikan',
-                        items: _bloc.pendidikan,
-                        value: _bloc.tempLulusan[indexAnggota],
-                        onSelected: (value) => _bloc.tempLulusan[indexAnggota] = value,
+                        items: bloc.pendidikan,
+                        value: bloc.tempLulusan[indexAnggota],
+                        onSelected: (value) => bloc.tempLulusan[indexAnggota] = value,
                       ),
                       const SizedBox(
                         height: 12,
@@ -215,8 +179,8 @@ class HomePage extends Page {
                         title: 'Nomor HP',
                         hit: 'Jika ada',
                         onChanged: (value) {
-                          _bloc.tempNomorTelp[indexAnggota] = value;
-                          // print(_bloc.tempNomorTelp);
+                          bloc.tempNomorTelp[indexAnggota] = value;
+                          // print(bloc.tempNomorTelp);
                         },
                       ),
                     ]
@@ -229,15 +193,15 @@ class HomePage extends Page {
       ),
     ),
     floatingActionButton: ValueListenableBuilder<bool>(
-      valueListenable: _bloc.validAnggotaNotif,
+      valueListenable: bloc.validAnggotaNotif,
       builder: (context, value, _) => FloatingActionButton(
         backgroundColor: value ? Colors.teal : Colors.grey,
         onPressed: value ? () async {
-          await _bloc.checkNoKK(_bloc.nomorKK).then((value) {
+          await bloc.checkNoKK(bloc.nomorKK).then((value) {
             if (!value) {
-              _bloc.saveDataKeluarga();
+              bloc.saveDataKeluarga();
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => QuestionPage(_bloc.dataKeluarga)));
+                builder: (context) => QuestionPage(bloc.dataKeluarga)));
             } else {
               showNetworkFlash(
                 context,

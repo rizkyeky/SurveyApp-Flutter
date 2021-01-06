@@ -13,13 +13,17 @@ import '../service/service.dart';
 part 'bloc_home.dart';
 part 'bloc_question.dart';
 part 'bloc_list.dart';
+part 'bloc_input.dart';
 
 abstract class Bloc {
   void init();
   void dispose();
 }
 
-String formatDate(DateTime date) => DateFormat("d MMMM y").format(date);
+String formatDate(DateTime date) {
+  final String formated = DateFormat("d M y").format(date);
+  return formated.replaceAll(' ', '-');
+}
 DateTime convertDate(String date) {
   String str;
 
