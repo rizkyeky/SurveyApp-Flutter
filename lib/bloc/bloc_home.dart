@@ -17,7 +17,7 @@ class HomeBloc implements Bloc {
 
   final FirebaseService _firebaseService = locator.get<FirebaseService>();
 
-  ValueNotifier<List<Map<String, String>>> anggotaNotif = ValueNotifier([]);
+  ValueNotifier<List<Map<String, dynamic>>> anggotaNotif = ValueNotifier([]);
   ValueNotifier<bool> validFormNotif = ValueNotifier(false);
   ValueNotifier<bool> validAnggotaNotif = ValueNotifier(false);
   ValueNotifier<bool> satuAlamatNotif = ValueNotifier(false);
@@ -54,29 +54,19 @@ class HomeBloc implements Bloc {
   }
 
   void saveDataKeluarga() {
-    dataKeluarga['Nomor KK'] = nomorKK;
+    // dataKeluarga['Nomor KK'] = nomorKK;
 
-    // ignore: avoid_function_literals_in_foreach_calls
-    anggota.forEach((element) {element.addAll({
-      'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
-      'Lulusan': tempLulusan[anggota.indexOf(element)],
-      'Nomor HP': tempNomorTelp[anggota.indexOf(element)],
-    });});
+    // // ignore: avoid_function_literals_in_foreach_calls
+    // anggota.forEach((element) {element.addAll({
+    //   'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
+    //   'Lulusan': tempLulusan[anggota.indexOf(element)],
+    //   'Nomor HP': tempNomorTelp[anggota.indexOf(element)],
+    // });});
 
     dataKeluarga['Anggota'] = anggota;
-    // print(dataKeluarga);
   }
 
-  void checkValidFormAnggota() {
-    validFormNotif.value = tempNama != null && tempNik != null && 
-    tempJenisKel != null && tempTempatLahir != null && tempTglLahir != null;
-  }
-
-  bool checkValidKeluarga() {
-    final bool validAlamat = satuAlamat ? (tempAlamat != null || tempAlamat != '') : !satuAlamat;
-    final bool validAgama = satuAlamat ? (tempAgama != null || tempAgama != '') : !satuAgama;
-    return anggota.isNotEmpty && (nomorKK != null || nomorKK != '') && validAlamat && validAgama;
-  }
+  bool checkValidKeluarga() => anggota.isNotEmpty && (nomorKK != null && nomorKK != '');
 
   void addAnggota(Map<String, dynamic> dataAnggota) {
     anggota.add(dataAnggota);
@@ -91,24 +81,24 @@ class HomeBloc implements Bloc {
   //   tempTglLahir = convertDate(anggota[index]['Tanggal Lahir']);
   // }
 
-  void modifAnggota(int index) {
-    anggota[index] = {
-      'Nama': tempNama,
-      'NIK': tempNik,
-      'Jenis Kelamin': tempJenisKel,
-      'Tempat Lahir': tempTempatLahir,
-      'Tanggal Lahir': formatDate(tempTglLahir),
-      'Agama': tempAgama,
-      'Alamat': tempAlamat,
-    };
-    anggotaNotif.value = List.from(anggota);
+  // void modifAnggota(int index) {
+  //   anggota[index] = {
+  //     'Nama': tempNama,
+  //     'NIK': tempNik,
+  //     'Jenis Kelamin': tempJenisKel,
+  //     'Tempat Lahir': tempTempatLahir,
+  //     'Tanggal Lahir': formatDate(tempTglLahir),
+  //     'Agama': tempAgama,
+  //     'Alamat': tempAlamat,
+  //   };
+  //   anggotaNotif.value = List.from(anggota);
 
-    tempNama = null;
-    tempNik = null;
-    tempJenisKel = null;
-    tempTempatLahir = null;
-    tempTglLahir = null;
-  }
+  //   tempNama = null;
+  //   tempNik = null;
+  //   tempJenisKel = null;
+  //   tempTempatLahir = null;
+  //   tempTglLahir = null;
+  // }
 
   void deleteAnggota(int index) {
     anggota.removeAt(index);
@@ -118,104 +108,4 @@ class HomeBloc implements Bloc {
     tempNomorTelp.removeAt(index);
     validAnggotaNotif.value = checkValidKeluarga();
   }
-
-  List<String> pendidikan = [
-    'SD',
-    'SMP',
-    'SMA',
-    'D3',
-    'S1',
-    'S2',
-  ];
-
-  List<String> pekerjaan = [
-    'Belum/ Tidak Bekerja',
-    'Mengurus Rumah Tangga',
-    'Pelajar/ Mahasiswa',
-    'Pensiunan',
-    'Pewagai Negeri Sipil',
-    'Tentara Nasional Indonesia',
-    'Kepolisisan RI',
-    'Perdagangan',
-    'Petani/ Pekebun',
-    'Peternak',
-    'Nelayan/ Perikanan',
-    'Industri',
-    'Konstruksi',
-    'Transportasi',
-    'Karyawan Swasta',
-    'Karyawan BUMN',
-    'Karyawan BUMD',
-    'Karyawan Honorer',
-    'Buruh Harian Lepas',
-    'Buruh Tani/ Perkebunan',
-    'Buruh Nelayan/ Perikanan',
-    'Buruh Peternakan',
-    'Pembantu Rumah Tangga',
-    'Tukang Cukur',
-    'Tukang Listrik',
-    'Tukang Batu',
-    'Tukang Kayu',
-    'Tukang Sol Sepatu',
-    'Tukang Las/ Pandai Besi',
-    'Tukang Jahit',
-    'Tukang Gigi',
-    'Penata Rias',
-    'Penata Busana',
-    'Penata Rambut',
-    'Mekanik',
-    'Seniman',
-    'Tabib',
-    'Paraji',
-    'Perancang Busana',
-    'Penterjemah',
-    'Imam Masjid',
-    'Pendeta',
-    'Pastor',
-    'Wartawan',
-    'Ustadz/ Mubaligh',
-    'Juru Masak',
-    'Promotor Acara',
-    'Anggota DPR-RI',
-    'Anggota DPD',
-    'Anggota BPK',
-    'Presiden',
-    'Wakil Presiden',
-    'Anggota Mahkamah Konstitusi',
-    'Anggota Kabinet/ Kementerian',
-    'Duta Besar',
-    'Gubernur',
-    'Wakil Gubernur',
-    'Bupati',
-    'Wakil Bupati',
-    'Walikota',
-    'Wakil Walikota',
-    'Anggota DPRD Provinsi',
-    'Anggota DPRD Kabupaten/ Kota',
-    'Dosen',
-    'Guru',
-    'Pilot',
-    'Pengacara',
-    'Notaris',
-    'Arsitek',
-    'Akuntan',
-    'Konsultan',
-    'Dokter',
-    'Bidan',
-    'Perawat',
-    'Apoteker',
-    'Psikiater/ Psikolog',
-    'Penyiar Televisi',
-    'Penyiar Radio',
-    'Pelaut',
-    'Peneliti',
-    'Sopir',
-    'Pialang',
-    'Paranormal',
-    'Pedagang',
-    'Perangkat Desa',
-    'Kepala Desa',
-    'Biarawati',
-    'Wiraswasta -> Isian wiraswasta',
-  ];
 }

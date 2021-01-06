@@ -61,7 +61,7 @@ class InputBloc implements Bloc {
     'NIK': tempNik,
     'Jenis Kelamin': tempJenisKel,
     'Tempat Lahir': tempTempatLahir,
-    'Tanggal Lahir': formatDate(tempTglLahir),
+    'Tanggal Lahir': tempTglLahir != null ? formatDate(tempTglLahir) : null,
     'Agama': tempAgama,
     'Pekerjaan': tempPekerjaan,
     'Lulusan': tempLulusan,
@@ -83,14 +83,14 @@ class InputBloc implements Bloc {
     'Golongan Darah': tempGolDarah,
     'Akta Kelahiran': tempAktaLahir,
     'Nomor Pasport': tempNomorPasport,
-    'Tanggal Akhir Pasport': formatDate(tempTglPasport),
+    'Tanggal Akhir Pasport': tempTglPasport != null ? formatDate(tempTglPasport) : null,
     'Nomor Dokumen KITAS': tempNomorKITAS,
 
     'Nomor Akta Perkawinan': tempNomorAktaKawin,
-    'Tanggal Akta Perkawinan': formatDate(tempTglAktaKawin),
+    'Tanggal Akta Perkawinan': tempTglAktaKawin != null ? formatDate(tempTglAktaKawin) : null,
 
     'Nomor Akta Perceraian': tempNomorAktaCerai,
-    'Tanggal Akta Perceraian': formatDate(tempTglAktaCerai),
+    'Tanggal Akta Perceraian': tempTglAktaCerai != null ? formatDate(tempTglAktaCerai) : null,
 
     'Cacat': tempCacat,
     'Cara KB': tempKB,

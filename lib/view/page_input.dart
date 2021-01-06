@@ -177,6 +177,7 @@ class InputPage extends Page {
             TextFieldWithTitle(
               padding: const EdgeInsets.all(0),
               maxLines: 2,
+              textCapitalization: TextCapitalization.words,
               title: 'Alamat',
               hit: 'Tulis nama jalan atau nama perumahan',
               onChanged: (value) => bloc.tempAlamat = value,
@@ -432,7 +433,7 @@ class InputPage extends Page {
         builder: (context, value, child) => FloatingActionButton(
           onPressed: value ? () {
             Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => HomePage(dataAnggota: bloc.dataAnggota()),
             ));
           } : null,
           backgroundColor:  value ? Colors.teal : Colors.grey,

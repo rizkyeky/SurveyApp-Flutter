@@ -13,11 +13,10 @@ class HomePage extends Page {
 
   @override
   void init() {
-    bloc.init();
-    
     if (dataAnggota != null) {
       bloc.addAnggota(dataAnggota);
     }
+    bloc.init();
   }
 
   final HomeBloc bloc = HomeBloc();
@@ -120,67 +119,6 @@ class HomePage extends Page {
                             onTap: (indexLs == 0) ? () {} : null,
                           );
                         }
-                      ),
-                      ValueListenableBuilder<bool>(
-                        valueListenable: bloc.satuAlamatNotif, 
-                        builder: (context, value, _) => !value ? TextFieldWithTitle(
-                          title: 'Alamat',
-                          maxLines: 2,
-                          textCapitalization: TextCapitalization.words,
-                          onChanged: (value) => bloc.tempAlamat,
-                        ) : const SizedBox()
-                      ),
-                      ValueListenableBuilder<bool>(
-                        valueListenable: bloc.satuAgamaNotif, 
-                        builder: (context, value, _) => !value ? TextFieldWithTitle(
-                          title: 'Agama',
-                          textCapitalization: TextCapitalization.sentences,
-                          onChanged: (value) => bloc.tempAgama,
-                        ) : const SizedBox()
-                      ),
-                      const Text("Pekerjaan", style: TextStyle(fontSize:16.0),),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      DropdownSearch<String>(
-                        hint: "Pilih Pekerjaan",
-                        items: bloc.pekerjaan,
-                        showSearchBox: true,
-                        selectedItem: 'Belum/ Tidak Bekerja',
-                        onChanged: (value) => bloc.tempPekerjaan[indexAnggota] = value,
-                        searchBoxDecoration: const InputDecoration(
-                          border: InputBorder.none,
-                          filled: true,
-                          hintText: 'Cari Pekerjaan',
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                        ),
-                        dropdownSearchDecoration: const InputDecoration(
-                          border: InputBorder.none,
-                          filled: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                        ),
-                      ),
-                      const SizedBox(height: 12,),
-                      const Text("Pendidikan", style: TextStyle(fontSize:16.0),),
-                      const SizedBox(height: 12,),
-                      DropDownOption(
-                        title: 'Pilih Pendidikan',
-                        items: bloc.pendidikan,
-                        value: bloc.tempLulusan[indexAnggota],
-                        onSelected: (value) => bloc.tempLulusan[indexAnggota] = value,
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      TextFieldWithTitle(
-                        padding: const EdgeInsets.all(0),
-                        keyboardType: TextInputType.phone,
-                        title: 'Nomor HP',
-                        hit: 'Jika ada',
-                        onChanged: (value) {
-                          bloc.tempNomorTelp[indexAnggota] = value;
-                          // print(bloc.tempNomorTelp);
-                        },
                       ),
                     ]
                   ),
