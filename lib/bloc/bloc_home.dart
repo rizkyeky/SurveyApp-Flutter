@@ -40,29 +40,9 @@ class HomeBloc implements Bloc {
   List<String> tempLulusan = [];
   List<String> tempNomorTelp = [];
 
-  List<Map<String, String>> anggota = [
-    // {
-    //   'Nama': 'Mochamad Rizky Darmawan Ganteng Banget Gila',
-    //   'NIK': '321111000222333444',
-    //   'Jenis Kelamin': 'Perempuan',
-    //   'Tempat Lahir': 'Bandung dan Bandung',
-    //   'Tanggal Lahir': '1 January 1999',
-    //   'Agama': 'Islam',
-    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
-    // },
-    // {
-    //   'Nama': 'Dewi Rostika dan Dadang',
-    //   'NIK': '321111000222333444',
-    //   'Jenis Kelamin': 'Laki-laki',
-    //   'Tempat Lahir': 'Bandung dan Surabaya',
-    //   'Tanggal Lahir': '31 Desember 2020',
-    //   'Agama': 'Islam',
-    //   'Alamat': 'Jalan Raya Blok Kanan Kiri Pertigaan Deket Tukang Somay Bandung'
-    // }
-  ];
+  List<Map<String, dynamic>> anggota = [];
 
-  Map<String, dynamic> dataKeluarga = {
-  };
+  Map<String, dynamic> dataKeluarga = {};
 
   Future<bool> checkNoKK(String noKK) async {
     final ServiceResult<List<String>> result = await _firebaseService.checkKoleksi();
@@ -75,8 +55,6 @@ class HomeBloc implements Bloc {
 
   void saveDataKeluarga() {
     dataKeluarga['Nomor KK'] = nomorKK;
-
-    // print(anggota);
 
     // ignore: avoid_function_literals_in_foreach_calls
     anggota.forEach((element) {element.addAll({
@@ -100,43 +78,18 @@ class HomeBloc implements Bloc {
     return anggota.isNotEmpty && (nomorKK != null || nomorKK != '') && validAlamat && validAgama;
   }
 
-  void addAnggota() {
-    if (tempNama != null && tempNik != null && tempJenisKel != null && 
-    tempTempatLahir != null && tempTglLahir != null
-    ) {
-      anggota.add({
-        'Nama': tempNama,
-        'NIK': tempNik,
-        'Jenis Kelamin': tempJenisKel,
-        'Tempat Lahir': tempTempatLahir,
-        'Tanggal Lahir': formatDate(tempTglLahir),
-        'Agama': tempAgama,
-        'Alamat': tempAlamat,
-      });
-      anggotaNotif.value = List.from(anggota);
-      validFormNotif.value = false;
-
-      validAnggotaNotif.value = checkValidKeluarga();
-
-      tempPekerjaan.add('Belum/ Tidak Bekerja');
-      tempLulusan.add('SD');
-      tempNomorTelp.add(null);
-
-      tempNama = null;
-      tempNik = null;
-      tempJenisKel = null;
-      tempTempatLahir = null;
-      tempTglLahir = null;
-    }
+  void addAnggota(Map<String, dynamic> dataAnggota) {
+    anggota.add(dataAnggota);
+    anggotaNotif.value = List.from(anggota);
   }
 
-  void editAnggota(int index) {
-    tempNama = anggota[index]['Nama'];
-    tempNik = anggota[index]['NIK'];
-    tempJenisKel = anggota[index]['Jenis Kelamin'];
-    tempTempatLahir = anggota[index]['Tempat Lahir'];
-    tempTglLahir = convertDate(anggota[index]['Tanggal Lahir']);
-  }
+  // void editAnggota(int index) {
+  //   tempNama = anggota[index]['Nama'];
+  //   tempNik = anggota[index]['NIK'];
+  //   tempJenisKel = anggota[index]['Jenis Kelamin'];
+  //   tempTempatLahir = anggota[index]['Tempat Lahir'];
+  //   tempTglLahir = convertDate(anggota[index]['Tanggal Lahir']);
+  // }
 
   void modifAnggota(int index) {
     anggota[index] = {

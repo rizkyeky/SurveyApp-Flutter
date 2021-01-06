@@ -56,6 +56,51 @@ class InputBloc implements Bloc {
   bool tempHamil = false;
   bool tempKTPel = false;
 
+  Map<String, dynamic> dataAnggota() => {
+    'Nama': tempNama,
+    'NIK': tempNik,
+    'Jenis Kelamin': tempJenisKel,
+    'Tempat Lahir': tempTempatLahir,
+    'Tanggal Lahir': formatDate(tempTglLahir),
+    'Agama': tempAgama,
+    'Pekerjaan': tempPekerjaan,
+    'Lulusan': tempLulusan,
+    'Pendidikan': tempPendidikan,
+    'Status Perkawinan': tempStatusPerkawinan,
+    'Status Keluarga': tempStatusKeluarga,
+    'Kewarganegaraan': tempKewarganegaraan,
+
+    'Alamat': tempAlamat,
+    'Dusun': tempDusun,
+    'RW': tempRW,
+    'RT': tempRT,
+
+    'Nama Ayah': tempNamaAyah,
+    'Nama Ibu': tempNamaIbu,
+    'NIK Ayah': tempNIKAyah,
+    'NIK Ibu': tempNIKIbu,
+
+    'Golongan Darah': tempGolDarah,
+    'Akta Kelahiran': tempAktaLahir,
+    'Nomor Pasport': tempNomorPasport,
+    'Tanggal Akhir Pasport': formatDate(tempTglPasport),
+    'Nomor Dokumen KITAS': tempNomorKITAS,
+
+    'Nomor Akta Perkawinan': tempNomorAktaKawin,
+    'Tanggal Akta Perkawinan': formatDate(tempTglAktaKawin),
+
+    'Nomor Akta Perceraian': tempNomorAktaCerai,
+    'Tanggal Akta Perceraian': formatDate(tempTglAktaCerai),
+
+    'Cacat': tempCacat,
+    'Cara KB': tempKB,
+
+    'Nomor Telp': tempNomorTelp,
+
+    'Hamil': tempHamil,
+    'KTP-E': tempKTPel
+  };
+
   void checkValidFormAnggota() {
     final bool valid = tempNama != null &&
     tempNik != null &&

@@ -16,7 +16,7 @@ class HomePage extends Page {
     bloc.init();
     
     if (dataAnggota != null) {
-
+      bloc.addAnggota(dataAnggota);
     }
   }
 
@@ -26,11 +26,14 @@ class HomePage extends Page {
   Widget build(BuildContext context) => Scaffold(
     resizeToAvoidBottomInset: true,
     appBar: AppBar(
+      automaticallyImplyLeading: false,
       title: const Text('Data Anggota Keluarga'),
       actions: [
         IconButton(
           icon: const Icon(Icons.article_outlined), 
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ListPage()))
+          onPressed: () => Navigator.push(context, 
+            MaterialPageRoute(builder: (context) => ListPage())
+          )
         )
       ],
     ),
@@ -56,7 +59,7 @@ class HomePage extends Page {
             label: const Text('Tambah Anggota'),
           ),
           const SizedBox(height: 12,),
-          ValueListenableBuilder<List<Map<String, String>>>(
+          ValueListenableBuilder<List<Map<String, dynamic>>>(
             valueListenable: bloc.anggotaNotif, 
             builder: (context, value, child) => Column(
               children: List.generate(value.length, (indexAnggota) => Card(
@@ -74,7 +77,7 @@ class HomePage extends Page {
                           final List<String> menu = ['Edit', 'Delete'];
                           return ListTile(
                             contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
-                            title: Text(bloc.anggota[indexAnggota][key], style: TextStyle(
+                            title: Text(bloc.anggota[indexAnggota][key] as String, style: TextStyle(
                               fontSize: (indexLs == 0) ? 18 : 16,
                               fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
                             ),),
@@ -84,11 +87,7 @@ class HomePage extends Page {
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) {
                                 if (value == 'Edit') {
-                                  bloc.editAnggota(indexAnggota);
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AnggotaFormDialog(bloc: bloc, editIndex: indexAnggota,),
-                                  );
+                                  // bloc.editAnggota(indexAnggota);
                                 } else if (value == 'Delete') {
                                   showDialog(
                                     context: context,
@@ -267,121 +266,6 @@ class TextFieldWithTitle extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class AnggotaFormDialog extends StatelessWidget {
-  final HomeBloc bloc;
-  final int editIndex;
-
-  const AnggotaFormDialog({this.bloc, this.editIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime pickedDate = bloc.tempTglLahir;
-
-    return AlertDialog(
-      title: const Text('Tambah Anggota Keluarga'),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFieldWithTitle(
-              title: 'Nama',
-              controller: TextEditingController(text: bloc.tempNama),
-              textCapitalization: TextCapitalization.words,
-              onChanged: (val) {
-                bloc.tempNama = val;
-                bloc.checkValidFormAnggota();
-              },
-            ),
-            TextFieldWithTitle(
-              keyboardType: TextInputType.number,
-              controller: TextEditingController(text: bloc.tempNik),
-              title: 'NIK',
-              onChanged: (val) {
-                bloc.checkValidFormAnggota();
-                bloc.tempNik = val;
-              },
-            ),
-            StatefulBuilder(
-              builder: (context, setState) => Column(
-                children: [
-                  RadioListTile<String>(
-                    groupValue: bloc.tempJenisKel,
-                    title: const Text('Laki-laki'),
-                    value: 'Laki-laki',
-                    onChanged: (value) {
-                      setState(() => bloc.tempJenisKel = value);
-                      bloc.checkValidFormAnggota();
-                    },
-                  ),
-                  RadioListTile<String>(
-                    groupValue: bloc.tempJenisKel,
-                    title: const Text('Perempuan'),
-                    value: 'Perempuan',
-                    onChanged: (value) {
-                      setState(() => bloc.tempJenisKel = value);
-                      bloc.checkValidFormAnggota();
-                    },
-                  ),
-                ],
-              )),
-            TextFieldWithTitle(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              title: 'Tempat Lahir',
-              controller: TextEditingController(text: bloc.tempTempatLahir),
-              textCapitalization: TextCapitalization.words,
-              onChanged: (val) {
-                bloc.tempTempatLahir = val;
-                bloc.checkValidFormAnggota();
-              },
-            ),
-            StatefulBuilder(
-              builder: (context, setState) => FlatButton(
-                color: Colors.teal,
-                onPressed: () async {
-                  pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime(2000),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime(2021),
-                  );
-                  if (pickedDate != null && pickedDate != bloc.tempTglLahir) {
-                    setState(() => bloc.tempTglLahir = pickedDate);
-                    bloc.checkValidFormAnggota();
-                  }
-                },
-                child: Text(
-                  pickedDate != null
-                    ? formatDate(pickedDate)
-                    : 'Pilih Tanggal Lahir',
-                  style: const TextStyle(color: Colors.white)),
-              ),
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('CANCEL'),
-        ),
-        ValueListenableBuilder<bool>(
-          valueListenable: bloc.validFormNotif,
-          builder: (context, value, _) => FlatButton(
-            color: Colors.teal,
-            onPressed: value ? () {
-              (editIndex != null) ? bloc.modifAnggota(editIndex) : bloc.addAnggota();
-              Navigator.of(context).pop();
-            } : null,
-            child: const Text('OKE'),
-          ),
-        ),
-      ]
     );
   }
 }

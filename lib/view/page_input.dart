@@ -413,7 +413,7 @@ class InputPage extends Page {
                     },
                   ),
                   RadioListTile<bool>(
-                    groupValue: bloc.tempHamil,
+                    groupValue: bloc.tempKTPel,
                     title: const Text('Tidak'),
                     value: false,
                     onChanged: (value) {
