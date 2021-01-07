@@ -610,9 +610,11 @@ class QuestionPage extends Page {
             content: SizedBox(height: 100 ,child: Center(child: CircularProgressIndicator())),
           ));
             await _bloc.uploadImages();
-            await _bloc.saveJawabanKeluarga().then((_) => 
+            await _bloc.saveJawabanKeluarga().then((_) {
+              locator.call<HomeBloc>().resetForm();
               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder: (context) => HomePage()), (route) => false));
+                builder: (context) => HomePage()), (route) => false);
+            });
           } : null,
           child: const Icon(Icons.check),
         )

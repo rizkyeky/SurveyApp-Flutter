@@ -2,9 +2,7 @@ part of 'page.dart';
 
 class HomePage extends Page {
 
-  final Map<String, dynamic> dataAnggota;
-
-  HomePage({this.dataAnggota});
+  HomePage();
 
   @override
   void dispose() {
@@ -13,16 +11,14 @@ class HomePage extends Page {
 
   @override
   void init() {
-    if (dataAnggota != null) {
-      bloc.addAnggota(dataAnggota);
-    }
     bloc.init();
   }
 
-  final HomeBloc bloc = HomeBloc();
+  final HomeBloc bloc = locator.get<HomeBloc>();
   
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    return Scaffold(
     resizeToAvoidBottomInset: true,
     appBar: AppBar(
       automaticallyImplyLeading: false,
@@ -44,9 +40,10 @@ class HomePage extends Page {
           TextFieldWithTitle(
             title: 'Nomor KK',
             keyboardType: TextInputType.number,
+            controller: TextEditingController(text: bloc.nomorKK),
             onChanged: (val) {
               bloc.nomorKK = val;
-              bloc.validAnggotaNotif.value = bloc.checkValidKeluarga();
+              bloc.validFormNotif.value = bloc.checkValid();
             },
           ),
           const SizedBox(height: 12,),
@@ -73,9 +70,9 @@ class HomePage extends Page {
                         (indexLs) {
                           final String key = bloc.anggota[indexAnggota].keys
                             .toList()[indexLs];
-                          final List<String> menu = ['Edit', 'Delete'];
+                          final List<String> menu = ['Delete'];
                           return ListTile(
-                            contentPadding: (indexLs == 0) ? const EdgeInsets.all(12) : const EdgeInsets.all(0),
+                            contentPadding: (indexLs == 0) ? const EdgeInsets.symmetric(vertical: 6, horizontal: 12) : const EdgeInsets.all(0),
                             title: Text(bloc.anggota[indexAnggota][key] as String, style: TextStyle(
                               fontSize: (indexLs == 0) ? 18 : 16,
                               fontWeight: (indexLs == 0) ? FontWeight.bold : FontWeight.normal
@@ -85,9 +82,7 @@ class HomePage extends Page {
                             trailing: (indexLs == 0) ? PopupMenuButton<String>(
                               icon: const Icon(Icons.more_vert),
                               onSelected: (value) {
-                                if (value == 'Edit') {
-                                  // bloc.editAnggota(indexAnggota);
-                                } else if (value == 'Delete') {
+                                if (value == 'Delete') {
                                   showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
@@ -130,7 +125,7 @@ class HomePage extends Page {
       ),
     ),
     floatingActionButton: ValueListenableBuilder<bool>(
-      valueListenable: bloc.validAnggotaNotif,
+      valueListenable: bloc.validFormNotif,
       builder: (context, value, _) => FloatingActionButton(
         backgroundColor: value ? Colors.teal : Colors.grey,
         onPressed: value ? () async {
@@ -143,7 +138,7 @@ class HomePage extends Page {
               showNetworkFlash(
                 context,
                 text: 'Nomor KK sudah terdaftar',
-                color: Colors.white,
+                color: Colors.yellow,
                 textColor: Colors.black
               );
             }
@@ -153,6 +148,7 @@ class HomePage extends Page {
       ),
     ),
   );
+  }
 }
 
 class TextFieldWithTitle extends StatelessWidget {

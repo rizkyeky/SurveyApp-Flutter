@@ -3,7 +3,7 @@ part of 'bloc.dart';
 class InputBloc implements Bloc {
   @override
   void dispose() {
-    // TODO: implement dispose
+    validInputNotif.dispose();
   }
 
   @override
@@ -59,19 +59,19 @@ class InputBloc implements Bloc {
   Map<String, dynamic> dataAnggota() => {
     'Nama': tempNama,
     'NIK': tempNik,
-    'Jenis Kelamin': tempJenisKel,
     'Tempat Lahir': tempTempatLahir,
     'Tanggal Lahir': tempTglLahir != null ? formatDate(tempTglLahir) : null,
-    'Agama': tempAgama,
-    'Pekerjaan': tempPekerjaan,
-    'Lulusan': tempLulusan,
-    'Pendidikan': tempPendidikan,
-    'Status Perkawinan': tempStatusPerkawinan,
-    'Status Keluarga': tempStatusKeluarga,
-    'Kewarganegaraan': tempKewarganegaraan,
+    'Jenis Kelamin': opsi['kelamin'].indexOf(tempJenisKel) + 1,
+    'Agama': opsi['agama'].indexOf(tempAgama),
+    'Pekerjaan': opsi['pekerjaan'].indexOf(tempPekerjaan) + 1,
+    'Lulusan': opsi['pendidikan1'].indexOf(tempLulusan) + 1,
+    'Pendidikan': opsi['pendidikan2'].indexOf(tempPendidikan) + 1,
+    'Status Perkawinan': opsi['statusperkawinan'].indexOf(tempStatusPerkawinan) + 1,
+    'Status Keluarga': opsi['statuskeluarga'].indexOf(tempStatusKeluarga) + 1,
+    'Kewarganegaraan': opsi['kewarganegara'].indexOf(tempKewarganegaraan) + 1,
 
     'Alamat': tempAlamat,
-    'Dusun': tempDusun,
+    'Dusun': opsi['dusun'].indexOf(tempDusun) + 1,
     'RW': tempRW,
     'RT': tempRT,
 
@@ -80,7 +80,7 @@ class InputBloc implements Bloc {
     'NIK Ayah': tempNIKAyah,
     'NIK Ibu': tempNIKIbu,
 
-    'Golongan Darah': tempGolDarah,
+    'Golongan Darah': opsi['dusun'].indexOf(tempGolDarah) + 1,
     'Akta Kelahiran': tempAktaLahir,
     'Nomor Pasport': tempNomorPasport,
     'Tanggal Akhir Pasport': tempTglPasport != null ? formatDate(tempTglPasport) : null,
@@ -92,34 +92,34 @@ class InputBloc implements Bloc {
     'Nomor Akta Perceraian': tempNomorAktaCerai,
     'Tanggal Akta Perceraian': tempTglAktaCerai != null ? formatDate(tempTglAktaCerai) : null,
 
-    'Cacat': tempCacat,
-    'Cara KB': tempKB,
+    'Cacat': opsi['cacat'].indexOf(tempCacat) + 1,
+    'Cara KB': opsi['cacat'].indexOf(tempKB) + 1,
 
     'Nomor Telp': tempNomorTelp,
 
-    'Hamil': tempHamil,
-    'KTP-E': tempKTPel
+    'Hamil': tempHamil ? 1 : 2,
+    'KTP-E': tempKTPel ? 1 : 2,
   };
 
   void checkValidFormAnggota() {
     final bool valid = tempNama != null &&
-    tempNik != null &&
-    tempJenisKel != null &&
-    tempTempatLahir != null &&
-    tempTglLahir != null &&
-    tempAgama != null &&
-    tempPekerjaan != null &&
-    tempLulusan != null &&
-    tempPendidikan != null&& 
-    tempStatusPerkawinan != null &&
-    tempStatusKeluarga != null &&
-    tempKewarganegaraan != null &&
-    tempNamaAyah != null &&
-    tempNamaIbu != null &&
-    tempNIKAyah != null &&
-    tempNIKIbu != null &&
+    tempNik != null;
+    // tempJenisKel != null &&
+    // tempTempatLahir != null &&
+    // tempTglLahir != null &&
+    // tempAgama != null &&
+    // tempPekerjaan != null &&
+    // tempLulusan != null &&
+    // tempPendidikan != null&& 
+    // tempStatusPerkawinan != null &&
+    // tempStatusKeluarga != null &&
+    // tempKewarganegaraan != null &&
+    // tempNamaAyah != null &&
+    // tempNamaIbu != null &&
+    // tempNIKAyah != null &&
+    // tempNIKIbu != null &&
 
-    tempGolDarah != null &&
+    // tempGolDarah != null &&
     // tempAktaLahir != null &&
     // tempNomorPasport != null &&
     // tempTglPasport != null &&
@@ -134,10 +134,10 @@ class InputBloc implements Bloc {
     // tempCacat != null &&
     // tempKB != null &&
 
-    tempAlamat != null &&
-    tempDusun != null &&
-    tempRW != null &&
-    tempRT != null;
+    // tempAlamat != null &&
+    // tempDusun != null &&
+    // tempRW != null &&
+    // tempRT != null;
     validInputNotif.value = valid;
   }
 
@@ -150,6 +150,10 @@ class InputBloc implements Bloc {
       'Cacat Fisik dan Mental',
       'Cacat Lainnya',
       'Tidak Cacat',
+    ],
+    'kelamin': [
+      'Laki-laki',
+      'Perempuan'
     ],
     'kb': [
       'Pil', 'IUD', 'Suntik', 'Kondom',

@@ -5,43 +5,22 @@ class HomeBloc implements Bloc {
   void dispose() {
     anggotaNotif.dispose();
     validFormNotif.dispose();
-    validAnggotaNotif.dispose();
-    satuAlamatNotif.dispose();
-    satuAgamaNotif.dispose();
   }
 
   @override
   void init() {
-    anggotaNotif.value = List.from(anggota);
+    anggotaNotif = ValueNotifier(anggota);
+    validFormNotif = ValueNotifier(checkValid());
   }
 
   final FirebaseService _firebaseService = locator.get<FirebaseService>();
 
-  ValueNotifier<List<Map<String, dynamic>>> anggotaNotif = ValueNotifier([]);
-  ValueNotifier<bool> validFormNotif = ValueNotifier(false);
-  ValueNotifier<bool> validAnggotaNotif = ValueNotifier(false);
-  ValueNotifier<bool> satuAlamatNotif = ValueNotifier(false);
-  ValueNotifier<bool> satuAgamaNotif = ValueNotifier(false);
+  ValueNotifier<List<Map<String, dynamic>>> anggotaNotif;
+  ValueNotifier<bool> validFormNotif;
 
   String nomorKK;
-  bool satuAlamat = false;
-  bool satuAgama = false;
-
-  String tempAlamat;
-  String tempAgama;
-
-  String tempNama;
-  String tempNik;
-  String tempJenisKel;
-  String tempTempatLahir;
-  DateTime tempTglLahir;
-  
-  List<String> tempPekerjaan = [];
-  List<String> tempLulusan = [];
-  List<String> tempNomorTelp = [];
 
   List<Map<String, dynamic>> anggota = [];
-
   Map<String, dynamic> dataKeluarga = {};
 
   Future<bool> checkNoKK(String noKK) async {
@@ -54,25 +33,27 @@ class HomeBloc implements Bloc {
   }
 
   void saveDataKeluarga() {
-    // dataKeluarga['Nomor KK'] = nomorKK;
-
-    // // ignore: avoid_function_literals_in_foreach_calls
-    // anggota.forEach((element) {element.addAll({
-    //   'Pekerjaan': tempPekerjaan[anggota.indexOf(element)],
-    //   'Lulusan': tempLulusan[anggota.indexOf(element)],
-    //   'Nomor HP': tempNomorTelp[anggota.indexOf(element)],
-    // });});
-
+    dataKeluarga['Nomor KK'] = nomorKK;
     dataKeluarga['Anggota'] = anggota;
   }
 
-  bool checkValidKeluarga() => anggota.isNotEmpty && (nomorKK != null && nomorKK != '');
+  bool checkValid() => anggota.isNotEmpty && (nomorKK != null && nomorKK != '');
 
   void addAnggota(Map<String, dynamic> dataAnggota) {
     anggota.add(dataAnggota);
     anggotaNotif.value = List.from(anggota);
   }
 
+  void deleteAnggota(int index) {
+    anggota.removeAt(index);
+    anggotaNotif.value = List.from(anggota);
+    validFormNotif.value = checkValid();
+  }
+
+  void resetForm() {
+    anggota = [];
+    dataKeluarga = {};
+  }
   // void editAnggota(int index) {
   //   tempNama = anggota[index]['Nama'];
   //   tempNik = anggota[index]['NIK'];
@@ -100,12 +81,4 @@ class HomeBloc implements Bloc {
   //   tempTglLahir = null;
   // }
 
-  void deleteAnggota(int index) {
-    anggota.removeAt(index);
-    anggotaNotif.value = List.from(anggota);
-    tempPekerjaan.removeAt(index);
-    tempLulusan.removeAt(index);
-    tempNomorTelp.removeAt(index);
-    validAnggotaNotif.value = checkValidKeluarga();
-  }
 }

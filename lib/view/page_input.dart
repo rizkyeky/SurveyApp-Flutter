@@ -432,9 +432,8 @@ class InputPage extends Page {
         valueListenable: bloc.validInputNotif, 
         builder: (context, value, child) => FloatingActionButton(
           onPressed: value ? () {
-            Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => HomePage(dataAnggota: bloc.dataAnggota()),
-            ));
+            locator.call<HomeBloc>().addAnggota(bloc.dataAnggota());
+            Navigator.pop(context);
           } : null,
           backgroundColor:  value ? Colors.teal : Colors.grey,
           tooltip: 'Tambah Anggota',
