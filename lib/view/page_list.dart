@@ -27,20 +27,21 @@ class ListPage extends Page {
             itemBuilder: (context, indexKeluarga) {
               final Map<String, dynamic> keluarga = _bloc.listKeluarga[indexKeluarga];
               return Card(
-              child: Column(
-                children: 
-                [
-                  ListTile(
-                    title: const Text('Nomor KK'),
-                    subtitle: Text(keluarga.values.toList()[0] as String),
-                  ),
-                  ListTile(
-                    title: const Text('Anggota'),
-                    subtitle: Text((keluarga['Anggota'] as List).map((e) => e['Nama']).toList().join(', ')),
-                  ),
-                ]
-              ),
-            );
+                margin: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                child: Column(
+                  children: 
+                  [
+                    ListTile(
+                      title: const Text('Nomor KK'),
+                      subtitle: Text(keluarga.values.toList()[0] as String),
+                    ),
+                    ListTile(
+                      title: const Text('Anggota'),
+                      subtitle: Text((keluarga['Anggota'] as List).map((e) => e['Nama']).toList().join(', ')),
+                    ),
+                  ]
+                ),
+              );
             }
           ) : const Center(child: Text('Tidak Ada Data')) : const Center(child: CircularProgressIndicator())
       ),

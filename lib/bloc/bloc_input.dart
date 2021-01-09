@@ -103,23 +103,23 @@ class InputBloc implements Bloc {
 
   void checkValidFormAnggota() {
     final bool valid = tempNama != null &&
-    tempNik != null;
-    // tempJenisKel != null &&
-    // tempTempatLahir != null &&
-    // tempTglLahir != null &&
-    // tempAgama != null &&
-    // tempPekerjaan != null &&
-    // tempLulusan != null &&
-    // tempPendidikan != null&& 
-    // tempStatusPerkawinan != null &&
-    // tempStatusKeluarga != null &&
-    // tempKewarganegaraan != null &&
-    // tempNamaAyah != null &&
-    // tempNamaIbu != null &&
-    // tempNIKAyah != null &&
-    // tempNIKIbu != null &&
+    tempNik != null &&
+    tempJenisKel != null &&
+    tempTempatLahir != null &&
+    tempTglLahir != null &&
+    tempAgama != null &&
+    tempPekerjaan != null &&
+    tempLulusan != null &&
+    tempPendidikan != null&& 
+    tempStatusPerkawinan != null &&
+    tempStatusKeluarga != null &&
+    tempKewarganegaraan != null &&
+    tempNamaAyah != null &&
+    tempNamaIbu != null &&
+    tempNIKAyah != null &&
+    tempNIKIbu != null &&
 
-    // tempGolDarah != null &&
+    tempGolDarah != null &&
     // tempAktaLahir != null &&
     // tempNomorPasport != null &&
     // tempTglPasport != null &&
@@ -134,10 +134,10 @@ class InputBloc implements Bloc {
     // tempCacat != null &&
     // tempKB != null &&
 
-    // tempAlamat != null &&
-    // tempDusun != null &&
-    // tempRW != null &&
-    // tempRT != null;
+    tempAlamat != null &&
+    tempDusun != null &&
+    tempRW != null &&
+    tempRT != null;
     validInputNotif.value = valid;
   }
 

@@ -53,7 +53,9 @@ class HomeBloc implements Bloc {
   void resetForm() {
     anggota = [];
     dataKeluarga = {};
+    nomorKK = null;
   }
+
   // void editAnggota(int index) {
   //   tempNama = anggota[index]['Nama'];
   //   tempNik = anggota[index]['NIK'];

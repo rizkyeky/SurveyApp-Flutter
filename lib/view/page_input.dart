@@ -433,6 +433,7 @@ class InputPage extends Page {
         builder: (context, value, child) => FloatingActionButton(
           onPressed: value ? () {
             locator.call<HomeBloc>().addAnggota(bloc.dataAnggota());
+            locator.call<HomeBloc>().validFormNotif.value = locator.get<HomeBloc>().checkValid();
             Navigator.pop(context);
           } : null,
           backgroundColor:  value ? Colors.teal : Colors.grey,
